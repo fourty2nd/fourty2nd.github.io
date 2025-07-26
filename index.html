@@ -148,7 +148,7 @@
   <script>
     function showPackage(number) {
       document.querySelector(".button-container").style.display = "none";
-      document.querySelector(#package${number}).style.display = "block";
+      document.querySelector(`#package${number}`).style.display = "block";
     }
 
     function goBack() {
@@ -185,7 +185,7 @@
         const offsetX = idle ? Math.cos(time + orb.angle) * radius : 0;
         const offsetY = idle ? Math.sin(time + orb.angle) * radius : 0;
 
-        orb.el.style.transform = translate(${mouseX + offsetX - 6}px, ${mouseY + offsetY - 6}px);
+        orb.el.style.transform = `translate(${mouseX + offsetX - 6}px, ${mouseY + offsetY - 6}px)`;
       });
 
       requestAnimationFrame(animateOrbs);
