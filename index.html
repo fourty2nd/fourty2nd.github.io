@@ -2,71 +2,92 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>fourty2's Discord Services</title>
   <style>
     * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+      margin: 0; padding: 0; box-sizing: border-box;
     }
     html, body {
       height: 100%;
       background: #0e0e0e;
-      overflow: hidden;
+      color: white;
       font-family: 'Poppins', sans-serif;
-      color: #fff;
+      overflow: hidden;
     }
-    body {
-      scrollbar-width: none;
+    .container {
+      position: relative;
+      z-index: 2;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
     }
-    body::-webkit-scrollbar {
-      display: none;
+    #welcome {
+      font-size: 3rem;
+      color: #bb86fc;
+      animation: fadeOut 1.5s ease forwards;
+      animation-delay: 2.5s;
+    }
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
     }
     h1 {
-      text-align: center;
-      margin: 40px 0 20px;
-      font-size: 2rem;
-      color: #ffffff;
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      display: none;
+      color: #bb86fc;
     }
-    .button-container {
+    .packages {
       display: flex;
-      justify-content: center;
       gap: 20px;
-      margin-bottom: 40px;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 1s ease, transform 1s ease;
     }
     .package-button {
-      background-color: #1f1f1f;
-      color: #ccc;
+      background-color: #2c006d;
       border: none;
       padding: 20px 30px;
       border-radius: 12px;
-      font-size: 1rem;
+      font-size: 1.2rem;
+      color: white;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: transform 0.3s ease, background 0.3s ease;
     }
     .package-button:hover {
-      background-color: #2a2a2a;
+      background-color: #4500a8;
       transform: scale(1.05);
     }
-    .package {
+    .package-details {
       display: none;
-      max-width: 700px;
-      margin: 0 auto;
-      padding: 20px 30px;
-      background-color: #1a1a1a;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      max-height: 80vh;
+      overflow-y: auto;
+      background: #1a0033;
       border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
-      animation: fadeIn 0.6s ease forwards;
-    }
-    .package p {
-      margin-bottom: 10px;
-      line-height: 1.6;
+      padding: 30px;
+      width: 90%;
+      max-width: 700px;
+      margin: auto;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 3;
+      color: #ddd;
     }
     .back-button {
       margin-top: 20px;
-      background-color: #333;
-      color: #eee;
+      background-color: #350078;
+      color: white;
       border: none;
       padding: 10px 20px;
       border-radius: 8px;
@@ -74,124 +95,162 @@
       transition: background-color 0.3s ease;
     }
     .back-button:hover {
-      background-color: #444;
+      background-color: #5600c8;
     }
-    @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(20px);}
-      to {opacity: 1; transform: translateY(0);}
+    .show {
+      display: block !important;
+      opacity: 1 !important;
     }
 
-    /* Cursor Follower Orbs */
+    /* Orbs */
     .orb {
       position: fixed;
       width: 12px;
       height: 12px;
-      background: #555;
+      background: #bb86fc;
       border-radius: 50%;
       pointer-events: none;
-      transition: transform 0.1s linear;
+      opacity: 0;
+      transition: opacity 1s ease;
+      z-index: 1;
     }
   </style>
 </head>
 <body>
-  <h1>fourty2's Discord Services</h1>
-
-  <div class="button-container">
-    <button class="package-button" onclick="showPackage(1)">Package 1</button>
-    <button class="package-button" onclick="showPackage(2)">Package 2</button>
-    <button class="package-button" onclick="showPackage(3)">Custom Bot</button>
+  <div class="container">
+    <div id="welcome">Welcome.</div>
+    <h1 id="title">fourty2's Discord Services</h1>
+    <div class="packages" id="packages">
+      <button class="package-button" onclick="showPackage('package1')">Package 1</button>
+      <button class="package-button" onclick="showPackage('package2')">Package 2</button>
+      <button class="package-button" onclick="showPackage('package3')">Custom Bot</button>
+    </div>
   </div>
 
-  <div id="package1" class="package">
-    <p><strong>🧰 Package 1: Discord Setup – $20</strong><br>
-    Perfect for new business owners, gang startups, or anyone wanting a streamlined Discord to manage their FiveM experience with ease and clarity.</p>
-
-    <p>📁 <strong>Channel, Role & Category Setup</strong><br>Organized layout with relevant channels, permissions, and role hierarchy.</p>
-    <p>🖌️ <strong>Custom Embed Design</strong><br>Branded and aesthetic embeds for intros, info, and announcements.</p>
-    <p>🤖 <strong>Bot Setup</strong><br>Timer bots, role bots, application systems, and more — configured to suit your needs.</p>
-    <p>🌐 <strong>Professional Layout</strong><br>Designed to look clean, functional, and optimized for RP or community use.</p>
-    <p>📞 <strong>Support: Included</strong><br>Reach out to me if needed — I'll remain your Discord server.</p>
-    
+  <div class="package-details" id="package1">
+    <h2>🧰 Package 1: Discord Setup – <strong>$20</strong></h2>
+    <p><em>Perfect for new business owners, gang startups, or anyone wanting a streamlined Discord to manage their FiveM experience with ease and clarity.</em></p>
+    <ul>
+      <li><strong>📁 Channel, Role & Category Setup</strong><br>Organized layout with relevant channels, permissions, and role hierarchy.</li>
+      <li><strong>🖌️ Custom Embed Design</strong><br>Branded and aesthetic embeds for intros, info, and announcements.</li>
+      <li><strong>🤖 Bot Setup</strong><br>Timer bots, role bots, application systems, and more — configured to suit your needs.</li>
+      <li><strong>🌐 Professional Layout</strong><br>Clean, functional, and optimized for RP or community use.</li>
+      <li><strong>📞 Support: Included</strong><br>Reach out to me if needed — I'll remain your Discord server contact.</li>
+    </ul>
     <button class="back-button" onclick="goBack()">Back to Packages</button>
   </div>
 
-  <div id="package2" class="package" style="max-height: 80vh; overflow-y: auto;">
-    <p><strong>🛠️ Package 2: Advanced Discord Build – $30</strong><br>
-    Ideal for gang startups, businesses, or server owners who want more than just a setup — they want structure, automation, and active oversight.</p>
-
-    <p>Includes everything from Package 1, plus:</p>
-    <p>🔧 <strong>Custom Ticket System</strong><br>With Ticket Tool or similar bots, custom questions, close messages, and category routing.</p>
-    <p>📜 <strong>Rules + Guidelines Embed</strong><br>Clean embeds for clarity and organization.</p>
-    <p>🎭 <strong>Reaction Roles / Role Menus</strong><br>Interactive roles like gangs, pronouns, city zones, etc.</p>
-    <p>📝 <strong>Custom Applications</strong><br>Application channels or forms for gangs, jobs, or city entry.</p>
-    <p>📚 <strong>Resource Channels</strong><br>In-city laws, guides, keybinds, etc.</p>
-    <p>🔒 <strong>Staff Setup & Permissions</strong><br>Private staff categories, logs, disciplinary channels.</p>
-    <p>🤖 <strong>Bot Automation</strong><br>Moderation, auto-roles, welcomes.</p>
-    <p>📊 <strong>Server Analytics Bots</strong><br>Track joins, engagement, role stats.</p>
-    <p>🖼️ <strong>Branding Integration</strong><br>Embeds styled with your theme/logo.</p>
-    <p>📞 <strong>Support: Included</strong><br>Contact anytime — I stay part of your server.</p>
-
+  <div class="package-details" id="package2">
+    <h2>🛠️ Package 2: Advanced Discord Build – <strong>$30</strong></h2>
+    <p><em>Ideal for gang startups, businesses, or server owners who want more than just a setup — they want structure, automation, and active oversight.</em></p>
+    <ul>
+      <li><strong>Everything in Package 1</strong></li>
+      <li><strong>🔧 Custom Ticket System</strong></li>
+      <li><strong>📜 Rules + Guidelines Embed</strong></li>
+      <li><strong>🎭 Reaction Roles / Role Menus</strong></li>
+      <li><strong>📝 Custom Applications</strong></li>
+      <li><strong>📚 Resource Channels</strong></li>
+      <li><strong>🔒 Staff Setup & Permissions</strong></li>
+      <li><strong>🤖 Bot Automation</strong></li>
+      <li><strong>📊 Server Analytics Bots</strong></li>
+      <li><strong>🖼️ Branding Integration</strong></li>
+      <li><strong>📞 Support: Included</strong></li>
+    </ul>
     <button class="back-button" onclick="goBack()">Back to Packages</button>
   </div>
 
-  <div id="package3" class="package">
-    <p><strong>🤖 Custom Bots – $20</strong><br>
-    A completely tailored Discord bot designed to match your exact needs. Whether it's a city whitelist system, gang management, XP system, or custom utility — I’ll build it how you want it.</p>
-
-    <p><strong>⚠️ Note:</strong> This bot must be hosted on your own VPS or hosting service.</p>
-
-    <p>📞 <strong>Support: Included</strong><br>Contact me directly for updates or help.</p>
-    
+  <div class="package-details" id="package3">
+    <h2>🤖 Custom Bot – <strong>$20</strong></h2>
+    <p><em>We'll build a fully custom Discord bot based on your exact needs and features. You explain, we create.</em></p>
+    <ul>
+      <li>Command & Interaction based</li>
+      <li>Unique features tailored to your server</li>
+      <li><strong>⚠️ Note:</strong> You’ll need your own VPS/server to host the bot</li>
+      <li><strong>📞 Support: Included</strong></li>
+    </ul>
     <button class="back-button" onclick="goBack()">Back to Packages</button>
   </div>
 
   <script>
-    function showPackage(number) {
-      document.querySelector(".button-container").style.display = "none";
-      document.querySelector(`#package${number}`).style.display = "block";
+    const welcome = document.getElementById("welcome");
+    const title = document.getElementById("title");
+    const packages = document.getElementById("packages");
+
+    // Show packages after welcome fades out
+    setTimeout(() => {
+      welcome.style.display = "none";
+      title.style.display = "block";
+      packages.style.opacity = "1";
+      packages.style.transform = "translateY(0)";
+      packages.style.transition = "opacity 1s ease, transform 1s ease";
+    }, 4000);
+
+    // Packages start hidden and translated down by default in CSS, so no inline styles here
+
+    function showPackage(id) {
+      packages.style.display = "none";
+      title.style.display = "none";
+      document.querySelectorAll('.package-details').forEach(el => el.classList.remove('show'));
+      const detail = document.getElementById(id);
+      detail.style.display = "block";
+      setTimeout(() => {
+        detail.style.opacity = "1";
+      }, 50);
     }
 
     function goBack() {
-      document.querySelector(".button-container").style.display = "flex";
-      document.querySelectorAll(".package").forEach(p => p.style.display = "none");
+      document.querySelectorAll('.package-details').forEach(el => {
+        el.style.display = "none";
+        el.style.opacity = "0";
+      });
+      packages.style.display = "flex";
+      title.style.display = "block";
     }
 
-    // Mouse Orbs
-    const orbCount = 6;
-    const orbs = [];
+    // Orbs creation & animation after 2 seconds of welcome gone (total 6.5 seconds)
+    setTimeout(() => {
+      const orbCount = 6;
+      const orbs = [];
 
-    for (let i = 0; i < orbCount; i++) {
-      const orb = document.createElement("div");
-      orb.className = "orb";
-      document.body.appendChild(orb);
-      orbs.push({ el: orb, angle: (Math.PI * 2 / orbCount) * i });
-    }
+      for (let i = 0; i < orbCount; i++) {
+        const orb = document.createElement("div");
+        orb.className = "orb";
+        document.body.appendChild(orb);
+        orbs.push({ el: orb, angle: (Math.PI * 2 / orbCount) * i });
+      }
 
-    let mouseX = 0, mouseY = 0;
-    let lastMove = Date.now();
-
-    document.addEventListener("mousemove", e => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      lastMove = Date.now();
-    });
-
-    function animateOrbs() {
-      const time = Date.now() * 0.002;
-      const idle = Date.now() - lastMove > 200;
-
-      orbs.forEach((orb, i) => {
-        const radius = 20;
-        const offsetX = idle ? Math.cos(time + orb.angle) * radius : 0;
-        const offsetY = idle ? Math.sin(time + orb.angle) * radius : 0;
-
-        orb.el.style.transform = `translate(${mouseX + offsetX - 6}px, ${mouseY + offsetY - 6}px)`;
+      // Fade orbs in
+      orbs.forEach(orb => {
+        orb.el.style.opacity = "1";
       });
 
-      requestAnimationFrame(animateOrbs);
-    }
+      let mouseX = window.innerWidth / 2;
+      let mouseY = window.innerHeight / 2;
+      let lastMove = Date.now();
 
-    animateOrbs();
+      document.addEventListener("mousemove", e => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        lastMove = Date.now();
+      });
+
+      function animateOrbs() {
+        const time = Date.now() * 0.002;
+        const idle = Date.now() - lastMove > 200;
+
+        orbs.forEach((orb, i) => {
+          const radius = 20;
+          const offsetX = idle ? Math.cos(time + orb.angle) * radius : 0;
+          const offsetY = idle ? Math.sin(time + orb.angle) * radius : 0;
+
+          orb.el.style.transform = `translate3d(${mouseX + offsetX}px, ${mouseY + offsetY}px, 0) translate(-50%, -50%)`;
+        });
+
+        requestAnimationFrame(animateOrbs);
+      }
+      animateOrbs();
+
+    }, 6500);
   </script>
 </body>
 </html>
