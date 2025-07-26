@@ -1,256 +1,491 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>fourty2's Discord Services</title>
-<style>
-  /* Reset & base */
-  * {
-    box-sizing: border-box;
-  }
-  body, html {
-    margin: 0; padding: 0; height: 100%;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #105493;
-    color: white;
-    overflow-x: hidden;
-    scroll-behavior: smooth;
-  }
-
-  /* Container for hero */
-  .hero {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem;
-    text-align: center;
-    user-select: none;
-  }
-
-  .hero h1 {
-    font-weight: 700;
-    font-size: 3rem;
-    margin: 0;
-    user-select: text;
-  }
-
-  /* Buttons container */
-  .btn-group {
-    display: flex;
-    gap: 1.5rem;
-  }
-
-  /* Buttons */
-  .btn {
-    background-color: #073763;
-    border: none;
-    color: white;
-    padding: 1rem 2.5rem;
-    font-size: 1.25rem;
-    font-weight: 600;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.25);
-    user-select: none;
-  }
-
-  .btn:hover,
-  .btn:focus {
-    transform: scale(1.1);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.35);
-    outline: none;
-  }
-
-  /* Fade effect */
-  .fade {
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.6s ease;
-  }
-
-  .fade.show {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  /* Packages container */
-  main {
-    background: white;
-    color: #222;
-    padding: 3rem 1.5rem 5rem;
-    max-width: 900px;
-    margin: 0 auto 4rem;
-    border-radius: 10px;
-    box-shadow: 0 8px 30px rgb(0 0 0 / 0.1);
-    font-size: 1rem;
-    line-height: 1.5;
-    display: none;
-    flex-direction: column;
-    gap: 3rem;
-  }
-  main.show {
-    display: flex;
-  }
-
-  section.package {
-    border-left: 6px solid #105493;
-    padding-left: 1rem;
-  }
-  section.package h2 {
-    margin-top: 0;
-    color: #105493;
-    font-weight: 700;
-    font-size: 1.6rem;
-  }
-  ul.features {
-    list-style: none;
-    padding-left: 1rem;
-    color: #444;
-  }
-  ul.features li {
-    margin-bottom: 0.7rem;
-    position: relative;
-  }
-  ul.features li::before {
-    content: '•';
-    color: #105493;
-    font-weight: 700;
-    position: absolute;
-    left: -1rem;
-  }
-
-  /* Back button */
-  .back-btn {
-    align-self: center;
-    margin-top: 2rem;
-    background: #073763;
-    color: white;
-    border: none;
-    padding: 0.75rem 1.8rem;
-    border-radius: 6px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    user-select: none;
-  }
-  .back-btn:hover {
-    background: #05274a;
-  }
-
-  /* Responsive */
-  @media (max-width: 600px) {
-    .btn-group {
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>fourty2's Discord Services</title>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@500&display=swap" rel="stylesheet" />
+  
+  <style>
+    /* Reset & base */
+    * {
+      box-sizing: border-box;
+    }
+    body, html {
+      margin: 0; padding: 0; height: 100%;
+      font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #121212;
+      color: #d0d0d0;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      display: flex;
       flex-direction: column;
-      width: 80vw;
+      min-height: 100vh;
+      position: relative;
     }
-    .btn {
+
+    /* Background effect container */
+    #bg-canvas {
+      position: fixed;
+      top: 0; left: 0;
       width: 100%;
-      padding: 1rem 0;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      background: #121212;
+    }
+
+    /* Container */
+    .container {
+      max-width: 900px;
+      margin: 0 auto 4rem;
+      padding: 2rem 1.25rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+      user-select: none;
+      margin-top: 3rem;
+      color: #e0e0e0;
+    }
+    header h1 {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 500;
+      font-size: 3.5rem;
+      letter-spacing: 0.05em;
+      margin: 0;
+      color: #e0e0e0;
+    }
+    header p {
+      font-weight: 400;
       font-size: 1.2rem;
+      margin-top: 0.4rem;
+      color: #9e9e9e;
     }
+
+    /* Button group */
+    .btn-group {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      background-color: #444;
+      border: none;
+      color: #ddd;
+      padding: 1.15rem 3.5rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgb(68 68 68 / 0.7);
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+      user-select: none;
+      min-width: 140px;
+      text-align: center;
+      letter-spacing: 0.03em;
+    }
+
+    .btn:hover,
+    .btn:focus {
+      transform: scale(1.1);
+      box-shadow: 0 10px 28px rgb(68 68 68 / 0.9);
+      background-color: #666;
+      outline: none;
+      color: #fff;
+    }
+
+    /* Packages container */
     main {
-      padding: 2rem 1rem 4rem;
-      margin: 0 1rem 4rem;
+      background: #1a1a1a;
+      color: #d0d0d0;
+      padding: 3rem 3rem 4rem;
+      max-width: 900px;
+      border-radius: 14px;
+      box-shadow: 0 12px 36px rgb(0 0 0 / 0.7);
+      font-size: 1rem;
+      line-height: 1.6;
+      width: 100%;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+      scroll-margin-top: 80px;
+
+      /* Center horizontally & vertically */
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      max-height: 80vh;
+      overflow-y: auto;
+      box-sizing: border-box;
+      z-index: 10;
     }
-  }
-</style>
+    main.show {
+      opacity: 1;
+      pointer-events: auto;
+      animation: fadeInScale 0.5s ease forwards;
+    }
+
+    @keyframes fadeInScale {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -48%) scale(0.92);
+      }
+      100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+
+    section.package {
+      border-left: 6px solid #4f46e5; /* Indigo-600 */
+      padding-left: 1.4rem;
+    }
+    section.package h2 {
+      margin-top: 0;
+      color: #818cf8; /* Indigo-400 */
+      font-weight: 700;
+      font-size: 1.75rem;
+      margin-bottom: 0.5rem;
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+    }
+    ul.features {
+      list-style: none;
+      padding-left: 1.2rem;
+      color: #9ca3af; /* Gray-400 */
+      font-weight: 500;
+    }
+    ul.features li {
+      margin-bottom: 0.85rem;
+      position: relative;
+    }
+    ul.features li::before {
+      content: '•';
+      color: #4f46e5;
+      font-weight: 900;
+      position: absolute;
+      left: -1rem;
+      font-size: 1.3rem;
+      line-height: 1;
+      top: 2px;
+    }
+
+    /* Back button */
+    .back-btn {
+      align-self: center;
+      margin-top: 2.4rem;
+      background: #444;
+      color: #d0d0d0;
+      border: none;
+      padding: 0.85rem 2.3rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgb(68 68 68 / 0.7);
+      transition: background 0.3s ease;
+      user-select: none;
+      letter-spacing: 0.04em;
+    }
+    .back-btn:hover {
+      background: #666;
+      color: #fff;
+    }
+
+    /* Responsive */
+    @media (max-width: 720px) {
+      header h1 {
+        font-size: 2.5rem;
+      }
+      .btn-group {
+        gap: 1rem;
+      }
+      .btn {
+        padding: 1rem 2.5rem;
+        min-width: 110px;
+        font-size: 1.1rem;
+      }
+      main {
+        padding: 2rem 1.5rem 3rem;
+        border-radius: 12px;
+        font-size: 0.95rem;
+        max-height: 75vh;
+      }
+      section.package {
+        padding-left: 1rem;
+      }
+      ul.features {
+        padding-left: 1rem;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<div class="hero">
-  <h1>fourty2's discord services</h1>
-  <div class="btn-group">
-    <button class="btn" data-package="1">Package 1</button>
-    <button class="btn" data-package="2">Package 2</button>
-    <button class="btn" data-package="3">Package 3</button>
+  <canvas id="bg-canvas"></canvas>
+
+  <div class="container">
+    <header>
+      <h1>fourty2's discord services</h1>
+      <p>Professional, tailored Discord setups & custom bots for your community</p>
+    </header>
+
+    <div class="btn-group" role="group" aria-label="Select package">
+      <button class="btn" data-package="1" aria-controls="package-1" aria-expanded="false">Package 1</button>
+      <button class="btn" data-package="2" aria-controls="package-2" aria-expanded="false">Package 2</button>
+      <button class="btn" data-package="3" aria-controls="package-3" aria-expanded="false">Package 3</button>
+    </div>
+
+    <main id="packages" aria-live="polite" aria-label="Package details panel" tabindex="-1" role="region">
+      <section class="package" id="package-1" aria-label="Package 1 details">
+        <h2>Package 1: Discord Setup – $20</h2>
+        <ul class="features">
+          <li>Organized Channel, Role & Category Setup</li>
+          <li>Custom Embed Design for intros, info, and announcements</li>
+          <li>Basic Bot Setup like timer bots and role bots</li>
+          <li>Clean, functional layout optimized for RP or community use</li>
+          <li>Support included post-setup</li>
+        </ul>
+      </section>
+
+      <section class="package" id="package-2" aria-label="Package 2 details">
+        <h2>Package 2: Advanced Discord Build – $30</h2>
+        <ul class="features">
+          <li>Everything in Package 1, plus:</li>
+          <li>Custom Ticket System with tailored questions & routing</li>
+          <li>Rules and Guidelines formatted in professional embeds</li>
+          <li>Reaction Roles and Role Menus for gangs, pronouns, zones, etc.</li>
+          <li>Custom Applications channels or external forms</li>
+          <li>Resource Channels for laws, guides, keybinds, etc.</li>
+          <li>Staff Setup with private categories, logs, and disciplinary channels</li>
+          <li>Bot Automation with popular bots like Dyno, Carl-bot, MEE6</li>
+          <li>Server Analytics Bots for member tracking and engagement</li>
+          <li>Branding integration with logos, banners, colors</li>
+          <li>Ongoing Support included</li>
+        </ul>
+      </section>
+
+      <section class="package" id="package-3" aria-label="Package 3 details">
+        <h2>Package 3: Custom Bots – $20</h2>
+        <ul class="features">
+          <li>Fully custom bot development based on your exact requirements</li>
+          <li>Flexible and personalized to fit your community perfectly</li>
+          <li>Integration & maintenance support</li>
+          <li><strong>Note:</strong> You need to provide your own VPS or hosting for the bot</li>
+        </ul>
+      </section>
+
+      <button class="back-btn" id="back-btn">← Back to Packages</button>
+    </main>
   </div>
-</div>
 
-<main id="packages">
+  <script>
+    const buttons = document.querySelectorAll('.btn');
+    const packagesMain = document.getElementById('packages');
+    const backBtn = document.getElementById('back-btn');
+    const container = document.querySelector('.container');
+    let currentOpen = null;
 
-  <section class="package" id="package-1">
-    <h2>Package 1: Discord Setup – $20</h2>
-    <ul class="features">
-      <li>Organized Channel, Role & Category Setup</li>
-      <li>Custom Embed Design for intros, info, and announcements</li>
-      <li>Basic Bot Setup like timer bots and role bots</li>
-      <li>Clean, functional layout optimized for RP or community use</li>
-      <li>Support included post-setup</li>
-    </ul>
-  </section>
-
-  <section class="package" id="package-2">
-    <h2>Package 2: Advanced Discord Build – $30</h2>
-    <ul class="features">
-      <li>Everything in Package 1, plus:</li>
-      <li>Custom Ticket System with tailored questions & routing</li>
-      <li>Rules and Guidelines formatted in professional embeds</li>
-      <li>Reaction Roles and Role Menus for gangs, pronouns, zones, etc.</li>
-      <li>Custom Applications channels or external forms</li>
-      <li>Resource Channels for laws, guides, keybinds, etc.</li>
-      <li>Staff Setup with private categories, logs, and disciplinary channels</li>
-      <li>Bot Automation with popular bots like Dyno, Carl-bot, MEE6</li>
-      <li>Server Analytics Bots for member tracking and engagement</li>
-      <li>Branding integration with logos, banners, colors</li>
-      <li>Ongoing Support included</li>
-    </ul>
-  </section>
-
-  <section class="package" id="package-3">
-    <h2>Package 3: Custom Bots – $20</h2>
-    <ul class="features">
-      <li>Fully custom bot development based on your exact requirements</li>
-      <li>Flexible and personalized to fit your community perfectly</li>
-      <li>Integration & maintenance support</li>
-      <li><strong>Note:</strong> You need to provide your own VPS or hosting for the bot</li>
-    </ul>
-  </section>
-
-  <button class="back-btn" id="back-btn">← Back to Packages</button>
-</main>
-
-<script>
-  const buttons = document.querySelectorAll('.btn');
-  const packagesMain = document.getElementById('packages');
-  const backBtn = document.getElementById('back-btn');
-  const hero = document.querySelector('.hero');
-
-  buttons.forEach(button => {
-    button.addEventListener('click', () => {
-      const pkgNum = button.getAttribute('data-package');
-      showPackage(pkgNum);
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        const pkgNum = button.getAttribute('data-package');
+        showPackage(pkgNum);
+      });
     });
-  });
 
-  backBtn.addEventListener('click', () => {
-    packagesMain.classList.remove('show');
-    hero.style.opacity = '1';
-    hero.style.pointerEvents = 'auto';
-    // Scroll top smoothly
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
+    backBtn.addEventListener('click', () => {
+      packagesMain.classList.remove('show');
+      container.querySelector('header').style.opacity = '1';
+      container.querySelector('.btn-group').style.opacity = '1';
+      currentOpen = null;
 
-  function showPackage(num) {
-    // Hide hero with fade
-    hero.style.transition = 'opacity 0.6s ease';
-    hero.style.opacity = '0';
-    hero.style.pointerEvents = 'none';
+      // Reset aria-expanded
+      buttons.forEach(btn => btn.setAttribute('aria-expanded', 'false'));
 
-    // Show packages main with fade after hero faded
-    setTimeout(() => {
-      packagesMain.classList.add('show');
-      // Scroll to top of packages
-      window.scrollTo({ top: packagesMain.offsetTop - 20, behavior: 'smooth' });
-      // Scroll to selected package
-      const selected = document.getElementById(`package-${num}`);
-      selected.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 600);
-  }
-</script>
+      // Hide all package sections when back button clicked
+      const allPackages = packagesMain.querySelectorAll('section.package');
+      allPackages.forEach(pkg => {
+        pkg.style.display = 'none';
+      });
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    function showPackage(num) {
+      if (currentOpen === num) return;
+      currentOpen = num;
+
+      // Hide header and buttons smoothly
+      container.querySelector('header').style.transition = 'opacity 0.5s ease';
+      container.querySelector('.btn-group').style.transition = 'opacity 0.5s ease';
+      container.querySelector('header').style.opacity = '0';
+      container.querySelector('.btn-group').style.opacity = '0';
+
+      // Show packages main after fade out
+      setTimeout(() => {
+        packagesMain.classList.add('show');
+
+        // Show only selected package
+        const allPackages = packagesMain.querySelectorAll('section.package');
+        allPackages.forEach(pkg => {
+          if (pkg.id === `package-${num}`) {
+            pkg.style.display = 'block';
+          } else {
+            pkg.style.display = 'none';
+          }
+        });
+
+        packagesMain.focus();
+        packagesMain.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        // Set aria-expanded attributes
+        buttons.forEach(btn => {
+          btn.setAttribute('aria-expanded', btn.getAttribute('data-package') === num ? 'true' : 'false');
+        });
+      }, 500);
+    }
+
+    /* Cursor follower - PS2 style loading orbs with smooth stop and slow rotation */
+    (() => {
+      const canvas = document.getElementById('bg-canvas');
+      const ctx = canvas.getContext('2d');
+      let width, height;
+      let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+      let lastMouse = { x: mouse.x, y: mouse.y };
+      let moving = false;
+      let lastMoveTime = 0;
+
+      const ORB_COUNT = 5;
+      const orbs = [];
+
+      // Orb properties
+      for (let i = 0; i < ORB_COUNT; i++) {
+        orbs.push({
+          angle: i * (2 * Math.PI / ORB_COUNT),
+          radius: 12,
+          size: 8,
+          speed: 0.015 + i * 0.005,  // slower rotation speed
+          x: mouse.x,
+          y: mouse.y,
+          vx: 0,
+          vy: 0,
+        });
+      }
+
+      function resize() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      function drawOrb(x, y, size, alpha = 1) {
+        const gradient = ctx.createRadialGradient(x, y, size * 0.3, x, y, size);
+        gradient.addColorStop(0, `rgba(79,70,229,${alpha})`);
+        gradient.addColorStop(1, 'rgba(79,70,229,0)');
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(x, y, size, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+
+      function lerp(a, b, t) {
+        return a + (b - a) * t;
+      }
+
+      function animate(time = 0) {
+        ctx.clearRect(0, 0, width, height);
+
+        // Detect movement
+        moving = Math.hypot(mouse.x - lastMouse.x, mouse.y - lastMouse.y) > 0.5;
+        lastMoveTime = moving ? time : lastMoveTime;
+
+        if (moving) {
+          // Orbs follow cursor with smooth trailing effect and velocity easing
+          orbs.forEach((orb, i) => {
+            // Calculate desired velocity towards mouse
+            const dx = mouse.x - orb.x;
+            const dy = mouse.y - orb.y;
+            // Apply easing to velocity (smooth acceleration)
+            orb.vx += dx * 0.1;
+            orb.vy += dy * 0.1;
+
+            // Apply friction to slow down velocity for smoothness
+            orb.vx *= 0.6;
+            orb.vy *= 0.6;
+
+            orb.x += orb.vx;
+            orb.y += orb.vy;
+
+            drawOrb(orb.x, orb.y, orb.size);
+          });
+        } else {
+          // Idle time since last movement
+          const idleTime = time - lastMoveTime;
+
+          if (idleTime > 200) {
+            // Smoothly lerp orbs towards their orbit positions around mouse
+            orbs.forEach((orb, i) => {
+              orb.angle += orb.speed;
+
+              const targetX = mouse.x + Math.cos(orb.angle) * orb.radius;
+              const targetY = mouse.y + Math.sin(orb.angle) * orb.radius;
+
+              // Lerp orb position towards target orbit position for smooth transition
+              orb.x = lerp(orb.x, targetX, 0.15);
+              orb.y = lerp(orb.y, targetY, 0.15);
+
+              // Slowly reduce velocity to zero to prevent popping back to center
+              orb.vx *= 0.7;
+              orb.vy *= 0.7;
+
+              drawOrb(orb.x, orb.y, orb.size * 0.8, 0.6);
+            });
+          } else {
+            // Just draw orbs on mouse position briefly
+            orbs.forEach((orb) => {
+              orb.x = lerp(orb.x, mouse.x, 0.25);
+              orb.y = lerp(orb.y, mouse.y, 0.25);
+              orb.vx *= 0.5;
+              orb.vy *= 0.5;
+              drawOrb(orb.x, orb.y, orb.size);
+            });
+          }
+        }
+
+        lastMouse.x = mouse.x;
+        lastMouse.y = mouse.y;
+
+        requestAnimationFrame(animate);
+      }
+
+      window.addEventListener('mousemove', (e) => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+      });
+
+      animate();
+    })();
+  </script>
 
 </body>
 </html>
