@@ -17,6 +17,9 @@
       font-family: 'Poppins', sans-serif;
       color: #fff;
     }
+    body {
+      scrollbar-width: none;
+    }
     body::-webkit-scrollbar {
       display: none;
     }
@@ -78,24 +81,7 @@
       to {opacity: 1; transform: translateY(0);}
     }
 
-    /* Welcome Screen */
-    #welcome {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #0e0e0e;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2rem;
-      z-index: 9999;
-      transition: opacity 1s ease;
-    }
-
-    /* Cursor Orbs */
+    /* Cursor Follower Orbs */
     .orb {
       position: fixed;
       width: 12px;
@@ -103,14 +89,11 @@
       background: #555;
       border-radius: 50%;
       pointer-events: none;
-      opacity: 0;
-      transition: opacity 1s ease;
+      transition: transform 0.1s linear;
     }
   </style>
 </head>
 <body>
-  <div id="welcome">Welcome to fourty2's Services</div>
-
   <h1>fourty2's Discord Services</h1>
 
   <div class="button-container">
@@ -122,17 +105,20 @@
   <div id="package1" class="package">
     <p><strong>🧰 Package 1: Discord Setup – $20</strong><br>
     Perfect for new business owners, gang startups, or anyone wanting a streamlined Discord to manage their FiveM experience with ease and clarity.</p>
+
     <p>📁 <strong>Channel, Role & Category Setup</strong><br>Organized layout with relevant channels, permissions, and role hierarchy.</p>
     <p>🖌️ <strong>Custom Embed Design</strong><br>Branded and aesthetic embeds for intros, info, and announcements.</p>
     <p>🤖 <strong>Bot Setup</strong><br>Timer bots, role bots, application systems, and more — configured to suit your needs.</p>
     <p>🌐 <strong>Professional Layout</strong><br>Designed to look clean, functional, and optimized for RP or community use.</p>
     <p>📞 <strong>Support: Included</strong><br>Reach out to me if needed — I'll remain your Discord server.</p>
+    
     <button class="back-button" onclick="goBack()">Back to Packages</button>
   </div>
 
   <div id="package2" class="package" style="max-height: 80vh; overflow-y: auto;">
     <p><strong>🛠️ Package 2: Advanced Discord Build – $30</strong><br>
     Ideal for gang startups, businesses, or server owners who want more than just a setup — they want structure, automation, and active oversight.</p>
+
     <p>Includes everything from Package 1, plus:</p>
     <p>🔧 <strong>Custom Ticket System</strong><br>With Ticket Tool or similar bots, custom questions, close messages, and category routing.</p>
     <p>📜 <strong>Rules + Guidelines Embed</strong><br>Clean embeds for clarity and organization.</p>
@@ -144,21 +130,25 @@
     <p>📊 <strong>Server Analytics Bots</strong><br>Track joins, engagement, role stats.</p>
     <p>🖼️ <strong>Branding Integration</strong><br>Embeds styled with your theme/logo.</p>
     <p>📞 <strong>Support: Included</strong><br>Contact anytime — I stay part of your server.</p>
+
     <button class="back-button" onclick="goBack()">Back to Packages</button>
   </div>
 
   <div id="package3" class="package">
     <p><strong>🤖 Custom Bots – $20</strong><br>
     A completely tailored Discord bot designed to match your exact needs. Whether it's a city whitelist system, gang management, XP system, or custom utility — I’ll build it how you want it.</p>
+
     <p><strong>⚠️ Note:</strong> This bot must be hosted on your own VPS or hosting service.</p>
+
     <p>📞 <strong>Support: Included</strong><br>Contact me directly for updates or help.</p>
+    
     <button class="back-button" onclick="goBack()">Back to Packages</button>
   </div>
 
   <script>
     function showPackage(number) {
       document.querySelector(".button-container").style.display = "none";
-      document.querySelector(`#package${number}`).style.display = "block";
+      document.querySelector(#package${number}).style.display = "block";
     }
 
     function goBack() {
@@ -166,59 +156,42 @@
       document.querySelectorAll(".package").forEach(p => p.style.display = "none");
     }
 
-    // Welcome screen fade out
-    const welcome = document.getElementById('welcome');
-    setTimeout(() => {
-      welcome.style.opacity = 0;
-      setTimeout(() => {
-        welcome.style.display = 'none';
-        initOrbs();
-      }, 1000); // wait for fade out
-    }, 3000);
+    // Mouse Orbs
+    const orbCount = 6;
+    const orbs = [];
 
-    // Cursor Orbs
-    function initOrbs() {
-      const orbCount = 6;
-      const orbs = [];
+    for (let i = 0; i < orbCount; i++) {
+      const orb = document.createElement("div");
+      orb.className = "orb";
+      document.body.appendChild(orb);
+      orbs.push({ el: orb, angle: (Math.PI * 2 / orbCount) * i });
+    }
 
-      for (let i = 0; i < orbCount; i++) {
-        const orb = document.createElement("div");
-        orb.className = "orb";
-        document.body.appendChild(orb);
-        orbs.push({ el: orb, angle: (Math.PI * 2 / orbCount) * i });
-      }
+    let mouseX = 0, mouseY = 0;
+    let lastMove = Date.now();
 
-      // Fade in orbs
-      setTimeout(() => {
-        document.querySelectorAll(".orb").forEach(o => o.style.opacity = 1);
-      }, 2000);
+    document.addEventListener("mousemove", e => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      lastMove = Date.now();
+    });
 
-      let mouseX = 0, mouseY = 0;
-      let lastMove = Date.now();
+    function animateOrbs() {
+      const time = Date.now() * 0.002;
+      const idle = Date.now() - lastMove > 200;
 
-      document.addEventListener("mousemove", e => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        lastMove = Date.now();
+      orbs.forEach((orb, i) => {
+        const radius = 20;
+        const offsetX = idle ? Math.cos(time + orb.angle) * radius : 0;
+        const offsetY = idle ? Math.sin(time + orb.angle) * radius : 0;
+
+        orb.el.style.transform = translate(${mouseX + offsetX - 6}px, ${mouseY + offsetY - 6}px);
       });
 
-      function animate() {
-        const time = Date.now() * 0.002;
-        const idle = Date.now() - lastMove > 200;
-
-        orbs.forEach((orb, i) => {
-          const radius = 20;
-          const offsetX = idle ? Math.cos(time + orb.angle) * radius : 0;
-          const offsetY = idle ? Math.sin(time + orb.angle) * radius : 0;
-
-          orb.el.style.transform = `translate(${mouseX + offsetX - 6}px, ${mouseY + offsetY - 6}px)`;
-        });
-
-        requestAnimationFrame(animate);
-      }
-
-      animate();
+      requestAnimationFrame(animateOrbs);
     }
+
+    animateOrbs();
   </script>
 </body>
 </html>
