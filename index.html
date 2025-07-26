@@ -168,7 +168,6 @@
     const title = document.getElementById("title");
     const packages = document.getElementById("packages");
 
-    // After 2.5s, fade out welcome, show title + packages
     setTimeout(() => {
       welcome.style.display = "none";
       title.style.display = "block";
@@ -176,7 +175,6 @@
       packages.style.transform = "translateY(0)";
     }, 2500);
 
-    // After 4.5s (2 seconds later), show orbs and start animating them
     setTimeout(() => {
       initOrbs();
     }, 4500);
@@ -204,11 +202,9 @@
       title.style.display = "block";
     }
 
-    // Orbs code
     function initOrbs() {
       const orbCount = 6;
       const orbs = [];
-
       for (let i = 0; i < orbCount; i++) {
         const orb = document.createElement("div");
         orb.className = "orb";
@@ -216,37 +212,44 @@
         orbs.push({ el: orb, angle: (Math.PI * 2 / orbCount) * i });
       }
 
-      orbs.forEach(orb => {
-        orb.el.style.opacity = "1";
-      });
+      orbs.forEach(o => o.el.style.opacity = "1");
 
       let mouseX = window.innerWidth / 2;
       let mouseY = window.innerHeight / 2;
-      let lastMove = Date.now();
+
+      // For smooth follow, store current orb center position and use lerp
+      let orbCenterX = mouseX;
+      let orbCenterY = mouseY;
 
       document.addEventListener("mousemove", e => {
         mouseX = e.clientX;
         mouseY = e.clientY;
-        lastMove = Date.now();
       });
 
-      function animateOrbs() {
+      function lerp(start, end, t) {
+        return start + (end - start) * t;
+      }
+
+      function animate() {
+        // Smoothly move orb center toward mouse position
+        orbCenterX = lerp(orbCenterX, mouseX, 0.15);
+        orbCenterY = lerp(orbCenterY, mouseY, 0.15);
+
         const time = Date.now() * 0.002;
-        const idle = Date.now() - lastMove > 200;
         const radius = 20;
 
         orbs.forEach((orb, i) => {
-          const offsetX = idle ? Math.cos(time + orb.angle) * radius : 0;
-          const offsetY = idle ? Math.sin(time + orb.angle) * radius : 0;
-
-          orb.el.style.left = (mouseX + offsetX) + "px";
-          orb.el.style.top = (mouseY + offsetY) + "px";
+          const angle = time + orb.angle;
+          const x = orbCenterX + Math.cos(angle) * radius;
+          const y = orbCenterY + Math.sin(angle) * radius;
+          orb.el.style.left = `${x}px`;
+          orb.el.style.top = `${y}px`;
         });
 
-        requestAnimationFrame(animateOrbs);
+        requestAnimationFrame(animate);
       }
 
-      animateOrbs();
+      animate();
     }
   </script>
 </body>
