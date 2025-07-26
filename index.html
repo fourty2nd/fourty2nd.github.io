@@ -11,20 +11,21 @@
     html, body {
       height: 100%;
       background: #0e0e0e;
-      color: white;
       font-family: 'Poppins', sans-serif;
+      color: white;
       overflow: hidden;
+      position: relative;
     }
     .container {
-      position: relative;
-      z-index: 2;
-      height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      height: 100vh;
       text-align: center;
       padding: 20px;
+      position: relative;
+      z-index: 2;
     }
     #welcome {
       font-size: 3rem;
@@ -41,8 +42,8 @@
     h1 {
       font-size: 2.5rem;
       margin-bottom: 2rem;
-      display: none;
       color: #bb86fc;
+      display: none;
     }
     .packages {
       display: flex;
@@ -52,7 +53,7 @@
       transition: opacity 1s ease, transform 1s ease;
     }
     .package-button {
-      background-color: #2c006d;
+      background-color: #1f1f1f;
       border: none;
       padding: 20px 30px;
       border-radius: 12px;
@@ -62,7 +63,7 @@
       transition: transform 0.3s ease, background 0.3s ease;
     }
     .package-button:hover {
-      background-color: #4500a8;
+      background-color: #2d2d2d;
       transform: scale(1.05);
     }
     .package-details {
@@ -71,7 +72,7 @@
       transition: opacity 0.5s ease;
       max-height: 80vh;
       overflow-y: auto;
-      background: #1a0033;
+      background: #1c1c1c;
       border-radius: 12px;
       padding: 30px;
       width: 90%;
@@ -82,27 +83,17 @@
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 3;
-      color: #ddd;
     }
     .back-button {
       margin-top: 20px;
-      background-color: #350078;
+      background-color: #333;
       color: white;
       border: none;
       padding: 10px 20px;
       border-radius: 8px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
     }
-    .back-button:hover {
-      background-color: #5600c8;
-    }
-    .show {
-      display: block !important;
-      opacity: 1 !important;
-    }
-
-    /* Orbs */
+    /* Cursor Orbs */
     .orb {
       position: fixed;
       width: 12px;
@@ -113,6 +104,7 @@
       opacity: 0;
       transition: opacity 1s ease;
       z-index: 1;
+      transform: translate(-50%, -50%);
     }
   </style>
 </head>
@@ -176,39 +168,44 @@
     const title = document.getElementById("title");
     const packages = document.getElementById("packages");
 
-    // Show packages after welcome fades out
+    // After 2.5s, fade out welcome, show title + packages
     setTimeout(() => {
       welcome.style.display = "none";
       title.style.display = "block";
       packages.style.opacity = "1";
       packages.style.transform = "translateY(0)";
-      packages.style.transition = "opacity 1s ease, transform 1s ease";
-    }, 4000);
+    }, 2500);
 
-    // Packages start hidden and translated down by default in CSS, so no inline styles here
+    // After 4.5s (2 seconds later), show orbs and start animating them
+    setTimeout(() => {
+      initOrbs();
+    }, 4500);
 
     function showPackage(id) {
       packages.style.display = "none";
       title.style.display = "none";
-      document.querySelectorAll('.package-details').forEach(el => el.classList.remove('show'));
+      document.querySelectorAll('.package-details').forEach(el => {
+        el.style.display = "none";
+        el.style.opacity = 0;
+      });
       const detail = document.getElementById(id);
       detail.style.display = "block";
       setTimeout(() => {
-        detail.style.opacity = "1";
-      }, 50);
+        detail.style.opacity = 1;
+      }, 100);
     }
 
     function goBack() {
       document.querySelectorAll('.package-details').forEach(el => {
         el.style.display = "none";
-        el.style.opacity = "0";
+        el.style.opacity = 0;
       });
       packages.style.display = "flex";
       title.style.display = "block";
     }
 
-    // Orbs creation & animation after 2 seconds of welcome gone (total 6.5 seconds)
-    setTimeout(() => {
+    // Orbs code
+    function initOrbs() {
       const orbCount = 6;
       const orbs = [];
 
@@ -219,7 +216,6 @@
         orbs.push({ el: orb, angle: (Math.PI * 2 / orbCount) * i });
       }
 
-      // Fade orbs in
       orbs.forEach(orb => {
         orb.el.style.opacity = "1";
       });
@@ -237,20 +233,21 @@
       function animateOrbs() {
         const time = Date.now() * 0.002;
         const idle = Date.now() - lastMove > 200;
+        const radius = 20;
 
         orbs.forEach((orb, i) => {
-          const radius = 20;
           const offsetX = idle ? Math.cos(time + orb.angle) * radius : 0;
           const offsetY = idle ? Math.sin(time + orb.angle) * radius : 0;
 
-          orb.el.style.transform = `translate3d(${mouseX + offsetX}px, ${mouseY + offsetY}px, 0) translate(-50%, -50%)`;
+          orb.el.style.left = (mouseX + offsetX) + "px";
+          orb.el.style.top = (mouseY + offsetY) + "px";
         });
 
         requestAnimationFrame(animateOrbs);
       }
-      animateOrbs();
 
-    }, 6500);
+      animateOrbs();
+    }
   </script>
 </body>
 </html>
