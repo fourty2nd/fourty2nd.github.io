@@ -16,9 +16,11 @@
       font-family: 'Poppins', sans-serif;
       background: #0e0e0e;
       color: white;
-      overflow: hidden;
+      overflow: hidden; /* remove scroll bar */
     }
     .container {
+      position: relative;
+      z-index: 10;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -30,13 +32,18 @@
     h1 {
       font-size: 2.5rem;
       margin-bottom: 2rem;
+      opacity: 0;
+      transform: translateY(60px);
+      animation: flyUp 1s ease forwards;
+      animation-delay: 2.5s;
     }
     .packages {
       display: flex;
       gap: 20px;
       opacity: 0;
       transform: translateY(50px);
-      transition: opacity 1s ease, transform 1s ease;
+      animation: flyUp 1s ease forwards;
+      animation-delay: 2.8s;
     }
     .package-button {
       background-color: #1f1f1f;
@@ -56,7 +63,7 @@
       display: none;
       opacity: 0;
       transition: opacity 0.5s ease;
-      max-height: 80vh;
+      max-height: 75vh;
       overflow-y: auto;
       background: #1c1c1c;
       border-radius: 12px;
@@ -68,6 +75,7 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
+      z-index: 10;
     }
     .back-button {
       margin-top: 20px;
@@ -103,15 +111,32 @@
       display: block !important;
       opacity: 1 !important;
     }
+    /* Hide scrollbars */
     ::-webkit-scrollbar {
       display: none;
+    }
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+
+    /* Canvas style */
+    #bg-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+      background: #0e0e0e;
     }
   </style>
 </head>
 <body>
+
+  <canvas id="bg-canvas"></canvas>
+
   <div class="container">
     <div id="welcome">Welcome.</div>
-    <h1 id="title" style="display:none;">fourty2's Discord Services</h1>
+    <h1 id="title">fourty2's Discord Services</h1>
     <div class="packages" id="packages">
       <button class="package-button" onclick="showPackage('package1')">Package 1</button>
       <button class="package-button" onclick="showPackage('package2')">Package 2</button>
@@ -164,16 +189,17 @@
   </div>
 
   <script>
+    // UI show/hide logic
     const welcome = document.getElementById("welcome");
     const title = document.getElementById("title");
     const packages = document.getElementById("packages");
 
     setTimeout(() => {
       welcome.style.display = "none";
-      title.style.display = "block";
+      title.style.opacity = "1";
       packages.style.opacity = "1";
       packages.style.transform = "translateY(0)";
-      packages.style.animation = "flyUp 1s ease forwards";
+      // flyUp animation is CSS, so just opacity and transform here for instant after welcome fades
     }, 2500);
 
     function showPackage(id) {
@@ -181,6 +207,8 @@
       document.getElementById("title").style.display = "none";
       document.querySelectorAll('.package-details').forEach(el => {
         el.classList.remove('show');
+        el.style.display = 'none';
+        el.style.opacity = 0;
       });
       const detail = document.getElementById(id);
       detail.style.display = 'block';
@@ -191,12 +219,131 @@
 
     function goBack() {
       document.querySelectorAll('.package-details').forEach(el => {
-        el.style.display = 'none';
         el.style.opacity = 0;
+        setTimeout(() => el.style.display = 'none', 300);
       });
       document.getElementById("packages").style.display = "flex";
       document.getElementById("title").style.display = "block";
     }
+
+    /* Cursor follower - PS2 style loading orbs with smooth stop and slow rotation */
+    (() => {
+      const canvas = document.getElementById('bg-canvas');
+      const ctx = canvas.getContext('2d');
+      let width, height;
+      let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+      let lastMouse = { x: mouse.x, y: mouse.y };
+      let moving = false;
+      let lastMoveTime = 0;
+
+      const ORB_COUNT = 5;
+      const orbs = [];
+
+      // Initialize orbs with angle, radius, size, speed, position and velocity
+      for (let i = 0; i < ORB_COUNT; i++) {
+        orbs.push({
+          angle: i * (2 * Math.PI / ORB_COUNT),
+          radius: 12,
+          size: 8,
+          speed: 0.015 + i * 0.005,
+          x: mouse.x,
+          y: mouse.y,
+          vx: 0,
+          vy: 0,
+        });
+      }
+
+      function resize() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      function drawOrb(x, y, size, alpha = 1) {
+        const gradient = ctx.createRadialGradient(x, y, size * 0.3, x, y, size);
+        gradient.addColorStop(0, `rgba(79,70,229,${alpha})`);
+        gradient.addColorStop(1, 'rgba(79,70,229,0)');
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(x, y, size, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+
+      function lerp(a, b, t) {
+        return a + (b - a) * t;
+      }
+
+      function animate(time = 0) {
+        ctx.clearRect(0, 0, width, height);
+
+        // Detect movement
+        moving = Math.hypot(mouse.x - lastMouse.x, mouse.y - lastMouse.y) > 0.5;
+        lastMoveTime = moving ? time : lastMoveTime;
+
+        if (moving) {
+          // Orbs follow cursor with smooth trailing effect and velocity easing
+          orbs.forEach((orb, i) => {
+            const dx = mouse.x - orb.x;
+            const dy = mouse.y - orb.y;
+
+            orb.vx += dx * 0.1;
+            orb.vy += dy * 0.1;
+
+            orb.vx *= 0.6;
+            orb.vy *= 0.6;
+
+            orb.x += orb.vx;
+            orb.y += orb.vy;
+
+            drawOrb(orb.x, orb.y, orb.size);
+          });
+        } else {
+          const idleTime = time - lastMoveTime;
+
+          if (idleTime > 200) {
+            // Smoothly lerp orbs towards orbit positions
+            orbs.forEach((orb, i) => {
+              orb.angle += orb.speed;
+
+              const targetX = mouse.x + Math.cos(orb.angle) * orb.radius;
+              const targetY = mouse.y + Math.sin(orb.angle) * orb.radius;
+
+              orb.x = lerp(orb.x, targetX, 0.15);
+              orb.y = lerp(orb.y, targetY, 0.15);
+
+              orb.vx *= 0.7;
+              orb.vy *= 0.7;
+
+              drawOrb(orb.x, orb.y, orb.size * 0.8, 0.6);
+            });
+          } else {
+            // Briefly draw orbs at mouse position
+            orbs.forEach((orb) => {
+              orb.x = lerp(orb.x, mouse.x, 0.25);
+              orb.y = lerp(orb.y, mouse.y, 0.25);
+              orb.vx *= 0.5;
+              orb.vy *= 0.5;
+              drawOrb(orb.x, orb.y, orb.size);
+            });
+          }
+        }
+
+        lastMouse.x = mouse.x;
+        lastMouse.y = mouse.y;
+
+        requestAnimationFrame(animate);
+      }
+
+      window.addEventListener('mousemove', (e) => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+      });
+
+      animate();
+    })();
   </script>
 </body>
 </html>
