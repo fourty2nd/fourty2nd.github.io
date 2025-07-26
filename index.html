@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>fourty2's Discord Services</title>
+<style>
+  /* Reset & base */
+  * {
+    box-sizing: border-box;
+  }
+  body, html {
+    margin: 0; padding: 0; height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #105493;
+    color: white;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+  }
+
+  /* Container for hero */
+  .hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    text-align: center;
+    user-select: none;
+  }
+
+  .hero h1 {
+    font-weight: 700;
+    font-size: 3rem;
+    margin: 0;
+    user-select: text;
+  }
+
+  /* Buttons container */
+  .btn-group {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  /* Buttons */
+  .btn {
+    background-color: #073763;
+    border: none;
+    color: white;
+    padding: 1rem 2.5rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+    user-select: none;
+  }
+
+  .btn:hover,
+  .btn:focus {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.35);
+    outline: none;
+  }
+
+  /* Fade effect */
+  .fade {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s ease;
+  }
+
+  .fade.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Packages container */
+  main {
+    background: white;
+    color: #222;
+    padding: 3rem 1.5rem 5rem;
+    max-width: 900px;
+    margin: 0 auto 4rem;
+    border-radius: 10px;
+    box-shadow: 0 8px 30px rgb(0 0 0 / 0.1);
+    font-size: 1rem;
+    line-height: 1.5;
+    display: none;
+    flex-direction: column;
+    gap: 3rem;
+  }
+  main.show {
+    display: flex;
+  }
+
+  section.package {
+    border-left: 6px solid #105493;
+    padding-left: 1rem;
+  }
+  section.package h2 {
+    margin-top: 0;
+    color: #105493;
+    font-weight: 700;
+    font-size: 1.6rem;
+  }
+  ul.features {
+    list-style: none;
+    padding-left: 1rem;
+    color: #444;
+  }
+  ul.features li {
+    margin-bottom: 0.7rem;
+    position: relative;
+  }
+  ul.features li::before {
+    content: '•';
+    color: #105493;
+    font-weight: 700;
+    position: absolute;
+    left: -1rem;
+  }
+
+  /* Back button */
+  .back-btn {
+    align-self: center;
+    margin-top: 2rem;
+    background: #073763;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.8rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    user-select: none;
+  }
+  .back-btn:hover {
+    background: #05274a;
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .btn-group {
+      flex-direction: column;
+      width: 80vw;
+    }
+    .btn {
+      width: 100%;
+      padding: 1rem 0;
+      font-size: 1.2rem;
+    }
+    main {
+      padding: 2rem 1rem 4rem;
+      margin: 0 1rem 4rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>fourty2's discord services</h1>
+  <div class="btn-group">
+    <button class="btn" data-package="1">Package 1</button>
+    <button class="btn" data-package="2">Package 2</button>
+    <button class="btn" data-package="3">Package 3</button>
+  </div>
+</div>
+
+<main id="packages">
+
+  <section class="package" id="package-1">
+    <h2>Package 1: Discord Setup – $20</h2>
+    <ul class="features">
+      <li>Organized Channel, Role & Category Setup</li>
+      <li>Custom Embed Design for intros, info, and announcements</li>
+      <li>Basic Bot Setup like timer bots and role bots</li>
+      <li>Clean, functional layout optimized for RP or community use</li>
+      <li>Support included post-setup</li>
+    </ul>
+  </section>
+
+  <section class="package" id="package-2">
+    <h2>Package 2: Advanced Discord Build – $30</h2>
+    <ul class="features">
+      <li>Everything in Package 1, plus:</li>
+      <li>Custom Ticket System with tailored questions & routing</li>
+      <li>Rules and Guidelines formatted in professional embeds</li>
+      <li>Reaction Roles and Role Menus for gangs, pronouns, zones, etc.</li>
+      <li>Custom Applications channels or external forms</li>
+      <li>Resource Channels for laws, guides, keybinds, etc.</li>
+      <li>Staff Setup with private categories, logs, and disciplinary channels</li>
+      <li>Bot Automation with popular bots like Dyno, Carl-bot, MEE6</li>
+      <li>Server Analytics Bots for member tracking and engagement</li>
+      <li>Branding integration with logos, banners, colors</li>
+      <li>Ongoing Support included</li>
+    </ul>
+  </section>
+
+  <section class="package" id="package-3">
+    <h2>Package 3: Custom Bots – $20</h2>
+    <ul class="features">
+      <li>Fully custom bot development based on your exact requirements</li>
+      <li>Flexible and personalized to fit your community perfectly</li>
+      <li>Integration & maintenance support</li>
+      <li><strong>Note:</strong> You need to provide your own VPS or hosting for the bot</li>
+    </ul>
+  </section>
+
+  <button class="back-btn" id="back-btn">← Back to Packages</button>
+</main>
+
+<script>
+  const buttons = document.querySelectorAll('.btn');
+  const packagesMain = document.getElementById('packages');
+  const backBtn = document.getElementById('back-btn');
+  const hero = document.querySelector('.hero');
+
+  buttons.forEach(button => {
+    button.addEventListener('click', () => {
+      const pkgNum = button.getAttribute('data-package');
+      showPackage(pkgNum);
+    });
+  });
+
+  backBtn.addEventListener('click', () => {
+    packagesMain.classList.remove('show');
+    hero.style.opacity = '1';
+    hero.style.pointerEvents = 'auto';
+    // Scroll top smoothly
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  function showPackage(num) {
+    // Hide hero with fade
+    hero.style.transition = 'opacity 0.6s ease';
+    hero.style.opacity = '0';
+    hero.style.pointerEvents = 'none';
+
+    // Show packages main with fade after hero faded
+    setTimeout(() => {
+      packagesMain.classList.add('show');
+      // Scroll to top of packages
+      window.scrollTo({ top: packagesMain.offsetTop - 20, behavior: 'smooth' });
+      // Scroll to selected package
+      const selected = document.getElementById(`package-${num}`);
+      selected.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 600);
+  }
+</script>
+
+</body>
+</html>
