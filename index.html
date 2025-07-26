@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>fourty2's Discord Services</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Poppins:wght@500&display=swap" rel="stylesheet">
   <style>
@@ -17,7 +17,56 @@
       background: #0e0e0e;
       color: white;
       overflow: hidden;
+      position: relative;
     }
+
+    /* === ORBS BACKGROUND === */
+    .orbs {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .orb {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.05), transparent);
+      filter: blur(80px);
+      animation: float 20s infinite ease-in-out;
+    }
+
+    .orb:nth-child(1) {
+      top: 10%;
+      left: 15%;
+      background: #00ffff33;
+      animation-delay: 0s;
+    }
+
+    .orb:nth-child(2) {
+      top: 50%;
+      left: 70%;
+      background: #ff00ff33;
+      animation-delay: 5s;
+    }
+
+    .orb:nth-child(3) {
+      top: 80%;
+      left: 30%;
+      background: #ffff0033;
+      animation-delay: 10s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-30px) scale(1.05); }
+    }
+
+    /* === CONTENT STYLING === */
     .container {
       display: flex;
       flex-direction: column;
@@ -29,10 +78,12 @@
       position: relative;
       z-index: 2;
     }
+
     h1 {
       font-size: 2.5rem;
       margin-bottom: 2rem;
     }
+
     .packages {
       display: flex;
       gap: 20px;
@@ -40,6 +91,7 @@
       transform: translateY(50px);
       transition: opacity 1s ease, transform 1s ease;
     }
+
     .package-button {
       background-color: #1f1f1f;
       border: none;
@@ -50,10 +102,12 @@
       cursor: pointer;
       transition: transform 0.3s ease, background 0.3s ease;
     }
+
     .package-button:hover {
       background-color: #2d2d2d;
       transform: scale(1.05);
     }
+
     .package-details {
       display: none;
       opacity: 0;
@@ -72,6 +126,7 @@
       transform: translate(-50%, -50%);
       z-index: 3;
     }
+
     .back-button {
       margin-top: 20px;
       background-color: #333;
@@ -113,6 +168,15 @@
   </style>
 </head>
 <body>
+
+  <!-- ORBS BACKGROUND -->
+  <div class="orbs">
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+  </div>
+
+  <!-- MAIN CONTENT -->
   <div class="container">
     <div id="welcome">Welcome.</div>
     <h1 id="title" style="display: none;">fourty2's Discord Services</h1>
@@ -123,22 +187,23 @@
     </div>
   </div>
 
+  <!-- PACKAGE DETAILS -->
   <div class="package-details" id="package1">
     <h2>🧰 Package 1: Discord Setup – <strong>$20</strong></h2>
-    <p><em>Perfect for new business owners, gang startups, or anyone wanting a streamlined Discord to manage their FiveM experience with ease and clarity.</em></p>
+    <p><em>Perfect for new business owners, gang startups...</em></p>
     <ul>
-      <li><strong>📁 Channel, Role & Category Setup</strong><br>Organized layout with relevant channels, permissions, and role hierarchy.</li>
-      <li><strong>🖌️ Custom Embed Design</strong><br>Branded and aesthetic embeds for intros, info, and announcements.</li>
-      <li><strong>🤖 Bot Setup</strong><br>Timer bots, role bots, application systems, and more — configured to suit your needs.</li>
-      <li><strong>🌐 Professional Layout</strong><br>Clean, functional, and optimized for RP or community use.</li>
-      <li><strong>📞 Support: Included</strong><br>Reach out to me if needed — I'll remain your Discord server contact.</li>
+      <li><strong>📁 Channel, Role & Category Setup</strong></li>
+      <li><strong>🖌️ Custom Embed Design</strong></li>
+      <li><strong>🤖 Bot Setup</strong></li>
+      <li><strong>🌐 Professional Layout</strong></li>
+      <li><strong>📞 Support: Included</strong></li>
     </ul>
     <button class="back-button" onclick="goBack()">Back to Packages</button>
   </div>
 
   <div class="package-details" id="package2">
     <h2>🛠️ Package 2: Advanced Discord Build – <strong>$30</strong></h2>
-    <p><em>Ideal for gang startups, businesses, or server owners who want more than just a setup — they want structure, automation, and active oversight.</em></p>
+    <p><em>Ideal for gang startups, businesses, or server owners...</em></p>
     <ul>
       <li><strong>Everything in Package 1</strong></li>
       <li><strong>🔧 Custom Ticket System</strong></li>
@@ -157,7 +222,7 @@
 
   <div class="package-details" id="package3">
     <h2>🤖 Custom Bot – <strong>$20</strong></h2>
-    <p><em>We'll build a fully custom Discord bot based on your exact needs and features. You explain, we create.</em></p>
+    <p><em>We'll build a fully custom Discord bot based on your exact needs and features...</em></p>
     <ul>
       <li>Command & Interaction based</li>
       <li>Unique features tailored to your server</li>
@@ -176,7 +241,8 @@
       welcome.style.display = "none";
       title.style.display = "block";
       packages.style.display = "flex";
-      packages.style.animation = "flyUp 1s ease forwards";
+      packages.style.opacity = "1";
+      packages.style.transform = "translateY(0)";
     }, 2500);
 
     function showPackage(id) {
@@ -184,6 +250,8 @@
       title.style.display = "none";
       document.querySelectorAll('.package-details').forEach(el => {
         el.classList.remove('show');
+        el.style.display = 'none';
+        el.style.opacity = 0;
       });
       const detail = document.getElementById(id);
       detail.style.display = 'block';
@@ -201,5 +269,6 @@
       title.style.display = "block";
     }
   </script>
+
 </body>
 </html>
