@@ -4,176 +4,261 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>fourty2's Discord Services</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Poppins:wght@500&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #0a0a0a;
+    html, body {
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      background: #0e0e0e;
       color: white;
       overflow: hidden;
     }
-    .center {
+    .container {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      text-align: center;
-    }
-    #welcome {
-      font-size: 3rem;
-      opacity: 1;
-      transition: opacity 1s ease;
-    }
-    #main {
-      display: none;
       flex-direction: column;
       align-items: center;
-      gap: 20px;
-      animation: fadeIn 1s ease forwards;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+      padding: 20px;
+      position: relative;
+      z-index: 2;
     }
     h1 {
       font-size: 2.5rem;
-      margin-bottom: 20px;
+      margin-bottom: 2rem;
     }
-    .buttons {
+    .packages {
       display: flex;
       gap: 20px;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 1s ease, transform 1s ease;
     }
     .package-button {
-      padding: 15px 30px;
-      background-color: #073763;
-      color: white;
+      background-color: #1f1f1f;
       border: none;
-      border-radius: 10px;
+      padding: 20px 30px;
+      border-radius: 12px;
+      font-size: 1.2rem;
+      color: white;
       cursor: pointer;
-      transition: transform 0.3s ease;
+      transition: transform 0.3s ease, background 0.3s ease;
     }
     .package-button:hover {
-      transform: scale(1.1);
+      background-color: #2d2d2d;
+      transform: scale(1.05);
     }
-    .package-panel {
+    .package-details {
       display: none;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 40px;
-      animation: fadeIn 0.8s ease;
-    }
-    .package-panel p {
-      max-width: 600px;
-      text-align: center;
-      margin-bottom: 20px;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      max-height: 80vh;
+      overflow-y: auto;
+      background: #1c1c1c;
+      border-radius: 12px;
+      padding: 30px;
+      width: 90%;
+      max-width: 700px;
+      margin: auto;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 3;
     }
     .back-button {
-      padding: 10px 20px;
-      background-color: #2f2f2f;
-      border: none;
-      border-radius: 5px;
+      margin-top: 20px;
+      background-color: #333;
       color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
       cursor: pointer;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
+    #welcome {
+      font-size: 3rem;
+      animation: fadeOut 1.5s ease forwards;
+      animation-delay: 2s;
     }
 
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+    }
+
+    @keyframes flyUp {
+      from {
+        opacity: 0;
+        transform: translateY(60px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .show {
+      display: block !important;
+      opacity: 1 !important;
+    }
+
+    /* Orb Styles */
+    #orb-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
     .orb {
       width: 15px;
       height: 15px;
       border-radius: 50%;
-      background-color: #5591ff;
-      position: fixed;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.5s ease;
+      background: rgba(255, 255, 255, 0.15);
+      position: absolute;
     }
   </style>
 </head>
 <body>
-  <div class="center" id="welcome">Welcome.</div>
+  <!-- Orbs -->
+  <div id="orb-container">
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+  </div>
 
-  <div id="main">
-    <h1>fourty2's Discord Services</h1>
-    <div class="buttons">
-      <button class="package-button" onclick="showPackage(1)">Package 1</button>
-      <button class="package-button" onclick="showPackage(2)">Package 2</button>
-      <button class="package-button" onclick="showPackage(3)">Package 3</button>
-    </div>
-
-    <div class="package-panel" id="panel1">
-      <p>This is the content of Package 1.</p>
-      <button class="back-button" onclick="backToPackages()">Back to Packages</button>
-    </div>
-    <div class="package-panel" id="panel2">
-      <p>This is the content of Package 2.</p>
-      <button class="back-button" onclick="backToPackages()">Back to Packages</button>
-    </div>
-    <div class="package-panel" id="panel3">
-      <p>This is the content of Package 3.</p>
-      <button class="back-button" onclick="backToPackages()">Back to Packages</button>
+  <!-- Content -->
+  <div class="container">
+    <div id="welcome">Welcome.</div>
+    <h1 id="title" style="display: none;">fourty2's Discord Services</h1>
+    <div class="packages" id="packages">
+      <button class="package-button" onclick="showPackage('package1')">Package 1</button>
+      <button class="package-button" onclick="showPackage('package2')">Package 2</button>
+      <button class="package-button" onclick="showPackage('package3')">Custom Bot</button>
     </div>
   </div>
 
-  <div class="orb" id="orb1"></div>
-  <div class="orb" id="orb2"></div>
-  <div class="orb" id="orb3"></div>
+  <!-- Package Details -->
+  <div class="package-details" id="package1">
+    <h2>🧰 Package 1: Discord Setup – <strong>$20</strong></h2>
+    <p><em>Perfect for new business owners, gang startups, or anyone wanting a streamlined Discord to manage their FiveM experience with ease and clarity.</em></p>
+    <ul>
+      <li><strong>📁 Channel, Role & Category Setup</strong></li>
+      <li><strong>🖌️ Custom Embed Design</strong></li>
+      <li><strong>🤖 Bot Setup</strong></li>
+      <li><strong>🌐 Professional Layout</strong></li>
+      <li><strong>📞 Support: Included</strong></li>
+    </ul>
+    <button class="back-button" onclick="goBack()">Back to Packages</button>
+  </div>
 
+  <div class="package-details" id="package2">
+    <h2>🛠️ Package 2: Advanced Discord Build – <strong>$30</strong></h2>
+    <p><em>Ideal for gang startups, businesses, or server owners who want more than just a setup — they want structure, automation, and active oversight.</em></p>
+    <ul>
+      <li><strong>Everything in Package 1</strong></li>
+      <li><strong>🔧 Custom Ticket System</strong></li>
+      <li><strong>📜 Rules + Guidelines Embed</strong></li>
+      <li><strong>🎭 Reaction Roles / Role Menus</strong></li>
+      <li><strong>📝 Custom Applications</strong></li>
+      <li><strong>📚 Resource Channels</strong></li>
+      <li><strong>🔒 Staff Setup & Permissions</strong></li>
+      <li><strong>🤖 Bot Automation</strong></li>
+      <li><strong>📊 Server Analytics Bots</strong></li>
+      <li><strong>🖼️ Branding Integration</strong></li>
+      <li><strong>📞 Support: Included</strong></li>
+    </ul>
+    <button class="back-button" onclick="goBack()">Back to Packages</button>
+  </div>
+
+  <div class="package-details" id="package3">
+    <h2>🤖 Custom Bot – <strong>$20</strong></h2>
+    <p><em>We'll build a fully custom Discord bot based on your exact needs and features. You explain, we create.</em></p>
+    <ul>
+      <li>Command & Interaction based</li>
+      <li>Unique features tailored to your server</li>
+      <li><strong>⚠️ Note:</strong> You’ll need your own VPS/server to host the bot</li>
+      <li><strong>📞 Support: Included</strong></li>
+    </ul>
+    <button class="back-button" onclick="goBack()">Back to Packages</button>
+  </div>
+
+  <!-- Script -->
   <script>
-    const welcome = document.getElementById('welcome');
-    const main = document.getElementById('main');
-    const orbs = [
-      document.getElementById('orb1'),
-      document.getElementById('orb2'),
-      document.getElementById('orb3')
-    ];
+    const welcome = document.getElementById("welcome");
+    const title = document.getElementById("title");
+    const packages = document.getElementById("packages");
+    const orbContainer = document.getElementById("orb-container");
+    const orbs = document.querySelectorAll('.orb');
 
-    let mouseX = 0, mouseY = 0;
-    let angle = 0;
-
-    window.addEventListener('mousemove', e => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-    });
-
-    function updateOrbs() {
-      angle += 0.03;
-      orbs.forEach((orb, index) => {
-        const radius = 25 + index * 15;
-        const x = mouseX + radius * Math.cos(angle + index);
-        const y = mouseY + radius * Math.sin(angle + index);
-        orb.style.left = x + 'px';
-        orb.style.top = y + 'px';
-      });
-      requestAnimationFrame(updateOrbs);
-    }
-
+    // 1. Welcome screen fade out
     setTimeout(() => {
-      welcome.style.opacity = 0;
-      setTimeout(() => {
-        welcome.style.display = 'none';
-        main.style.display = 'flex';
+      welcome.style.display = "none";
+      title.style.display = "block";
+      packages.style.display = "flex";
+      packages.style.animation = "flyUp 1s ease forwards";
 
-        setTimeout(() => {
-          orbs.forEach(o => o.style.opacity = 1);
-          updateOrbs();
-        }, 2000);
-      }, 1000);
+      // 2. Show orbs after 2 seconds
+      setTimeout(() => {
+        orbContainer.style.opacity = 1;
+        startOrbAnimation();
+      }, 2000);
     }, 2500);
 
-    function showPackage(num) {
-      document.querySelector('.buttons').style.display = 'none';
-      document.getElementById(`panel${num}`).style.display = 'flex';
+    // 3. Package toggling
+    function showPackage(id) {
+      packages.style.display = "none";
+      title.style.display = "none";
+      document.querySelectorAll('.package-details').forEach(el => {
+        el.classList.remove('show');
+      });
+      const detail = document.getElementById(id);
+      detail.style.display = 'block';
+      setTimeout(() => {
+        detail.style.opacity = 1;
+      }, 100);
     }
 
-    function backToPackages() {
-      document.querySelectorAll('.package-panel').forEach(panel => {
-        panel.style.display = 'none';
+    function goBack() {
+      document.querySelectorAll('.package-details').forEach(el => {
+        el.style.display = 'none';
+        el.style.opacity = 0;
       });
-      document.querySelector('.buttons').style.display = 'flex';
+      packages.style.display = "flex";
+      title.style.display = "block";
+    }
+
+    // 4. Orb animation
+    function startOrbAnimation() {
+      document.addEventListener('mousemove', (e) => {
+        const cx = e.clientX;
+        const cy = e.clientY;
+        orbs.forEach((orb, i) => {
+          const angle = (i / orbs.length) * Math.PI * 2;
+          const radius = 40 + (i % 3) * 15;
+          const x = cx + Math.cos(angle + Date.now() * 0.002) * radius;
+          const y = cy + Math.sin(angle + Date.now() * 0.002) * radius;
+          orb.style.transform = `translate(${x}px, ${y}px)`;
+        });
+      });
     }
   </script>
 </body>
