@@ -10,9 +10,9 @@
     }
     html, body {
       height: 100%;
-      background: #0e0e0e;
+      background: #121212;
       font-family: 'Poppins', sans-serif;
-      color: white;
+      color: #ccc;
       overflow: hidden;
       position: relative;
     }
@@ -29,7 +29,7 @@
     }
     #welcome {
       font-size: 3rem;
-      color: #bb86fc;
+      color: #888;
       animation: fadeOut 1.5s ease forwards;
       animation-delay: 2.5s;
     }
@@ -42,7 +42,7 @@
     h1 {
       font-size: 2.5rem;
       margin-bottom: 2rem;
-      color: #bb86fc;
+      color: #aaa;
       display: none;
     }
     .packages {
@@ -53,17 +53,17 @@
       transition: opacity 1s ease, transform 1s ease;
     }
     .package-button {
-      background-color: #1f1f1f;
+      background-color: #2c2c2c;
       border: none;
       padding: 20px 30px;
       border-radius: 12px;
       font-size: 1.2rem;
-      color: white;
+      color: #ccc;
       cursor: pointer;
       transition: transform 0.3s ease, background 0.3s ease;
     }
     .package-button:hover {
-      background-color: #2d2d2d;
+      background-color: #444;
       transform: scale(1.05);
     }
     .package-details {
@@ -72,7 +72,7 @@
       transition: opacity 0.5s ease;
       max-height: 80vh;
       overflow-y: auto;
-      background: #1c1c1c;
+      background: #1f1f1f;
       border-radius: 12px;
       padding: 30px;
       width: 90%;
@@ -83,28 +83,33 @@
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 3;
+      color: #ddd;
     }
     .back-button {
       margin-top: 20px;
       background-color: #333;
-      color: white;
+      color: #ddd;
       border: none;
       padding: 10px 20px;
       border-radius: 8px;
       cursor: pointer;
+    }
+    .back-button:hover {
+      background-color: #444;
     }
     /* Cursor Orbs */
     .orb {
       position: fixed;
       width: 12px;
       height: 12px;
-      background: #bb86fc;
+      background: #888;
       border-radius: 50%;
       pointer-events: none;
       opacity: 0;
       transition: opacity 1s ease;
       z-index: 1;
       transform: translate(-50%, -50%);
+      box-shadow: 0 0 8px #666;
     }
   </style>
 </head>
@@ -175,10 +180,7 @@
       packages.style.transform = "translateY(0)";
     }, 2500);
 
-    setTimeout(() => {
-      initOrbs();
-    }, 4500);
-
+    // Packages display handlers
     function showPackage(id) {
       packages.style.display = "none";
       title.style.display = "none";
@@ -202,55 +204,96 @@
       title.style.display = "block";
     }
 
-    function initOrbs() {
-      const orbCount = 6;
-      const orbs = [];
-      for (let i = 0; i < orbCount; i++) {
-        const orb = document.createElement("div");
-        orb.className = "orb";
-        document.body.appendChild(orb);
-        orbs.push({ el: orb, angle: (Math.PI * 2 / orbCount) * i });
+    // Cursor Orbs behavior
+
+    const orbCount = 6;
+    const orbs = [];
+
+    // Create orbs and append to body
+    for(let i=0; i < orbCount; i++){
+      const orb = document.createElement("div");
+      orb.className = "orb";
+      document.body.appendChild(orb);
+      orbs.push({
+        el: orb,
+        x: window.innerWidth / 2,
+        y: window.innerHeight / 2,
+        targetX: window.innerWidth / 2,
+        targetY: window.innerHeight / 2,
+        angle: (Math.PI * 2 / orbCount) * i,
+      });
+    }
+
+    // Show orbs after welcome screen ends + 1 sec delay
+    setTimeout(() => {
+      orbs.forEach(o => o.el.style.opacity = '1');
+    }, 3500);
+
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let lastMoveTime = Date.now();
+    let idleTimeout = 1000; // 1 second before spinning
+    let spinning = false;
+
+    document.addEventListener("mousemove", e => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      lastMoveTime = Date.now();
+      if(spinning) {
+        spinning = false;
+      }
+    });
+
+    function lerp(start, end, t){
+      return start + (end - start) * t;
+    }
+
+    function animate() {
+      const now = Date.now();
+      const idle = (now - lastMoveTime) > idleTimeout;
+
+      if(!idle) {
+        // Mouse is moving or recently moved - trail behavior
+
+        // Lead orb goes directly toward mouse with smoothing
+        orbs[0].x = lerp(orbs[0].x, mouseX, 0.2);
+        orbs[0].y = lerp(orbs[0].y, mouseY, 0.2);
+
+        // Each orb follows the one before it
+        for(let i=1; i < orbCount; i++) {
+          orbs[i].x = lerp(orbs[i].x, orbs[i-1].x, 0.15);
+          orbs[i].y = lerp(orbs[i].y, orbs[i-1].y, 0.15);
+        }
+        spinning = false;
+      } else {
+        // Mouse is idle - spin orbs around last mouse position
+        if(!spinning) {
+          // Initialize spin center to last mouse position
+          spinning = true;
+          orbs.forEach((orb, i) => {
+            orb.angle = (Math.PI * 2 / orbCount) * i;
+          });
+        }
+        const spinRadius = 30;
+        const spinSpeed = 0.03;
+        orbs.forEach((orb, i) => {
+          orb.angle += spinSpeed;
+          orb.x = mouseX + Math.cos(orb.angle) * spinRadius;
+          orb.y = mouseY + Math.sin(orb.angle) * spinRadius;
+        });
       }
 
-      orbs.forEach(o => o.el.style.opacity = "1");
-
-      let mouseX = window.innerWidth / 2;
-      let mouseY = window.innerHeight / 2;
-
-      // For smooth follow, store current orb center position and use lerp
-      let orbCenterX = mouseX;
-      let orbCenterY = mouseY;
-
-      document.addEventListener("mousemove", e => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
+      // Update orb elements positions
+      orbs.forEach(orb => {
+        orb.el.style.left = orb.x + "px";
+        orb.el.style.top = orb.y + "px";
       });
 
-      function lerp(start, end, t) {
-        return start + (end - start) * t;
-      }
-
-      function animate() {
-        // Smoothly move orb center toward mouse position
-        orbCenterX = lerp(orbCenterX, mouseX, 0.15);
-        orbCenterY = lerp(orbCenterY, mouseY, 0.15);
-
-        const time = Date.now() * 0.002;
-        const radius = 20;
-
-        orbs.forEach((orb, i) => {
-          const angle = time + orb.angle;
-          const x = orbCenterX + Math.cos(angle) * radius;
-          const y = orbCenterY + Math.sin(angle) * radius;
-          orb.el.style.left = `${x}px`;
-          orb.el.style.top = `${y}px`;
-        });
-
-        requestAnimationFrame(animate);
-      }
-
-      animate();
+      requestAnimationFrame(animate);
     }
+
+    animate();
+
   </script>
 </body>
 </html>
