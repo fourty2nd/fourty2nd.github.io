@@ -111,6 +111,30 @@
       transform: translate(-50%, -50%);
       box-shadow: 0 0 8px #666;
     }
+    /* New Payment Method Box */
+    .payment-method {
+      background: #1f1f1f;
+      border-radius: 12px;
+      padding: 30px;
+      width: 90%;
+      max-width: 700px;
+      margin: 30px auto 0;
+      color: #ddd;
+      font-size: 1.1rem;
+      text-align: left;
+      position: relative;
+      z-index: 2;
+    }
+    .payment-method h2 {
+      margin-bottom: 20px;
+      color: #aaa;
+      font-weight: 600;
+    }
+    .payment-method p {
+      margin-bottom: 12px;
+      white-space: pre-line; /* To preserve line breaks */
+      font-family: monospace;
+    }
   </style>
 </head>
 <body>
@@ -122,6 +146,26 @@
       <button class="package-button" onclick="showPackage('package2')">Package 2</button>
       <button class="package-button" onclick="showPackage('package3')">Custom Bot</button>
     </div>
+  </div>
+
+  <div class="payment-method">
+    <h2>💰 Payment Method</h2>
+    <p>
+      Bitcoin [BTC]:<br>
+      bclqegwgtgrgx6uhudrtfqmchvewy60ctxqfdv23md
+    </p>
+    <p>
+      Ethereum [ETH]:<br>
+      OxCC77550321853c3361a83B56aEC77f4b877e7cd6
+    </p>
+    <p>
+      Litecoin [LTC]:<br>
+      Itc1qt22h9f89ascul007w920he9chlgapsndvtc8lg
+    </p>
+    <p>
+      Gift cards are accepted.<br>
+      (Steam or Nitro are preferred)
+    </p>
   </div>
 
   <div class="package-details" id="package1">
