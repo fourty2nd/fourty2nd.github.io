@@ -5,9 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>fourty2's Discord Services</title>
   <style>
-    * {
-      margin: 0; padding: 0; box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
       height: 100%;
       background: #121212;
@@ -60,46 +58,24 @@
       animation: fadeOut 1.5s ease forwards;
       animation-delay: 2.5s;
     }
-    @keyframes fadeOut {
-      to { opacity: 0; transform: translateY(-20px); }
-    }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 1.5rem;
-      color: #aaa;
-      display: none;
-    }
-    .package-details {
-      display: none;
-      opacity: 0;
-      transition: opacity 0.5s ease;
-      background: #1f1f1f;
-      border-radius: 12px;
-      padding: 25px;
-      margin-bottom: 20px;
-      color: #ddd;
-    }
-    .package-details.active {
-      display: block;
-      opacity: 1;
-    }
-
-    /* Orb logic from first script */
+    @keyframes fadeOut { to { opacity: 0; transform: translateY(-20px); } }
+    h1 { font-size: 2rem; margin-bottom: 1.5rem; color: #aaa; display: none; }
+    .package-details { display: none; opacity: 0; transition: opacity 0.5s ease; background: #1f1f1f; border-radius: 12px; padding: 25px; margin-bottom: 20px; color: #ddd; }
+    .package-details.active { display: block; opacity: 1; }
+    
+    /* Orbs */
     .orb {
       position: fixed;
-      width: 18px;
-      height: 18px;
-      background: rgba(200,200,200,0.6);
+      width: 12px;
+      height: 12px;
+      background: #888;
       border-radius: 50%;
       pointer-events: none;
+      opacity: 0;
+      transition: opacity 1s ease;
       z-index: 1;
-      animation: float 6s ease-in-out infinite;
-      box-shadow: 0 0 12px rgba(180,180,180,0.8);
-    }
-    @keyframes float {
-      0%   { transform: translateY(0) translateX(0); }
-      50%  { transform: translateY(-25px) translateX(15px); }
-      100% { transform: translateY(0) translateX(0); }
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 8px #666;
     }
   </style>
 </head>
@@ -142,40 +118,96 @@
     <div id="pkg5" class="package-details">
       <h2>💳 Payment Methods</h2>
       <ul>
-        <li>💵 PayPal</li>
         <li>₿ Bitcoin</li>
+        <li>Ξ Ethereum</li>
+        <li>Litecoin LTC</li>
         <li>🎮 Giftcards (Discord Nitro / Steam)</li>
       </ul>
     </div>
   </div>
 
-  <!-- Orb generation -->
   <script>
-    // create floating orbs (from script 1)
-    const orbCount = 25;
-    for (let i = 0; i < orbCount; i++) {
-      let orb = document.createElement("div");
-      orb.className = "orb";
-      document.body.appendChild(orb);
-      orb.style.top = Math.random() * window.innerHeight + "px";
-      orb.style.left = Math.random() * window.innerWidth + "px";
-      orb.style.animationDuration = 4 + Math.random() * 4 + "s";
-      orb.style.opacity = 0.4 + Math.random() * 0.6;
-      orb.style.transform = `scale(${0.6 + Math.random() * 0.8})`;
-    }
-
-    // sidebar navigation
+    // Packages navigation
     function showPackage(id) {
-      document.querySelectorAll('.package-details').forEach(p => {
-        p.classList.remove('active');
-      });
+      document.querySelectorAll('.package-details').forEach(p => p.classList.remove('active'));
       document.getElementById(id).classList.add('active');
     }
 
-    // show h1 after welcome
-    setTimeout(() => {
-      document.querySelector('h1').style.display = 'block';
-    }, 3000);
+    // Show h1 after welcome
+    setTimeout(() => { document.querySelector('h1').style.display = 'block'; }, 3000);
+
+    // -------------------
+    // ORBS LOGIC (from first script)
+    // -------------------
+    const orbCount = 6;
+    const orbs = [];
+    for(let i=0;i<orbCount;i++){
+      const orb = document.createElement("div");
+      orb.className = "orb";
+      document.body.appendChild(orb);
+      orbs.push({
+        el: orb,
+        x: window.innerWidth/2,
+        y: window.innerHeight/2,
+        targetX: window.innerWidth/2,
+        targetY: window.innerHeight/2,
+        angle: (Math.PI*2/orbCount)*i,
+      });
+    }
+
+    let mouseX = window.innerWidth/2;
+    let mouseY = window.innerHeight/2;
+    let lastMoveTime = Date.now();
+    let idleTimeout = 1000;
+    let spinning = false;
+    let transitionProgress = 1;
+
+    document.addEventListener("mousemove", e=>{
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      lastMoveTime = Date.now();
+      if(spinning){ spinning=false; transitionProgress=0; }
+    });
+
+    function lerp(a,b,t){return a+(b-a)*t;}
+
+    function animate(){
+      const now = Date.now();
+      const idle = (now - lastMoveTime) > idleTimeout;
+
+      if(!idle){
+        orbs[0].x = lerp(orbs[0].x, mouseX, 0.2);
+        orbs[0].y = lerp(orbs[0].y, mouseY, 0.2);
+        for(let i=1;i<orbCount;i++){
+          orbs[i].x = lerp(orbs[i].x, orbs[i-1].x, 0.15);
+          orbs[i].y = lerp(orbs[i].y, orbs[i-1].y, 0.15);
+        }
+        transitionProgress = 1;
+        spinning=false;
+      } else {
+        if(!spinning){
+          spinning=true;
+          orbs.forEach((orb,i)=>{orb.angle=(Math.PI*2/orbCount)*i; orb.startX=orb.x; orb.startY=orb.y;});
+          transitionProgress=0;
+        }
+        const spinRadius=30, spinSpeed=0.03;
+        transitionProgress = Math.min(transitionProgress+0.02,1);
+        orbs.forEach((orb)=>{
+          orb.angle += spinSpeed;
+          const orbitX = mouseX + Math.cos(orb.angle)*spinRadius;
+          const orbitY = mouseY + Math.sin(orb.angle)*spinRadius;
+          orb.x = lerp(orb.startX, orbitX, transitionProgress);
+          orb.y = lerp(orb.startY, orbitY, transitionProgress);
+        });
+      }
+
+      orbs.forEach(o=>{o.el.style.left=o.x+"px"; o.el.style.top=o.y+"px";});
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    // fade in orbs
+    setTimeout(()=>{ orbs.forEach(o=>o.el.style.opacity='1'); },3500);
   </script>
 </body>
 </html>
