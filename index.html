@@ -2,357 +2,194 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>fourty2's Discord Services</title>
   <style>
-    * {
-      margin: 0; padding: 0; box-sizing: border-box;
-    }
     html, body {
-      height: 100%;
-      background: #121212;
-      font-family: 'Poppins', sans-serif;
-      color: #ccc;
+      margin: 0;
+      padding: 0;
       overflow: hidden;
-      position: relative;
+      height: 100%;
+      background: #0a0a0a;
+      font-family: Arial, sans-serif;
+      color: white;
+      scroll-behavior: smooth;
     }
-    .container {
+
+    /* Welcome Screen */
+    .welcome {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: #0a0a0a;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
-      text-align: center;
-      padding: 20px;
-      position: relative;
+      font-size: 2.5rem;
       z-index: 2;
-    }
-    #welcome {
-      font-size: 3rem;
-      color: #888;
-      animation: fadeOut 1.5s ease forwards;
-      animation-delay: 2.5s;
+      animation: fadeOut 1s ease 2s forwards;
     }
     @keyframes fadeOut {
-      to {
-        opacity: 0;
-        transform: translateY(-30px);
-      }
+      to { opacity: 0; visibility: hidden; }
     }
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 2rem;
-      color: #aaa;
-      display: none;
-    }
-    .packages {
-      display: flex;
-      gap: 20px;
-      opacity: 0;
-      transform: translateY(50px);
-      transition: opacity 1s ease, transform 1s ease;
-    }
-    .package-button {
-      background-color: #2c2c2c;
-      border: none;
-      padding: 20px 30px;
-      border-radius: 12px;
-      font-size: 1.2rem;
-      color: #ccc;
-      cursor: pointer;
-      transition: transform 0.3s ease, background 0.3s ease;
-    }
-    .package-button:hover {
-      background-color: #444;
-      transform: scale(1.05);
-    }
-    .package-details {
-      display: none;
-      opacity: 0;
-      transition: opacity 0.5s ease;
-      max-height: 80vh;
-      overflow-y: auto;
-      background: #1f1f1f;
-      border-radius: 12px;
-      padding: 30px;
-      width: 90%;
-      max-width: 700px;
-      margin: auto;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 3;
-      color: #ddd;
-    }
-    .back-button {
-      margin-top: 20px;
-      background-color: #333;
-      color: #ddd;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    .back-button:hover {
-      background-color: #444;
-    }
-    /* Cursor Orbs */
-    .orb {
+
+    /* Sidebar */
+    .sidebar {
       position: fixed;
-      width: 12px;
-      height: 12px;
-      background: #888; /* Light gray orb color */
+      top: 0;
+      left: 0;
+      width: 220px;
+      height: 100%;
+      background: #111;
+      padding-top: 60px;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.7);
+      z-index: 1;
+    }
+    .sidebar a {
+      display: block;
+      padding: 15px 20px;
+      text-decoration: none;
+      color: white;
+      border-left: 3px solid transparent;
+      transition: all 0.3s ease;
+    }
+    .sidebar a:hover {
+      background: #1a1a1a;
+      border-left: 3px solid cyan;
+    }
+
+    /* Content */
+    .content {
+      margin-left: 240px;
+      padding: 40px;
+      overflow-y: auto;
+      height: 100%;
+      opacity: 0;
+      animation: fadeIn 1s ease 3s forwards;
+    }
+    @keyframes fadeIn { to { opacity: 1; } }
+
+    h1 { margin-bottom: 20px; }
+    .section {
+      margin-bottom: 80px;
+      padding: 20px;
+      background: #1a1a1a;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #000;
+    }
+
+    /* Orbs */
+    .orb {
+      width: 10px;
+      height: 10px;
+      background: #00ffff;
       border-radius: 50%;
+      position: absolute;
       pointer-events: none;
       opacity: 0;
       transition: opacity 1s ease;
-      z-index: 1;
+      box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
       transform: translate(-50%, -50%);
-      box-shadow: 0 0 8px #666;
-    }
-    /* New Payment Method Box */
-    .payment-method {
-      background: #1f1f1f;
-      border-radius: 12px;
-      padding: 30px;
-      width: 90%;
-      max-width: 700px;
-      margin: 30px auto 0;
-      color: #ddd;
-      font-size: 1.1rem;
-      text-align: left;
-      position: relative;
-      z-index: 2;
-    }
-    .payment-method h2 {
-      margin-bottom: 20px;
-      color: #aaa;
-      font-weight: 600;
-    }
-    .payment-method p {
-      margin-bottom: 12px;
-      white-space: pre-line; /* To preserve line breaks */
-      font-family: monospace;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div id="welcome">Welcome.</div>
-    <h1 id="title">fourty2's Discord Services</h1>
-    <div class="packages" id="packages">
-      <button class="package-button" onclick="showPackage('package1')">Package 1</button>
-      <button class="package-button" onclick="showPackage('package2')">Package 2</button>
-      <button class="package-button" onclick="showPackage('package3')">Custom Bot</button>
+  <div class="welcome">Welcome.</div>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <a href="#package1">Package 1</a>
+    <a href="#package2">Package 2</a>
+    <a href="#package3">Package 3</a>
+    <a href="#customBot">Custom Bot</a>
+    <a href="#fivem">FiveM Server Development</a>
+    <a href="#payment">Payment Method</a>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <h1>fourty2's Discord Services</h1>
+
+    <div class="section" id="package1">
+      <h2>Package 1</h2>
+      <p>Description for package 1...</p>
+    </div>
+    <div class="section" id="package2">
+      <h2>Package 2</h2>
+      <p>Description for package 2...</p>
+    </div>
+    <div class="section" id="package3">
+      <h2>Package 3</h2>
+      <p>Description for package 3...</p>
+    </div>
+    <div class="section" id="customBot">
+      <h2>Custom Bot</h2>
+      <p>I create fully custom Discord bots tailored to your needs.</p>
+    </div>
+    <div class="section" id="fivem">
+      <h2>FiveM Server Development</h2>
+      <p>I make custom scripts and can build whatever your city needs. Support included.</p>
+    </div>
+    <div class="section" id="payment">
+      <h2>Payment Method</h2>
+      <p>💳 BTC, ETH, LTC, USDT and more accepted.</p>
     </div>
   </div>
 
-  <div class="payment-method">
-    <h2>💰 Payment Method</h2>
-    <p>
-      Bitcoin [BTC]:<br>
-      bclqegwgtgrgx6uhudrtfqmchvewy60ctxqfdv23md
-    </p>
-    <p>
-      Ethereum [ETH]:<br>
-      OxCC77550321853c3361a83B56aEC77f4b877e7cd6
-    </p>
-    <p>
-      Litecoin [LTC]:<br>
-      Itc1qt22h9f89ascul007w920he9chlgapsndvtc8lg
-    </p>
-    <p>
-      Gift cards are accepted.<br>
-      (Steam or Nitro are preferred)
-    </p>
-  </div>
-
-  <div class="package-details" id="package1">
-    <h2>🧰 Package 1: Discord Setup – <strong>$20</strong></h2>
-    <p><em>Perfect for new business owners, gang startups, or anyone wanting a streamlined Discord to manage their FiveM experience with ease and clarity.</em></p>
-    <ul>
-      <li><strong>📁 Channel, Role & Category Setup</strong><br>Organized layout with relevant channels, permissions, and role hierarchy.</li>
-      <li><strong>🖌️ Custom Embed Design</strong><br>Branded and aesthetic embeds for intros, info, and announcements.</li>
-      <li><strong>🤖 Bot Setup</strong><br>Timer bots, role bots, application systems, and more — configured to suit your needs.</li>
-      <li><strong>🌐 Professional Layout</strong><br>Clean, functional, and optimized for RP or community use.</li>
-      <li><strong>📞 Support: Included</strong><br>Reach out to me if needed — I'll remain your Discord server contact.</li>
-    </ul>
-    <button class="back-button" onclick="goBack()">Back to Packages</button>
-  </div>
-
-  <div class="package-details" id="package2">
-    <h2>🛠️ Package 2: Advanced Discord Build – <strong>$30</strong></h2>
-    <p><em>Ideal for gang startups, businesses, or server owners who want more than just a setup — they want structure, automation, and active oversight.</em></p>
-    <ul>
-      <li><strong>Everything in Package 1</strong></li>
-      <li><strong>🔧 Custom Ticket System</strong></li>
-      <li><strong>📜 Rules + Guidelines Embed</strong></li>
-      <li><strong>🎭 Reaction Roles / Role Menus</strong></li>
-      <li><strong>📝 Custom Applications</strong></li>
-      <li><strong>📚 Resource Channels</strong></li>
-      <li><strong>🔒 Staff Setup & Permissions</strong></li>
-      <li><strong>🤖 Bot Automation</strong></li>
-      <li><strong>📊 Server Analytics Bots</strong></li>
-      <li><strong>🖼️ Branding Integration</strong></li>
-      <li><strong>📞 Support: Included</strong></li>
-    </ul>
-    <button class="back-button" onclick="goBack()">Back to Packages</button>
-  </div>
-
-  <div class="package-details" id="package3">
-    <h2>🤖 Custom Bot – <strong>$20</strong></h2>
-    <p><em>We'll build a fully custom Discord bot based on your exact needs and features. You explain, we create.</em></p>
-    <ul>
-      <li>Command & Interaction based</li>
-      <li>Unique features tailored to your server</li>
-      <li><strong>⚠️ Note:</strong> You’ll need your own VPS/server to host the bot</li>
-      <li><strong>📞 Support: Included</strong></li>
-    </ul>
-    <button class="back-button" onclick="goBack()">Back to Packages</button>
-  </div>
+  <!-- Orbs -->
+  <div class="orb" id="orb0"></div>
+  <div class="orb" id="orb1"></div>
+  <div class="orb" id="orb2"></div>
+  <div class="orb" id="orb3"></div>
+  <div class="orb" id="orb4"></div>
+  <div class="orb" id="orb5"></div>
 
   <script>
-    const welcome = document.getElementById("welcome");
-    const title = document.getElementById("title");
-    const packages = document.getElementById("packages");
-
-    setTimeout(() => {
-      welcome.style.display = "none";
-      title.style.display = "block";
-      packages.style.opacity = "1";
-      packages.style.transform = "translateY(0)";
-    }, 2500);
-
-    // Packages display handlers
-    function showPackage(id) {
-      packages.style.display = "none";
-      title.style.display = "none";
-      document.querySelectorAll('.package-details').forEach(el => {
-        el.style.display = "none";
-        el.style.opacity = 0;
-      });
-      const detail = document.getElementById(id);
-      detail.style.display = "block";
-      setTimeout(() => {
-        detail.style.opacity = 1;
-      }, 100);
-    }
-
-    function goBack() {
-      document.querySelectorAll('.package-details').forEach(el => {
-        el.style.display = "none";
-        el.style.opacity = 0;
-      });
-      packages.style.display = "flex";
-      title.style.display = "block";
-    }
-
-    // Cursor Orbs behavior
-
-    const orbCount = 6;
-    const orbs = [];
-
-    // Create orbs and append to body
-    for(let i=0; i < orbCount; i++){
-      const orb = document.createElement("div");
-      orb.className = "orb";
-      document.body.appendChild(orb);
-      orbs.push({
-        el: orb,
-        x: window.innerWidth / 2,
-        y: window.innerHeight / 2,
-        targetX: window.innerWidth / 2,
-        targetY: window.innerHeight / 2,
-        angle: (Math.PI * 2 / orbCount) * i,
-      });
-    }
-
-    // Show orbs after welcome screen ends + 1 sec delay
-    setTimeout(() => {
-      orbs.forEach(o => o.el.style.opacity = '1');
-    }, 3500);
-
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
+    const orbs = Array.from({ length: 6 }, (_, i) => document.getElementById(`orb${i}`));
+    const offsets = Array(6).fill(null).map(() => ({ x: window.innerWidth / 2, y: window.innerHeight / 2 }));
+    let targetX = window.innerWidth / 2;
+    let targetY = window.innerHeight / 2;
     let lastMoveTime = Date.now();
-    let idleTimeout = 1000; // 1 second before spinning
-    let spinning = false;
-    let transitionProgress = 1; // Track transition progress (1 means no transition)
+    let initialized = false;
 
-    document.addEventListener("mousemove", e => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
+    document.addEventListener('mousemove', e => {
+      targetX = e.clientX;
+      targetY = e.clientY;
       lastMoveTime = Date.now();
-      if(spinning) {
-        spinning = false;
-        transitionProgress = 0; // Start transition from trail to spin
-      }
     });
 
-    function lerp(start, end, t){
-      return start + (end - start) * t;
-    }
+    setTimeout(() => {
+      orbs.forEach(orb => orb.style.opacity = 1);
+      initialized = true;
+    }, 4000);
 
     function animate() {
       const now = Date.now();
-      const idle = (now - lastMoveTime) > idleTimeout;
+      const idle = now - lastMoveTime > 500;
 
-      if(!idle) {
-        // Mouse is moving or recently moved - trail behavior
+      for (let i = 0; i < orbs.length; i++) {
+        const orb = orbs[i];
+        const speed = 0.12 + i * 0.015;
+        if (!initialized) continue;
 
-        // Lead orb goes directly toward mouse with smoothing
-        orbs[0].x = lerp(orbs[0].x, mouseX, 0.2);
-        orbs[0].y = lerp(orbs[0].y, mouseY, 0.2);
-
-        // Each orb follows the one before it
-        for(let i=1; i < orbCount; i++) {
-          orbs[i].x = lerp(orbs[i].x, orbs[i-1].x, 0.15);
-          orbs[i].y = lerp(orbs[i].y, orbs[i-1].y, 0.15);
+        if (!idle) {
+          offsets[i].x += (targetX - offsets[i].x) * speed;
+          offsets[i].y += (targetY - offsets[i].y) * speed;
+        } else {
+          const angle = (Date.now() / 500 + i * (Math.PI / 3));
+          const radius = 30 + i * 5;
+          const orbitX = targetX + Math.cos(angle) * radius;
+          const orbitY = targetY + Math.sin(angle) * radius;
+          offsets[i].x += (orbitX - offsets[i].x) * 0.08;
+          offsets[i].y += (orbitY - offsets[i].y) * 0.08;
         }
-        transitionProgress = 1;
-        spinning = false;
-      } else {
-        // Mouse is idle - spin orbs around last mouse position
-        if(!spinning) {
-          spinning = true;
-          orbs.forEach((orb, i) => {
-            orb.angle = (Math.PI * 2 / orbCount) * i;
-            orb.startX = orb.x;
-            orb.startY = orb.y;
-          });
-          transitionProgress = 0;
-        }
-        const spinRadius = 30;
-        const spinSpeed = 0.03;
 
-        // Transition progress goes from 0 to 1 to smoothly move orbs into spinning orbit
-        transitionProgress = Math.min(transitionProgress + 0.02, 1);
-
-        orbs.forEach((orb, i) => {
-          orb.angle += spinSpeed;
-
-          // Target orbit position
-          const orbitX = mouseX + Math.cos(orb.angle) * spinRadius;
-          const orbitY = mouseY + Math.sin(orb.angle) * spinRadius;
-
-          // Lerp position from start (trail) to orbit (spin)
-          orb.x = lerp(orb.startX, orbitX, transitionProgress);
-          orb.y = lerp(orb.startY, orbitY, transitionProgress);
-        });
+        orb.style.left = `${offsets[i].x}px`;
+        orb.style.top = `${offsets[i].y}px`;
       }
-
-      // Update orb elements positions
-      orbs.forEach(orb => {
-        orb.el.style.left = orb.x + "px";
-        orb.el.style.top = orb.y + "px";
-      });
-
       requestAnimationFrame(animate);
     }
-
     animate();
-
   </script>
 </body>
 </html>
