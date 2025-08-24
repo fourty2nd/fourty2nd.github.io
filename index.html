@@ -7,175 +7,193 @@
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      padding: 0;
       background: black;
       color: white;
+      font-family: Arial, sans-serif;
       overflow-x: hidden;
+    }
+
+    /* Orb canvas stays ABOVE everything */
+    canvas#orbCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 9999;
+      pointer-events: none;
     }
 
     /* Sidebar */
     .sidebar {
       position: fixed;
-      left: 0;
       top: 0;
-      width: 220px;
+      left: 0;
+      width: 240px;
       height: 100%;
       background: #111;
-      padding-top: 30px;
-      box-shadow: 2px 0 10px rgba(0,0,0,0.6);
-      z-index: 10;
+      padding: 20px;
+      z-index: 10000; /* Above canvas for visibility */
+      overflow-y: auto;
     }
-    .sidebar h2 {
-      text-align: center;
-      margin-bottom: 20px;
-      color: #bbb;
-    }
-    .sidebar a {
+    .sidebar button {
       display: block;
-      padding: 15px 20px;
-      color: #ccc;
-      text-decoration: none;
-      transition: background 0.3s, color 0.3s;
-    }
-    .sidebar a:hover {
-      background: #333;
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      background: #222;
       color: white;
+      border: none;
+      text-align: left;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s;
+      border-radius: 8px;
+    }
+    .sidebar button:hover {
+      background: #444;
     }
 
-    /* Content */
+    /* Content area */
     .content {
-      margin-left: 240px;
-      padding: 40px;
+      margin-left: 260px;
+      padding: 20px;
     }
+
     .package {
-      margin-bottom: 80px;
-    }
-    .package h3 {
-      font-size: 1.8rem;
-      margin-bottom: 10px;
-      color: #ccc;
-    }
-    .package p {
-      color: #aaa;
-      font-size: 1rem;
-      line-height: 1.5;
+      display: none;
+      margin: 20px 0;
+      padding: 20px;
+      background: #222;
+      border-radius: 10px;
     }
 
-    /* Welcome screen */
-    .welcome {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: black;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 3rem;
-      color: white;
-      z-index: 100;
-      transition: opacity 1s ease;
-    }
-
-    /* Orbs */
-    .orb {
-      position: fixed;
-      width: 12px;
-      height: 12px;
-      background: #ddd; /* light gray */
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 5; /* ABOVE background, BELOW sidebar */
+    .package.active {
+      display: block;
     }
   </style>
 </head>
 <body>
-  <div class="welcome" id="welcome">Welcome.</div>
+  <!-- Orb canvas -->
+  <canvas id="orbCanvas"></canvas>
 
   <!-- Sidebar -->
   <div class="sidebar">
-    <h2>Services</h2>
-    <a href="#package1">Package 1</a>
-    <a href="#package2">Package 2</a>
-    <a href="#package3">Package 3</a>
-    <a href="#customBot">Custom Bot</a>
-    <a href="#fivemDev">FiveM Server Development</a>
-    <a href="#payment">Payment Method</a>
+    <button onclick="showPackage('package1')">📦 Basic Discord Setup</button>
+    <button onclick="showPackage('package2')">⚡ Advanced Discord Setup</button>
+    <button onclick="showPackage('package3')">🤖 Custom Bot</button>
+    <button onclick="showPackage('package4')">🛠️ FiveM Server Development</button>
+    <button onclick="showPackage('package5')">💳 Payment Methods</button>
   </div>
 
-  <!-- Main Content -->
+  <!-- Content -->
   <div class="content">
-    <div class="package" id="package1">
-      <h3>Package 1</h3>
-      <p>Starter package with basic features to get you running quickly.</p>
+    <div id="package1" class="package">
+      <h2>📦 Basic Discord Setup</h2>
+      <ul>
+        <li><strong>📁 Channel, Role & Category Setup</strong><br>Organized layout with relevant channels, permissions, and role hierarchy.</li>
+        <li><strong>🖌️ Custom Embed Design</strong><br>Branded and aesthetic embeds for intros, info, and announcements.</li>
+        <li><strong>🤖 Bot Setup</strong><br>Timer bots, role bots, application systems, and more — configured to suit your needs.</li>
+        <li><strong>🌐 Professional Layout</strong><br>Clean, functional, and optimized for RP or community use.</li>
+        <li><strong>📞 Support: Included</strong><br>Reach out to me if needed — I'll remain your Discord server.</li>
+      </ul>
     </div>
 
-    <div class="package" id="package2">
-      <h3>Package 2</h3>
-      <p>Intermediate package with extended functionality and customization.</p>
+    <div id="package2" class="package">
+      <h2>⚡ Advanced Discord Setup</h2>
+      <p>Includes everything in Basic, plus advanced bots, custom role systems, applications, logging, moderation tools, and more.</p>
     </div>
 
-    <div class="package" id="package3">
-      <h3>Package 3</h3>
-      <p>Premium package with full service, advanced integrations, and priority support.</p>
+    <div id="package3" class="package">
+      <h2>🤖 Custom Bot</h2>
+      <p>I can create fully custom Discord bots tailored to your needs — from role management, applications, logging, to unique features.</p>
     </div>
 
-    <div class="package" id="customBot">
-      <h3>Custom Bot Development</h3>
-      <p>Bots built for Discord or other platforms with custom commands, automation, and full support.</p>
+    <div id="package4" class="package">
+      <h2>🛠️ FiveM Server Development</h2>
+      <p>Custom scripts, resource setup, bug fixes, and anything your city needs. Support included.</p>
     </div>
 
-    <div class="package" id="fivemDev">
-      <h3>FiveM Server Development</h3>
-      <p>Custom FiveM scripts and server builds tailored to your RP city. Support and updates included.</p>
-    </div>
-
-    <div class="package" id="payment">
-      <h3>Payment Methods</h3>
-      <p>We accept Bitcoin ₿, Ethereum Ξ, USDT, and other major cryptocurrencies.</p>
+    <div id="package5" class="package">
+      <h2>💳 Payment Methods</h2>
+      <ul>
+        <li>₿ Bitcoin</li>
+        <li>Ξ Ethereum</li>
+        <li>💳 Giftcards (Discord Nitro / Steam)</li>
+      </ul>
     </div>
   </div>
 
-  <!-- Orbs -->
   <script>
+    // Sidebar logic
+    function showPackage(id) {
+      document.querySelectorAll('.package').forEach(pkg => pkg.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    // Orb animation (flowing + spin when stopped)
+    const canvas = document.getElementById("orbCanvas");
+    const ctx = canvas.getContext("2d");
+    let w, h;
+    let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+    let orbs = [];
     const orbCount = 6;
-    const orbs = [];
-    const positions = [];
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
+
+    function resize() {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resize);
+    resize();
+
+    class Orb {
+      constructor(i) {
+        this.angle = (Math.PI * 2 / orbCount) * i;
+        this.distance = 40;
+        this.size = 6;
+        this.speed = 0.02;
+        this.x = mouse.x;
+        this.y = mouse.y;
+      }
+
+      update() {
+        if (Math.abs(this.x - mouse.x) > 1 || Math.abs(this.y - mouse.y) > 1) {
+          // follow cursor smoothly
+          this.x += (mouse.x - this.x) * 0.05;
+          this.y += (mouse.y - this.y) * 0.05;
+        } else {
+          // spin around cursor
+          this.angle += this.speed;
+          this.x = mouse.x + Math.cos(this.angle) * this.distance;
+          this.y = mouse.y + Math.sin(this.angle) * this.distance;
+        }
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = "lightgray";
+        ctx.fill();
+      }
+    }
 
     for (let i = 0; i < orbCount; i++) {
-      const orb = document.createElement('div');
-      orb.className = 'orb';
-      document.body.appendChild(orb);
-      orbs.push(orb);
-      positions.push({x: mouseX, y: mouseY});
+      orbs.push(new Orb(i));
     }
 
-    document.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
+    function animate() {
+      ctx.clearRect(0, 0, w, h);
+      orbs.forEach(orb => {
+        orb.update();
+        orb.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    window.addEventListener("mousemove", e => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
     });
-
-    function animateOrbs() {
-      for (let i = 0; i < orbs.length; i++) {
-        positions[i].x += (mouseX - positions[i].x) * 0.1;
-        positions[i].y += (mouseY - positions[i].y) * 0.1;
-        orbs[i].style.left = positions[i].x + (i * 12) + 'px';
-        orbs[i].style.top = positions[i].y + (i * 12) + 'px';
-      }
-      requestAnimationFrame(animateOrbs);
-    }
-    animateOrbs();
-
-    // Welcome fade out
-    window.onload = () => {
-      setTimeout(() => {
-        document.getElementById('welcome').style.opacity = '0';
-        setTimeout(() => {
-          document.getElementById('welcome').style.display = 'none';
-        }, 1000);
-      }, 2000);
-    };
   </script>
 </body>
 </html>
