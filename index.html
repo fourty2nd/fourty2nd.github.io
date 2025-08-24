@@ -1,199 +1,181 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dynasty Services</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>fourty2's Discord Services</title>
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: black;
-      color: white;
-      font-family: Arial, sans-serif;
-      overflow-x: hidden;
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
     }
-
-    /* Orb canvas stays ABOVE everything */
-    canvas#orbCanvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 9999;
-      pointer-events: none;
+    html, body {
+      height: 100%;
+      background: #121212;
+      font-family: 'Poppins', sans-serif;
+      color: #ccc;
+      overflow: hidden;
+      position: relative;
     }
 
     /* Sidebar */
     .sidebar {
       position: fixed;
-      top: 0;
-      left: 0;
+      top: 0; left: 0;
       width: 240px;
       height: 100%;
-      background: #111;
+      background: #1a1a1a;
       padding: 20px;
-      z-index: 10000; /* Above canvas for visibility */
-      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      z-index: 3;
     }
     .sidebar button {
-      display: block;
-      width: 100%;
-      padding: 12px;
-      margin: 8px 0;
-      background: #222;
-      color: white;
+      background: #2c2c2c;
       border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 1rem;
+      color: #ccc;
       text-align: left;
       cursor: pointer;
-      font-size: 16px;
-      transition: background 0.3s;
-      border-radius: 8px;
+      transition: background 0.3s, transform 0.3s;
     }
     .sidebar button:hover {
       background: #444;
+      transform: translateX(5px);
     }
 
-    /* Content area */
+    /* Content */
     .content {
       margin-left: 260px;
-      padding: 20px;
+      padding: 40px;
+      z-index: 2;
+      position: relative;
     }
-
-    .package {
+    #welcome {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: #888;
+      animation: fadeOut 1.5s ease forwards;
+      animation-delay: 2.5s;
+    }
+    @keyframes fadeOut {
+      to { opacity: 0; transform: translateY(-20px); }
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      color: #aaa;
       display: none;
-      margin: 20px 0;
-      padding: 20px;
-      background: #222;
-      border-radius: 10px;
+    }
+    .package-details {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      background: #1f1f1f;
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 20px;
+      color: #ddd;
+    }
+    .package-details.active {
+      display: block;
+      opacity: 1;
     }
 
-    .package.active {
-      display: block;
+    /* Orb logic from first script */
+    .orb {
+      position: fixed;
+      width: 18px;
+      height: 18px;
+      background: rgba(200,200,200,0.6);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 1;
+      animation: float 6s ease-in-out infinite;
+      box-shadow: 0 0 12px rgba(180,180,180,0.8);
+    }
+    @keyframes float {
+      0%   { transform: translateY(0) translateX(0); }
+      50%  { transform: translateY(-25px) translateX(15px); }
+      100% { transform: translateY(0) translateX(0); }
     }
   </style>
 </head>
 <body>
-  <!-- Orb canvas -->
-  <canvas id="orbCanvas"></canvas>
-
-  <!-- Sidebar -->
   <div class="sidebar">
-    <button onclick="showPackage('package1')">📦 Basic Discord Setup</button>
-    <button onclick="showPackage('package2')">⚡ Advanced Discord Setup</button>
-    <button onclick="showPackage('package3')">🤖 Custom Bot</button>
-    <button onclick="showPackage('package4')">🛠️ FiveM Server Development</button>
-    <button onclick="showPackage('package5')">💳 Payment Methods</button>
+    <button onclick="showPackage('pkg1')">📁 Server Setup</button>
+    <button onclick="showPackage('pkg2')">🎨 Embed Design</button>
+    <button onclick="showPackage('pkg3')">🤖 Custom Bot</button>
+    <button onclick="showPackage('pkg4')">🛠️ FiveM Server Development</button>
+    <button onclick="showPackage('pkg5')">💳 Payment Methods</button>
   </div>
 
-  <!-- Content -->
   <div class="content">
-    <div id="package1" class="package">
-      <h2>📦 Basic Discord Setup</h2>
+    <div id="welcome">Welcome!</div>
+    <h1>fourty2's Discord Services</h1>
+
+    <div id="pkg1" class="package-details">
+      <h2>📁 Server Setup</h2>
       <ul>
-        <li><strong>📁 Channel, Role & Category Setup</strong><br>Organized layout with relevant channels, permissions, and role hierarchy.</li>
-        <li><strong>🖌️ Custom Embed Design</strong><br>Branded and aesthetic embeds for intros, info, and announcements.</li>
-        <li><strong>🤖 Bot Setup</strong><br>Timer bots, role bots, application systems, and more — configured to suit your needs.</li>
-        <li><strong>🌐 Professional Layout</strong><br>Clean, functional, and optimized for RP or community use.</li>
-        <li><strong>📞 Support: Included</strong><br>Reach out to me if needed — I'll remain your Discord server.</li>
+        <li><strong>Channel, Role & Category Setup</strong> — Organized layout with proper perms.</li>
+        <li><strong>Support</strong> — Included.</li>
       </ul>
     </div>
 
-    <div id="package2" class="package">
-      <h2>⚡ Advanced Discord Setup</h2>
-      <p>Includes everything in Basic, plus advanced bots, custom role systems, applications, logging, moderation tools, and more.</p>
+    <div id="pkg2" class="package-details">
+      <h2>🎨 Embed Design</h2>
+      <p>Branded & aesthetic embeds for your server.</p>
     </div>
 
-    <div id="package3" class="package">
+    <div id="pkg3" class="package-details">
       <h2>🤖 Custom Bot</h2>
-      <p>I can create fully custom Discord bots tailored to your needs — from role management, applications, logging, to unique features.</p>
+      <p>Role bots, applications, timers, etc.</p>
     </div>
 
-    <div id="package4" class="package">
+    <div id="pkg4" class="package-details">
       <h2>🛠️ FiveM Server Development</h2>
-      <p>Custom scripts, resource setup, bug fixes, and anything your city needs. Support included.</p>
+      <p>Custom scripts for your city with full support.</p>
     </div>
 
-    <div id="package5" class="package">
+    <div id="pkg5" class="package-details">
       <h2>💳 Payment Methods</h2>
       <ul>
+        <li>💵 PayPal</li>
         <li>₿ Bitcoin</li>
-        <li>Ξ Ethereum</li>
-        <li>💳 Giftcards (Discord Nitro / Steam)</li>
+        <li>🎮 Giftcards (Discord Nitro / Steam)</li>
       </ul>
     </div>
   </div>
 
+  <!-- Orb generation -->
   <script>
-    // Sidebar logic
+    // create floating orbs (from script 1)
+    const orbCount = 25;
+    for (let i = 0; i < orbCount; i++) {
+      let orb = document.createElement("div");
+      orb.className = "orb";
+      document.body.appendChild(orb);
+      orb.style.top = Math.random() * window.innerHeight + "px";
+      orb.style.left = Math.random() * window.innerWidth + "px";
+      orb.style.animationDuration = 4 + Math.random() * 4 + "s";
+      orb.style.opacity = 0.4 + Math.random() * 0.6;
+      orb.style.transform = `scale(${0.6 + Math.random() * 0.8})`;
+    }
+
+    // sidebar navigation
     function showPackage(id) {
-      document.querySelectorAll('.package').forEach(pkg => pkg.classList.remove('active'));
+      document.querySelectorAll('.package-details').forEach(p => {
+        p.classList.remove('active');
+      });
       document.getElementById(id).classList.add('active');
     }
 
-    // Orb animation (flowing + spin when stopped)
-    const canvas = document.getElementById("orbCanvas");
-    const ctx = canvas.getContext("2d");
-    let w, h;
-    let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
-    let orbs = [];
-    const orbCount = 6;
-
-    function resize() {
-      w = canvas.width = window.innerWidth;
-      h = canvas.height = window.innerHeight;
-    }
-    window.addEventListener("resize", resize);
-    resize();
-
-    class Orb {
-      constructor(i) {
-        this.angle = (Math.PI * 2 / orbCount) * i;
-        this.distance = 40;
-        this.size = 6;
-        this.speed = 0.02;
-        this.x = mouse.x;
-        this.y = mouse.y;
-      }
-
-      update() {
-        if (Math.abs(this.x - mouse.x) > 1 || Math.abs(this.y - mouse.y) > 1) {
-          // follow cursor smoothly
-          this.x += (mouse.x - this.x) * 0.05;
-          this.y += (mouse.y - this.y) * 0.05;
-        } else {
-          // spin around cursor
-          this.angle += this.speed;
-          this.x = mouse.x + Math.cos(this.angle) * this.distance;
-          this.y = mouse.y + Math.sin(this.angle) * this.distance;
-        }
-      }
-
-      draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = "lightgray";
-        ctx.fill();
-      }
-    }
-
-    for (let i = 0; i < orbCount; i++) {
-      orbs.push(new Orb(i));
-    }
-
-    function animate() {
-      ctx.clearRect(0, 0, w, h);
-      orbs.forEach(orb => {
-        orb.update();
-        orb.draw();
-      });
-      requestAnimationFrame(animate);
-    }
-    animate();
-
-    window.addEventListener("mousemove", e => {
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
-    });
+    // show h1 after welcome
+    setTimeout(() => {
+      document.querySelector('h1').style.display = 'block';
+    }, 3000);
   </script>
 </body>
 </html>
