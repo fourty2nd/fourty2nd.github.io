@@ -67,6 +67,17 @@
     margin-left:240px;
     padding:40px;
   }
+
+  /* Title */
+  #title {
+    display:none;
+    text-align:center;
+    color:#aaa;
+    font-size:2.5rem;
+    margin-bottom:2rem;
+    transition:opacity 0.5s ease;
+  }
+
   .package-details {
     display:none;
     opacity:0;
@@ -122,6 +133,9 @@
 
 <!-- Main Content -->
 <div class="content">
+  <!-- Title -->
+  <h1 id="title">fourty2's Discord Services</h1>
+
   <div class="package-details" id="package1">
     <h2>🧰 Package 1: Discord Setup – <strong>$20</strong></h2>
     <p><em>Perfect for new business owners, gang startups, or anyone wanting a streamlined Discord to manage their FiveM experience with ease and clarity.</em></p>
@@ -182,10 +196,21 @@
 <!-- Orbs & Script -->
 <script>
 const welcome=document.getElementById("welcome");
+const title=document.getElementById("title");
 const packages=["package1","package2","package3","package4","package5"];
 
-// Welcome fade
-window.onload=()=>{setTimeout(()=>{welcome.style.opacity='0';setTimeout(()=>{welcome.style.display='none';},1000);},2000);}
+// Welcome fade & show title
+window.onload=()=>{
+  setTimeout(()=>{
+    welcome.style.opacity='0';
+    setTimeout(()=>{
+      welcome.style.display='none';
+      title.style.display='block';
+      title.style.opacity='0';
+      setTimeout(()=>{title.style.opacity='1';},50);
+    },1000);
+  },2000);
+}
 
 // Packages fade-in
 function showPackage(id){
@@ -208,7 +233,12 @@ function goBack(){
 
 // ORBS logic
 const orbCount=6;const orbs=[];
-for(let i=0;i<orbCount;i++){const orb=document.createElement('div');orb.className='orb';document.body.appendChild(orb);orbs.push({el:orb,x:window.innerWidth/2,y:window.innerHeight/2,targetX:window.innerWidth/2,targetY:window.innerHeight/2,angle:(Math.PI*2/orbCount)*i});}
+for(let i=0;i<orbCount;i++){
+  const orb=document.createElement('div');
+  orb.className='orb';
+  document.body.appendChild(orb);
+  orbs.push({el:orb,x:window.innerWidth/2,y:window.innerHeight/2,targetX:window.innerWidth/2,targetY:window.innerHeight/2,angle:(Math.PI*2/orbCount)*i});
+}
 setTimeout(()=>{orbs.forEach(o=>o.el.style.opacity='1');},3500);
 let mouseX=window.innerWidth/2,mouseY=window.innerHeight/2,lastMoveTime=Date.now(),idleTimeout=1000,spinning=false,transitionProgress=1;
 document.addEventListener('mousemove',e=>{mouseX=e.clientX;mouseY=e.clientY;lastMoveTime=Date.now();if(spinning){spinning=false;transitionProgress=0;}});
