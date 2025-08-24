@@ -26,11 +26,10 @@ body {
   font-size:2rem;
   color:#0f0;
   z-index:100;
-  flex-direction: column;
   font-family: monospace;
 }
 .welcome span {
-  margin:5px 0;
+  position: absolute;
   opacity: 0;
   transform: scale(0);
   transition: transform 0.4s, opacity 0.4s;
@@ -64,30 +63,26 @@ body {
   text-align:left;
   transition:background 0.3s,color 0.3s;
 }
-.sidebar button:hover {
-  background:#444;
-  color:white;
-}
+.sidebar button:hover { background:#444; color:white; }
 
 /* Discord Button */
 .discord-btn {
   position: absolute;
   bottom: 20px;
-  width: 50px;
-  height: 50px;
-  background: transparent;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  border: none;
+  width:160px;
+  height:50px;
+  background:#7289da;
+  border-radius:10px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  cursor:pointer;
+  border:none;
+  color:white;
+  font-size:1rem;
+  gap:5px;
 }
-.discord-btn img {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
-}
+.discord-btn:hover { background:#5b6eae; }
 
 /* Content */
 .content {
@@ -166,7 +161,8 @@ body {
   <button onclick="showPackage('package5')">💸 Payment Methods</button>
 
   <button class="discord-btn" onclick="window.location.href='https://discord.gg/gekCBbQk4r'">
-    <img src="https://cdn.discordapp.com/attachments/1409266069511737464/1409282027026649219/IMG_6129.webp" alt="Discord">
+    <span>🌐</span>
+    <span>My Discord Server</span>
   </button>
 </div>
 
@@ -177,11 +173,11 @@ body {
     <h2>🧰 Package 1: Discord Setup – <strong>$20</strong></h2>
     <p><em>Perfect for new business owners, gang startups, or anyone wanting a streamlined Discord to manage their FiveM experience with ease and clarity.</em></p>
     <ul>
-      <li><strong>📁 Channel, Role & Category Setup</strong></li>
-      <li><strong>🖌️ Custom Embed Design</strong></li>
-      <li><strong>🤖 Bot Setup</strong></li>
-      <li><strong>🌐 Professional Layout</strong></li>
-      <li><strong>📞 Support: Included</strong></li>
+      <li>📁 Channel, Role & Category Setup</li>
+      <li>🖌️ Custom Embed Design</li>
+      <li>🤖 Bot Setup</li>
+      <li>🌐 Professional Layout</li>
+      <li>📞 Support: Included</li>
     </ul>
     <button class="back-button" onclick="goBack()">Back</button>
   </div>
@@ -230,37 +226,41 @@ const welcomeSpans = welcome.querySelectorAll("span");
 const title = document.getElementById("title");
 const packages = ["package1","package2","package3","package4","package5"];
 
-// Pop-up techy welcome
+// Pop in → pop out welcome sequence
 function runWelcomeSequence() {
-  welcomeSpans.forEach((span,i)=>{
-    setTimeout(()=>{span.style.opacity=1; span.style.transform='scale(1)';}, i*800);
-  });
-  setTimeout(()=>{
-    welcome.style.display='none';
-    title.style.display='block';
-    title.style.opacity='0';
-    setTimeout(()=>{title.style.opacity='1';},50);
-  }, welcomeSpans.length*800 + 800);
+  let i = 0;
+  function showNext() {
+    if(i>0) welcomeSpans[i-1].style.opacity=0;
+    if(i < welcomeSpans.length){
+      const span = welcomeSpans[i];
+      span.style.opacity=1;
+      span.style.transform='scale(1)';
+      setTimeout(()=>{
+        span.style.opacity=0;
+        span.style.transform='scale(0)';
+        i++;
+        setTimeout(showNext, 400);
+      }, 1000);
+    } else {
+      welcome.style.display='none';
+      title.style.display='block';
+      title.style.opacity='0';
+      setTimeout(()=>{title.style.opacity='1';},50);
+    }
+  }
+  showNext();
 }
 window.onload = runWelcomeSequence;
 
 // Packages
 function showPackage(id){
-  packages.forEach(p=>{
-    const el=document.getElementById(p);
-    el.style.display='none';
-    el.style.opacity=0;
-  });
+  packages.forEach(p=>{ const el=document.getElementById(p); el.style.display='none'; el.style.opacity=0; });
   const detail=document.getElementById(id);
   detail.style.display='block';
   setTimeout(()=>{detail.style.opacity=1;},50);
 }
 function goBack(){
-  packages.forEach(p=>{
-    const el=document.getElementById(p);
-    el.style.display='none';
-    el.style.opacity=0;
-  });
+  packages.forEach(p=>{ const el=document.getElementById(p); el.style.display='none'; el.style.opacity=0; });
 }
 
 // Orbs
