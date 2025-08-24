@@ -26,14 +26,14 @@ body {
   font-size:2rem;
   color:#0f0;
   z-index:100;
-  transition:opacity 1s ease;
   flex-direction: column;
   font-family: monospace;
 }
 .welcome span {
+  margin:5px 0;
   opacity: 0;
-  transition: opacity 0.5s;
-  margin: 5px 0;
+  transform: scale(0);
+  transition: transform 0.4s, opacity 0.4s;
 }
 
 /* Sidebar */
@@ -75,17 +75,19 @@ body {
   bottom: 20px;
   width: 50px;
   height: 50px;
-  background: #7289da;
+  background: transparent;
   border-radius: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   border: none;
-  transition: background 0.3s;
 }
-.discord-btn:hover { background: #5b6eae; }
-.discord-btn img { width: 24px; height: 24px; }
+.discord-btn img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
 
 /* Content */
 .content {
@@ -164,7 +166,7 @@ body {
   <button onclick="showPackage('package5')">💸 Payment Methods</button>
 
   <button class="discord-btn" onclick="window.location.href='https://discord.gg/gekCBbQk4r'">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6c/Discord_logo.svg" alt="Discord">
+    <img src="https://cdn.discordapp.com/attachments/1409266069511737464/1409282027026649219/IMG_6129.webp" alt="Discord">
   </button>
 </div>
 
@@ -228,27 +230,17 @@ const welcomeSpans = welcome.querySelectorAll("span");
 const title = document.getElementById("title");
 const packages = ["package1","package2","package3","package4","package5"];
 
-// Techy welcome animation sequence
+// Pop-up techy welcome
 function runWelcomeSequence() {
-  let i = 0;
-  function showNext() {
-    if (i > 0) welcomeSpans[i-1].style.opacity = 0;
-    if (i < welcomeSpans.length) {
-      welcomeSpans[i].style.opacity = 1;
-      i++;
-      setTimeout(showNext, 1000);
-    } else {
-      // Fade out welcome, show main page
-      welcome.style.opacity = 0;
-      setTimeout(() => {
-        welcome.style.display = 'none';
-        title.style.display = 'block';
-        title.style.opacity = '0';
-        setTimeout(()=>{ title.style.opacity = '1'; },50);
-      }, 800);
-    }
-  }
-  showNext();
+  welcomeSpans.forEach((span,i)=>{
+    setTimeout(()=>{span.style.opacity=1; span.style.transform='scale(1)';}, i*800);
+  });
+  setTimeout(()=>{
+    welcome.style.display='none';
+    title.style.display='block';
+    title.style.opacity='0';
+    setTimeout(()=>{title.style.opacity='1';},50);
+  }, welcomeSpans.length*800 + 800);
 }
 window.onload = runWelcomeSequence;
 
@@ -278,45 +270,36 @@ for(let i=0;i<orbCount;i++){
   const orb=document.createElement('div');
   orb.className='orb';
   document.body.appendChild(orb);
-  orbs.push({el: orb, x: window.innerWidth/2, y: window.innerHeight/2});
+  orbs.push({el: orb, x:window.innerWidth/2, y:window.innerHeight/2});
 }
-
-let mouse={x: window.innerWidth/2, y: window.innerHeight/2};
-
-function updateOrbsPosition(x,y){
-  mouse.x = x; mouse.y = y;
-  orbs.forEach(o => o.el.style.opacity = 1);
-}
-
-window.addEventListener('mousemove', e => updateOrbsPosition(e.clientX, e.clientY));
-window.addEventListener('touchmove', e => {
-  const t = e.touches[0];
-  updateOrbsPosition(t.clientX, t.clientY);
-});
+let mouse={x:window.innerWidth/2,y:window.innerHeight/2};
+window.addEventListener('mousemove',e=>{ mouse.x=e.clientX; mouse.y=e.clientY; orbs.forEach(o=>o.el.style.opacity=1); });
+window.addEventListener('touchmove',e=>{ const t=e.touches[0]; mouse.x=t.clientX; mouse.y=t.clientY; orbs.forEach(o=>o.el.style.opacity=1); });
 
 function animateOrbs(){
-  let x = mouse.x, y = mouse.y;
-  orbs.forEach(o=>{
-    o.x += (x - o.x)*0.1;
-    o.y += (y - o.y)*0.1;
-    o.el.style.transform = `translate(${o.x}px,${o.y}px)`;
+  let x=mouse.x, y=mouse.y;
+  orbs.forEach((o,i)=>{
+    o.x += (x-o.x)*0.1;
+    o.y += (y-o.y)*0.1;
+    o.el.style.transform=`translate(${o.x}px, ${o.y}px)`;
     x=o.x; y=o.y;
   });
   requestAnimationFrame(animateOrbs);
 }
 animateOrbs();
 
-// Fade out orbs after inactivity
 let orbTimeout;
-window.addEventListener('mousemove',()=>{clearTimeout(orbTimeout); orbs.forEach(o=>o.el.style.opacity=1);
+window.addEventListener('mousemove',()=>{
+  clearTimeout(orbTimeout);
+  orbs.forEach(o=>o.el.style.opacity=1);
   orbTimeout=setTimeout(()=>{orbs.forEach(o=>o.el.style.opacity=0)},2000);
 });
-window.addEventListener('touchmove',()=>{clearTimeout(orbTimeout); orbs.forEach(o=>o.el.style.opacity=1);
+window.addEventListener('touchmove',()=>{
+  clearTimeout(orbTimeout);
+  orbs.forEach(o=>o.el.style.opacity=1);
   orbTimeout=setTimeout(()=>{orbs.forEach(o=>o.el.style.opacity=0)},2000);
 });
-
-// Window resize
-window.addEventListener('resize',()=>{mouse.x=window.innerWidth/2; mouse.y=window.innerHeight/2;});
+window.addEventListener('resize',()=>{ mouse.x=window.innerWidth/2; mouse.y=window.innerHeight/2; });
 </script>
 
 </body>
