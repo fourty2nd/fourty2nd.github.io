@@ -5,16 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fourty's Details</title>
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
 body {
-  font-family:'Poppins',sans-serif;
-  background:#121212;
-  color:#ccc;
+  margin:0; padding:0;
+  font-family:'Share Tech Mono', monospace;
+  background:black;
+  color:#0f0;
   overflow:hidden;
   position:relative;
 }
 
-/* Welcome Terminal */
+/* Terminal welcome screen */
 .welcome {
   position:fixed;
   top:0; left:0;
@@ -24,18 +24,15 @@ body {
   justify-content:center;
   align-items:center;
   flex-direction:column;
-  color:#0f0;
-  font-family: "Share Tech Mono", monospace;
-  z-index:100;
-  padding:20px;
   text-align:left;
-  overflow:hidden;
+  padding:20px;
+  z-index:100;
 }
 #welcome-terminal {
   width:90%;
   max-width:900px;
   height:80%;
-  overflow-y:auto;
+  overflow:hidden;
   white-space:pre-wrap;
   line-height:1.2em;
 }
@@ -44,132 +41,27 @@ body {
   font-size:3rem;
   font-weight:bold;
   color:#00ff00;
-  margin-top:20px;
   text-align:center;
 }
 
-/* Sidebar */
+/* Sidebar & content same as before */
 .sidebar {
-  position:fixed;
-  left:0; top:0;
-  width:220px;
-  height:100%;
-  background:#111;
-  padding-top:30px;
-  box-shadow:2px 0 10px rgba(0,0,0,0.6);
-  z-index:10;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
+  position:fixed; left:0; top:0; width:220px; height:100%; background:#111;
+  padding-top:30px; box-shadow:2px 0 10px rgba(0,0,0,0.6); z-index:10;
+  display:flex; flex-direction:column; align-items:center;
 }
-.sidebar button {
-  display:block;
-  width:90%;
-  margin:5px 0;
-  padding:12px;
-  background:#2c2c2c;
-  border:none;
-  border-radius:8px;
-  color:#ccc;
-  font-size:1rem;
-  cursor:pointer;
-  text-align:left;
-  transition: background 0.3s, color 0.3s, transform 0.2s, box-shadow 0.3s;
-}
-.sidebar button:hover {
-  background:#444;
-  color:white;
-  transform: scale(1.05);
-  box-shadow: 0 0 12px #fff, 0 0 18px #fff55;
-}
+.sidebar button { display:block; width:90%; margin:5px 0; padding:12px; background:#2c2c2c; border:none; border-radius:8px; color:#ccc; font-size:1rem; cursor:pointer; text-align:left; transition: 0.3s; }
+.sidebar button:hover { background:#444; color:white; transform: scale(1.05); box-shadow:0 0 12px #fff,0 0 18px #fff55; }
+.discord-btn { position:absolute; bottom:20px; width:160px; height:50px; background:#7289da; border-radius:10px; display:flex; justify-content:center; align-items:center; cursor:pointer; border:none; color:white; font-size:1rem; gap:5px; transition:0.3s; }
+.discord-btn:hover { transform: scale(1.05); box-shadow:0 0 12px #fff,0 0 18px #fff55; }
 
-/* Discord Button */
-.discord-btn {
-  position: absolute;
-  bottom: 20px;
-  width:160px;
-  height:50px;
-  background:#7289da;
-  border-radius:10px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  cursor:pointer;
-  border:none;
-  color:white;
-  font-size:1rem;
-  gap:5px;
-  transition: transform 0.2s, box-shadow 0.3s;
-}
-.discord-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 12px #fff, 0 0 18px #fff55;
-}
+.content { margin-left:240px; padding:40px; }
+#title { display:none; text-align:center; color:#aaa; font-size:2.5rem; margin-bottom:2rem; transition:opacity 0.5s; font-family: 'Mestizo', sans-serif; }
 
-/* Content */
-.content {
-  margin-left:240px;
-  padding:40px;
-}
-
-/* Title */
-#title {
-  display:none;
-  text-align:center;
-  color:#aaa;
-  font-size:2.5rem;
-  margin-bottom:2rem;
-  transition:opacity 0.5s ease;
-  font-family: 'Mestizo', sans-serif;
-}
-
-/* Package Details */
-.package-details {
-  display:none;
-  opacity:0;
-  max-height:80vh;
-  overflow-y:auto;
-  background:#1f1f1f;
-  border-radius:12px;
-  padding:30px;
-  margin-bottom:40px;
-  color:#ddd;
-  transition:opacity 0.5s ease;
-}
-.package-details h2 { margin-bottom:10px; }
-.package-details ul { margin-left:20px; }
-.back-button {
-  margin-top:20px;
-  background-color:#333;
-  color:#ddd;
-  border:none;
-  padding:10px 20px;
-  border-radius:8px;
-  cursor:pointer;
-  transition: transform 0.2s, box-shadow 0.3s;
-}
-.back-button:hover { 
-  background-color:#444; 
-  transform: scale(1.05);
-  box-shadow: 0 0 12px #fff, 0 0 18px #fff55;
-}
-
-/* Cursor Orbs */
-.orb {
-  position: fixed;
-  width: 12px;
-  height: 12px;
-  background: #888;
-  border-radius: 50%;
-  pointer-events: none;
-  opacity: 0;
-  z-index: 999;
-  transform: translate(-50%, -50%);
-  box-shadow: 0 0 8px #666;
-  transition: opacity 0.5s ease;
-}
+.package-details { display:none; opacity:0; max-height:80vh; overflow-y:auto; background:#1f1f1f; border-radius:12px; padding:30px; margin-bottom:40px; color:#ddd; transition:opacity 0.5s ease; }
+.back-button { margin-top:20px; background-color:#333; color:#ddd; border:none; padding:10px 20px; border-radius:8px; cursor:pointer; transition:0.3s; }
+.back-button:hover { background-color:#444; transform:scale(1.05); box-shadow:0 0 12px #fff,0 0 18px #fff55; }
 </style>
-<link href="https://fonts.googleapis.com/css2?family=Mestizo&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -185,199 +77,66 @@ body {
   <button onclick="showPackage('package3')">📃 Custom Discord Bot</button>
   <button onclick="showPackage('package4')">📃 Custom FiveM Scripts</button>
   <button onclick="showPackage('package5')">💸 Payment Methods</button>
-
   <button class="discord-btn" onclick="window.location.href='https://discord.gg/gekCBbQk4r'">
-    <span>🌐</span>
-    <span>Order Here!</span>
+    <span>🌐</span><span>Order Here!</span>
   </button>
 </div>
 
 <div class="content">
   <h1 id="title">Fourty's Details</h1>
 
-  <div class="package-details" id="package1">
-    <h2>🧰 Package 1: Discord Setup – <strong>$20</strong></h2>
-    <p><em>Perfect for new business owners, gang startups, or anyone wanting a streamlined Discord to manage their FiveM experience with ease and clarity.</em></p>
-    <ul>
-      <li>📁 Channel, Role & Category Setup</li>
-      <li>🖌️ Custom Embed Design</li>
-      <li>🤖 Bot Setup</li>
-      <li>🌐 Professional Layout</li>
-      <li>📞 Support: Included</li>
-    </ul>
-    <button class="back-button" onclick="goBack()">Back</button>
-  </div>
-
-  <div class="package-details" id="package2">
-    <h2>🛠️ Package 2: Advanced Discord Build – <strong>$30</strong></h2>
-    <p><em>Ideal for gang startups, businesses, or server owners who want structure, automation, and active oversight.</em></p>
-    <ul>
-      <li>Everything in Package 1</li>
-      <li>🔧 Custom Ticket System</li>
-      <li>📜 Rules + Guidelines Embed</li>
-      <li>🎭 Reaction Roles / Role Menus</li>
-      <li>📝 Custom Applications</li>
-      <li>📚 Resource Channels</li>
-      <li>🔒 Staff Setup & Permissions</li>
-      <li>🤖 Bot Automation</li>
-      <li>📊 Server Analytics Bots</li>
-      <li>🖼️ Branding Integration</li>
-      <li>📞 Support: Included</li>
-    </ul>
-    <button class="back-button" onclick="goBack()">Back</button>
-  </div>
-
-  <div class="package-details" id="package3">
-    <h2>🤖 Custom Discord Bot – <strong>$20</strong></h2>
-    <p><em>Fully custom bot tailored to your server. VPS/server required.</em></p>
-    <button class="back-button" onclick="goBack()">Back</button>
-  </div>
-
-  <div class="package-details" id="package4">
-    <h2>🛠️ Custom FiveM Scripts – <strong> $5 (PER SCRIPT)</strong></h2>
-    <p><em>Custom scripts and server builds for your FiveM city. Support included.</em></p>
-    <button class="back-button" onclick="goBack()">Back</button>
-  </div>
-
-  <div class="package-details" id="package5">
-    <h2>💸 Payment Methods</h2>
-    <p>Bitcoin ₿, Ethereum Ξ, Litecoin Ł, and Gift Cards (Discord Nitro/Steam preferred) are accepted.</p>
-    <button class="back-button" onclick="goBack()">Back</button>
-  </div>
+  <div class="package-details" id="package1"><h2>🧰 Package 1</h2><button class="back-button" onclick="goBack()">Back</button></div>
+  <div class="package-details" id="package2"><h2>🛠️ Package 2</h2><button class="back-button" onclick="goBack()">Back</button></div>
+  <div class="package-details" id="package3"><h2>🤖 Custom Bot</h2><button class="back-button" onclick="goBack()">Back</button></div>
+  <div class="package-details" id="package4"><h2>🛠️ FiveM Scripts</h2><button class="back-button" onclick="goBack()">Back</button></div>
+  <div class="package-details" id="package5"><h2>💸 Payments</h2><button class="back-button" onclick="goBack()">Back</button></div>
 </div>
 
 <script>
-// Terminal simulation
+// Quick fake terminal
 const terminal = document.getElementById('welcome-terminal');
-const accessGranted = document.getElementById('access-granted');
+const access = document.getElementById('access-granted');
 const welcome = document.getElementById('welcome');
 const title = document.getElementById('title');
 
 const terminalLines = [
-  "Initializing CCTV System...",
-  "Connecting to cameras...",
-  "Accessing network nodes...",
-  "Loading security protocols...",
-  "Decrypting passwords...",
-  "Establishing remote connection...",
-  "Bypassing firewall...",
-  "Retrieving system logs...",
-  "Scanning for active processes...",
-  "Injecting control modules...",
-  "System ready!"
+  "INIT SYSTEM...",
+  "LOADING MODULES...",
+  "CHECKING NETWORK...",
+  "CONNECTING TO SERVER...",
+  "AUTHENTICATING...",
+  "SYSTEM READY..."
 ];
 
-// Random delay between 30-70ms for cinematic effect
-function getRandomDelay() { return 30 + Math.random() * 40; }
-
-let lineIndex = 0;
-let charIndex = 0;
-
-function typeTerminal() {
-  if(lineIndex >= terminalLines.length) {
-    setTimeout(showAccessGranted, 800);
-    return;
-  }
-  const currentLine = terminalLines[lineIndex];
-  terminal.textContent += currentLine[charIndex] || '';
-  charIndex++;
-  if(charIndex < currentLine.length) {
-    setTimeout(typeTerminal, getRandomDelay());
-  } else {
-    terminal.textContent += "\n";
-    charIndex = 0;
-    lineIndex++;
-    setTimeout(typeTerminal, 100 + Math.random()*200);
-  }
-}
-
-function showAccessGranted() {
-  // cinematic pause then clear
-  terminal.textContent = "";
-  accessGranted.style.display = "block";
-  accessGranted.style.opacity = 0;
-  let opacity = 0;
-  const fadeIn = setInterval(() => {
-    opacity += 0.05;
-    accessGranted.style.opacity = opacity;
-    if(opacity >= 1) {
-      clearInterval(fadeIn);
-      setTimeout(hideWelcome, 1500);
+function fastTerminal() {
+  let i = 0;
+  function nextLine() {
+    if(i >= terminalLines.length) {
+      // After 3s, remove terminal and show access
+      setTimeout(() => {
+        welcome.style.display = 'none';
+        access.style.display = 'block';
+        setTimeout(()=>{ access.style.display='none'; title.style.display='block'; }, 1000);
+      }, 300);
+      return;
     }
-  }, 50);
+    // Simulate skips by sometimes printing only part of line
+    const line = terminalLines[i];
+    let display = line;
+    if(Math.random() < 0.3) display = line.slice(0,line.length/2) + " ...";
+    terminal.textContent += display + "\n";
+    i++;
+    setTimeout(nextLine, 300); // 0.3s per line
+  }
+  nextLine();
 }
 
-function hideWelcome() {
-  let opacity = 1;
-  const fadeOut = setInterval(() => {
-    opacity -= 0.05;
-    welcome.style.opacity = opacity;
-    if(opacity <= 0) {
-      clearInterval(fadeOut);
-      welcome.style.display = "none";
-      title.style.display = "block";
-      setTimeout(() => { title.style.opacity = 1; }, 50);
-    }
-  }, 30);
-}
+window.onload = fastTerminal;
 
-window.onload = () => { typeTerminal(); };
-
-// Packages & Orbs logic same as before
+// Package & sidebar functions
 const packages = ["package1","package2","package3","package4","package5"];
-function showPackage(id){
-  packages.forEach(p=>{ const el=document.getElementById(p); el.style.display='none'; el.style.opacity=0; });
-  const detail=document.getElementById(id);
-  detail.style.display='block';
-  setTimeout(()=>{detail.style.opacity=1;},50);
-}
-function goBack(){
-  packages.forEach(p=>{ const el=document.getElementById(p); el.style.display='none'; el.style.opacity=0; });
-}
-
-const orbCount = 6;
-const orbs = [];
-for(let i=0;i<orbCount;i++){
-  const orb=document.createElement('div');
-  orb.className='orb';
-  document.body.appendChild(orb);
-  orbs.push({el: orb, x:window.innerWidth/2, y:window.innerHeight/2});
-}
-
-let mouse={x:window.innerWidth/2,y:window.innerHeight/2};
-function updateMouse(x,y){
-  mouse.x = x;
-  mouse.y = y;
-  orbs.forEach(o=>o.el.style.opacity=1);
-}
-window.addEventListener('mousemove',e=>updateMouse(e.clientX,e.clientY));
-window.addEventListener('touchmove',e=>{ 
-  if(e.touches.length>0){
-    const t = e.touches[0];
-    updateMouse(t.clientX, t.clientY);
-  }
-});
-
-function animateOrbs(){
-  let x=mouse.x, y=mouse.y;
-  orbs.forEach((o,i)=>{
-    o.x += (x-o.x)*0.15;
-    o.y += (y-o.y)*0.15;
-    o.el.style.transform=`translate(${o.x}px, ${o.y}px)`;
-    x=o.x; y=o.y;
-  });
-  requestAnimationFrame(animateOrbs);
-}
-animateOrbs();
-
-let orbTimeout;
-function hideOrbsDelayed(){
-  clearTimeout(orbTimeout);
-  orbTimeout=setTimeout(()=>{orbs.forEach(o=>o.el.style.opacity=0)},2000);
-}
-window.addEventListener('mousemove', hideOrbsDelayed);
-window.addEventListener('touchmove', hideOrbsDelayed);
-window.addEventListener('resize',()=>{ mouse.x=window.innerWidth/2; mouse.y=window.innerHeight/2; });
+function showPackage(id){ packages.forEach(p=>{ document.getElementById(p).style.display='none'; document.getElementById(p).style.opacity=0; }); const detail=document.getElementById(id); detail.style.display='block'; setTimeout(()=>{detail.style.opacity=1;},50); }
+function goBack(){ packages.forEach(p=>{ document.getElementById(p).style.display='none'; document.getElementById(p).style.opacity=0; }); }
 
 </script>
 
