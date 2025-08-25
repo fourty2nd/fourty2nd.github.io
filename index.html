@@ -1,61 +1,354 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fourty's Details</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fourty's Details</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family:'Poppins',sans-serif;
+  background:#121212;
+  color:#ccc;
+  overflow:hidden;
+  position:relative;
+}
 
-  <!-- Open Graph Meta (Discord Embed) -->
-  <meta property="og:title" content="Fourty's Details">
-  <meta property="og:description" content="Professional, and tailored Discord setups, bots, and scripts for FiveM communities and beyond.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://fourty2nd.github.io/">
-  <meta property="og:image" content="https://fourty2nd.github.io/IMG_6126.jpeg">
-  <meta property="og:image:width" content="512">
-  <meta property="og:image:height" content="512">
+/* Welcome screen */
+.welcome {
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:black;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:3rem;
+  color:#0f0;
+  z-index:100;
+  font-family: monospace;
+  animation: fadeOut 1s ease forwards;
+  animation-delay: 2s; /* fade out after glitch */
+}
+.welcome span {
+  position: relative;
+  display:inline-block;
+}
 
-  <!-- Twitter Card (extra support for previews) -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Fourty's Details">
-  <meta name="twitter:description" content="Professional, and tailored Discord setups, bots, and scripts for FiveM communities and beyond.">
-  <meta name="twitter:image" content="https://fourty2nd.github.io/IMG_6126.jpeg">
+/* Glitch effect */
+.glitch {
+  position: relative;
+  color:#0f0;
+  font-size:3rem;
+}
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  overflow: hidden;
+  color: #0f0;
+  clip: rect(0, 0, 0, 0);
+}
+.glitch::before {
+  animation: glitchTop 0.3s linear infinite;
+  color:#f0f;
+}
+.glitch::after {
+  animation: glitchBot 0.3s linear infinite;
+  color:#0ff;
+}
 
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background: #000;
-      color: #fff;
-      text-align: center;
-    }
+@keyframes glitchTop {
+  0% { clip: rect(0,9999px,0,0); }
+  25% { clip: rect(0,9999px,100%,0); transform: translate(-3px,-3px); }
+  50% { clip: rect(0,9999px,0,0); }
+  75% { clip: rect(0,9999px,100%,0); transform: translate(3px,3px); }
+  100% { clip: rect(0,9999px,0,0); }
+}
+@keyframes glitchBot {
+  0% { clip: rect(0,9999px,0,0); }
+  25% { clip: rect(0,9999px,100%,0); transform: translate(3px,2px); }
+  50% { clip: rect(0,9999px,0,0); }
+  75% { clip: rect(0,9999px,100%,0); transform: translate(-2px,-2px); }
+  100% { clip: rect(0,9999px,0,0); }
+}
 
-    header {
-      padding: 40px 20px;
-    }
+@keyframes fadeOut {
+  to { opacity:0; visibility:hidden; }
+}
 
-    header img {
-      width: 200px;
-      max-width: 80%;
-    }
+/* Sidebar */
+.sidebar {
+  position:fixed;
+  left:0; top:0;
+  width:220px;
+  height:100%;
+  background:#111;
+  padding-top:30px;
+  box-shadow:2px 0 10px rgba(0,0,0,0.6);
+  z-index:10;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+.sidebar button {
+  display:block;
+  width:90%;
+  margin:5px 0;
+  padding:12px;
+  background:#2c2c2c;
+  border:none;
+  border-radius:8px;
+  color:#ccc;
+  font-size:1rem;
+  cursor:pointer;
+  text-align:left;
+  transition: background 0.3s, color 0.3s, transform 0.2s, box-shadow 0.3s;
+}
+.sidebar button:hover {
+  background:#444;
+  color:white;
+  transform: scale(1.05);
+  box-shadow: 0 0 12px #fff, 0 0 18px #fff55;
+}
 
-    h1 {
-      margin-top: 20px;
-      font-size: 2.2rem;
-    }
+/* Discord Button */
+.discord-btn {
+  position: absolute;
+  bottom: 20px;
+  width:160px;
+  height:50px;
+  background:#7289da;
+  border-radius:10px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  cursor:pointer;
+  border:none;
+  color:white;
+  font-size:1rem;
+  gap:5px;
+  transition: transform 0.2s, box-shadow 0.3s;
+}
+.discord-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 12px #fff, 0 0 18px #fff55;
+}
 
-    p {
-      font-size: 1.2rem;
-      margin-top: 10px;
-      color: #ddd;
-    }
-  </style>
+/* Content */
+.content {
+  margin-left:240px;
+  padding:40px;
+}
+
+/* Title */
+#title {
+  display:none;
+  text-align:center;
+  color:#aaa;
+  font-size:2.5rem;
+  margin-bottom:2rem;
+  transition:opacity 0.5s ease;
+  font-family: 'Mestizo', sans-serif;
+}
+
+/* Package Details */
+.package-details {
+  display:none;
+  opacity:0;
+  max-height:80vh;
+  overflow-y:auto;
+  background:#1f1f1f;
+  border-radius:12px;
+  padding:30px;
+  margin-bottom:40px;
+  color:#ddd;
+  transition:opacity 0.5s ease;
+}
+.package-details h2 { margin-bottom:10px; }
+.package-details ul { margin-left:20px; }
+.back-button {
+  margin-top:20px;
+  background-color:#333;
+  color:#ddd;
+  border:none;
+  padding:10px 20px;
+  border-radius:8px;
+  cursor:pointer;
+  transition: transform 0.2s, box-shadow 0.3s;
+}
+.back-button:hover { 
+  background-color:#444; 
+  transform: scale(1.05);
+  box-shadow: 0 0 12px #fff, 0 0 18px #fff55;
+}
+
+/* Cursor Orbs */
+.orb {
+  position: fixed;
+  width: 12px;
+  height: 12px;
+  background: #888;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 999;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 8px #666;
+  transition: opacity 0.5s ease;
+}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Mestizo&display=swap" rel="stylesheet">
 </head>
 <body>
-  <header>
-    <img src="IMG_6126.jpeg" alt="Fourty's Details Logo">
-    <h1>Fourty's Details</h1>
-    <p>Professional, and tailored Discord setups, bots, and scripts for FiveM communities and beyond.</p>
-  </header>
+
+<div class="welcome" id="welcome">
+  <span class="glitch" data-text="WELCOME">WELCOME</span>
+</div>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <button onclick="showPackage('package1')">📦 Package 1</button>
+  <button onclick="showPackage('package2')">📦 Package 2</button>
+  <button onclick="showPackage('package3')">📃 Custom Discord Bot</button>
+  <button onclick="showPackage('package4')">📃 Custom FiveM Scripts</button>
+  <button onclick="showPackage('package5')">💸 Payment Methods</button>
+
+  <button class="discord-btn" onclick="window.location.href='https://discord.gg/gekCBbQk4r'">
+    <span>🌐</span>
+    <span>My Discord Server</span>
+  </button>
+</div>
+
+<div class="content">
+  <h1 id="title">Fourty's Details</h1>
+
+  <!-- Packages -->
+  <div class="package-details" id="package1">
+    <h2>🧰 Package 1: Discord Setup – <strong>$20</strong></h2>
+    <p><em>Perfect for new business owners, gang startups, or anyone wanting a streamlined Discord to manage their FiveM experience with ease and clarity.</em></p>
+    <ul>
+      <li>📁 Channel, Role & Category Setup</li>
+      <li>🖌️ Custom Embed Design</li>
+      <li>🤖 Bot Setup</li>
+      <li>🌐 Professional Layout</li>
+      <li>📞 Support: Included</li>
+    </ul>
+    <button class="back-button" onclick="goBack()">Back</button>
+  </div>
+
+  <div class="package-details" id="package2">
+    <h2>🛠️ Package 2: Advanced Discord Build – <strong>$30</strong></h2>
+    <p><em>Ideal for gang startups, businesses, or server owners who want structure, automation, and active oversight.</em></p>
+    <ul>
+      <li>Everything in Package 1</li>
+      <li>🔧 Custom Ticket System</li>
+      <li>📜 Rules + Guidelines Embed</li>
+      <li>🎭 Reaction Roles / Role Menus</li>
+      <li>📝 Custom Applications</li>
+      <li>📚 Resource Channels</li>
+      <li>🔒 Staff Setup & Permissions</li>
+      <li>🤖 Bot Automation</li>
+      <li>📊 Server Analytics Bots</li>
+      <li>🖼️ Branding Integration</li>
+      <li>📞 Support: Included</li>
+    </ul>
+    <button class="back-button" onclick="goBack()">Back</button>
+  </div>
+
+  <div class="package-details" id="package3">
+    <h2>🤖 Custom Discord Bot – <strong>$20</strong></h2>
+    <p><em>Fully custom bot tailored to your server. VPS/server required.</em></p>
+    <button class="back-button" onclick="goBack()">Back</button>
+  </div>
+
+  <div class="package-details" id="package4">
+    <h2>🛠️ Custom FiveM Scripts – <strong> $5 (PER SCRIPT)</strong></h2>
+    <p><em>Custom scripts and server builds for your FiveM city. Support included.</em></p>
+    <button class="back-button" onclick="goBack()">Back</button>
+  </div>
+
+  <div class="package-details" id="package5">
+    <h2>💸 Payment Methods</h2>
+    <p>Bitcoin ₿, Ethereum Ξ, Litecoin Ł, and Gift Cards (Discord Nitro/Steam preferred) are accepted.</p>
+    <button class="back-button" onclick="goBack()">Back</button>
+  </div>
+</div>
+
+<script>
+const welcome = document.getElementById("welcome");
+const title = document.getElementById("title");
+const packages = ["package1","package2","package3","package4","package5"];
+
+// Show title after welcome fades out
+window.onload = () => {
+  setTimeout(()=>{
+    welcome.style.display="none";
+    title.style.display="block";
+    title.style.opacity="0";
+    setTimeout(()=>{title.style.opacity="1";},50);
+  }, 3000); // 3s total: 1s idle + 1s glitch + 1s fade
+}
+
+// Packages
+function showPackage(id){
+  packages.forEach(p=>{ const el=document.getElementById(p); el.style.display='none'; el.style.opacity=0; });
+  const detail=document.getElementById(id);
+  detail.style.display='block';
+  setTimeout(()=>{detail.style.opacity=1;},50);
+}
+function goBack(){
+  packages.forEach(p=>{ const el=document.getElementById(p); el.style.display='none'; el.style.opacity=0; });
+}
+
+// Orbs
+const orbCount = 6;
+const orbs = [];
+for(let i=0;i<orbCount;i++){
+  const orb=document.createElement('div');
+  orb.className='orb';
+  document.body.appendChild(orb);
+  orbs.push({el: orb, x:window.innerWidth/2, y:window.innerHeight/2});
+}
+
+let mouse={x:window.innerWidth/2,y:window.innerHeight/2};
+function updateMouse(x,y){
+  mouse.x = x;
+  mouse.y = y;
+  orbs.forEach(o=>o.el.style.opacity=1);
+}
+window.addEventListener('mousemove',e=>updateMouse(e.clientX,e.clientY));
+window.addEventListener('touchmove',e=>{ 
+  if(e.touches.length>0){
+    const t = e.touches[0];
+    updateMouse(t.clientX, t.clientY);
+  }
+});
+
+function animateOrbs(){
+  let x=mouse.x, y=mouse.y;
+  orbs.forEach((o,i)=>{
+    o.x += (x-o.x)*0.15;
+    o.y += (y-o.y)*0.15;
+    o.el.style.transform=`translate(${o.x}px, ${o.y}px)`;
+    x=o.x; y=o.y;
+  });
+  requestAnimationFrame(animateOrbs);
+}
+animateOrbs();
+
+let orbTimeout;
+function hideOrbsDelayed(){
+  clearTimeout(orbTimeout);
+  orbTimeout=setTimeout(()=>{orbs.forEach(o=>o.el.style.opacity=0)},2000);
+}
+window.addEventListener('mousemove', hideOrbsDelayed);
+window.addEventListener('touchmove', hideOrbsDelayed);
+window.addEventListener('resize',()=>{ mouse.x=window.innerWidth/2; mouse.y=window.innerHeight/2; });
+</script>
+
 </body>
 </html>
