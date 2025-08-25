@@ -14,7 +14,7 @@ body {
   position:relative;
 }
 
-/* Welcome screen */
+/* Welcome Terminal */
 .welcome {
   position:fixed;
   top:0; left:0;
@@ -24,22 +24,24 @@ body {
   justify-content:center;
   align-items:center;
   flex-direction:column;
-  font-size:1.2rem;
   color:#0f0;
-  z-index:100;
   font-family: "Share Tech Mono", monospace;
-  text-align:center;
+  z-index:100;
   padding:20px;
-}
-#welcome-text {
-  white-space:pre-wrap;
   text-align:left;
-  max-width:80%;
-  margin:auto;
+  overflow:hidden;
+}
+#welcome-terminal {
+  width:90%;
+  max-width:900px;
+  height:80%;
+  overflow-y:auto;
+  white-space:pre-wrap;
+  line-height:1.2em;
 }
 #access-granted {
   display:none;
-  font-size:2rem;
+  font-size:3rem;
   font-weight:bold;
   color:#00ff00;
   margin-top:20px;
@@ -172,7 +174,7 @@ body {
 <body>
 
 <div class="welcome" id="welcome">
-  <div id="welcome-text"></div>
+  <div id="welcome-terminal"></div>
   <div id="access-granted">ACCESS GRANTED</div>
 </div>
 
@@ -245,32 +247,53 @@ body {
 </div>
 
 <script>
-// Hacker-style welcome sequence
-const welcomeText = document.getElementById("welcome-text");
-const accessGranted = document.getElementById("access-granted");
-const welcome = document.getElementById("welcome");
-const title = document.getElementById("title");
+// Terminal simulation
+const terminal = document.getElementById('welcome-terminal');
+const accessGranted = document.getElementById('access-granted');
+const welcome = document.getElementById('welcome');
+const title = document.getElementById('title');
 
-const lines = [
-  "Engaging system…",
-  "Loading System…",
-  "System Loaded!"
+const terminalLines = [
+  "Initializing CCTV System...",
+  "Connecting to cameras...",
+  "Accessing network nodes...",
+  "Loading security protocols...",
+  "Decrypting passwords...",
+  "Establishing remote connection...",
+  "Bypassing firewall...",
+  "Retrieving system logs...",
+  "Scanning for active processes...",
+  "Injecting control modules...",
+  "System ready!"
 ];
 
-function typeLines(lines, lineIndex = 0, charIndex = 0) {
-  if(lineIndex >= lines.length) {
-    setTimeout(showAccessGranted, 1000);
+// Random delay between 30-70ms for cinematic effect
+function getRandomDelay() { return 30 + Math.random() * 40; }
+
+let lineIndex = 0;
+let charIndex = 0;
+
+function typeTerminal() {
+  if(lineIndex >= terminalLines.length) {
+    setTimeout(showAccessGranted, 800);
     return;
   }
-  welcomeText.textContent = lines.slice(0, lineIndex).join("\n") + (charIndex > 0 ? "\n" + lines[lineIndex].slice(0, charIndex) : "");
-  if(charIndex < lines[lineIndex].length) {
-    setTimeout(() => typeLines(lines, lineIndex, charIndex + 1), 40);
+  const currentLine = terminalLines[lineIndex];
+  terminal.textContent += currentLine[charIndex] || '';
+  charIndex++;
+  if(charIndex < currentLine.length) {
+    setTimeout(typeTerminal, getRandomDelay());
   } else {
-    setTimeout(() => typeLines(lines, lineIndex + 1, 0), 200);
+    terminal.textContent += "\n";
+    charIndex = 0;
+    lineIndex++;
+    setTimeout(typeTerminal, 100 + Math.random()*200);
   }
 }
 
 function showAccessGranted() {
+  // cinematic pause then clear
+  terminal.textContent = "";
   accessGranted.style.display = "block";
   accessGranted.style.opacity = 0;
   let opacity = 0;
@@ -279,7 +302,7 @@ function showAccessGranted() {
     accessGranted.style.opacity = opacity;
     if(opacity >= 1) {
       clearInterval(fadeIn);
-      setTimeout(hideWelcome, 1000);
+      setTimeout(hideWelcome, 1500);
     }
   }, 50);
 }
@@ -298,9 +321,9 @@ function hideWelcome() {
   }, 30);
 }
 
-window.onload = () => { typeLines(lines); };
+window.onload = () => { typeTerminal(); };
 
-// Packages
+// Packages & Orbs logic same as before
 const packages = ["package1","package2","package3","package4","package5"];
 function showPackage(id){
   packages.forEach(p=>{ const el=document.getElementById(p); el.style.display='none'; el.style.opacity=0; });
@@ -312,7 +335,6 @@ function goBack(){
   packages.forEach(p=>{ const el=document.getElementById(p); el.style.display='none'; el.style.opacity=0; });
 }
 
-// Orbs
 const orbCount = 6;
 const orbs = [];
 for(let i=0;i<orbCount;i++){
