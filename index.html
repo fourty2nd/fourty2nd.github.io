@@ -5,165 +5,57 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fourty's Details</title>
 
-  <!-- Open Graph Meta (for Discord preview) -->
+  <!-- Open Graph Meta (Discord Embed) -->
   <meta property="og:title" content="Fourty's Details">
   <meta property="og:description" content="Professional, and tailored Discord setups, bots, and scripts for FiveM communities and beyond.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://fourty2nd.github.io/fourty2nd.github.io/">
-  <meta property="og:image" content="https://fourty2nd.github.io/fourty2nd.github.io/IMG_6126.png">
+  <meta property="og:url" content="https://fourty2nd.github.io/">
+  <meta property="og:image" content="https://fourty2nd.github.io/IMG_6126.jpeg">
   <meta property="og:image:width" content="512">
   <meta property="og:image:height" content="512">
 
-  <!-- Twitter Card (extra preview support) -->
+  <!-- Twitter Card (extra support for previews) -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Fourty's Details">
   <meta name="twitter:description" content="Professional, and tailored Discord setups, bots, and scripts for FiveM communities and beyond.">
-  <meta name="twitter:image" content="https://fourty2nd.github.io/fourty2nd.github.io/IMG_6126.png">
+  <meta name="twitter:image" content="https://fourty2nd.github.io/IMG_6126.jpeg">
 
   <style>
     body {
       margin: 0;
       padding: 0;
       font-family: Arial, sans-serif;
-      background-color: #000;
-      color: white;
+      background: #000;
+      color: #fff;
       text-align: center;
-      overflow: hidden;
     }
 
-    /* Loading screen text */
-    #loading-screen {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: black;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2rem;
-      z-index: 10;
+    header {
+      padding: 40px 20px;
     }
 
-    /* Container */
-    #content {
-      display: none;
-      padding-top: 60px;
+    header img {
+      width: 200px;
+      max-width: 80%;
     }
 
-    /* Buttons */
-    .btn {
-      display: inline-block;
-      padding: 15px 40px;
-      margin: 15px;
-      font-size: 18px;
-      color: white;
-      background: none;
-      border: 2px solid white;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 15px white;
-    }
-
-    /* Discord Button */
-    .discord-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 10px 15px;
+    h1 {
       margin-top: 20px;
-      font-size: 16px;
-      border: 2px solid white;
-      border-radius: 6px;
+      font-size: 2.2rem;
     }
 
-    .discord-btn span {
-      margin-left: 8px;
-    }
-
-    /* Orbs */
-    .orb {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.15);
-      pointer-events: none;
-      z-index: 0;
+    p {
+      font-size: 1.2rem;
+      margin-top: 10px;
+      color: #ddd;
     }
   </style>
 </head>
 <body>
-  <!-- Loading Screen -->
-  <div id="loading-screen">Engaging system...</div>
-
-  <!-- Main Content -->
-  <div id="content">
+  <header>
+    <img src="IMG_6126.jpeg" alt="Fourty's Details Logo">
     <h1>Fourty's Details</h1>
     <p>Professional, and tailored Discord setups, bots, and scripts for FiveM communities and beyond.</p>
-
-    <button class="btn">Package 1</button>
-    <button class="btn">Package 2</button>
-    <button class="btn">Package 3</button>
-
-    <a class="btn discord-btn" href="https://discord.gg/gekCBbQk4r" target="_blank">🌐 <span>My Discord Server</span></a>
-  </div>
-
-  <script>
-    // Loading screen texts
-    const texts = ["Engaging system...", "Loading system...", "System Loaded!"];
-    let i = 0;
-    const loadingScreen = document.getElementById("loading-screen");
-    const content = document.getElementById("content");
-
-    function showNextText() {
-      if (i < texts.length) {
-        loadingScreen.textContent = texts[i];
-        i++;
-        setTimeout(showNextText, 1200);
-      } else {
-        loadingScreen.style.display = "none";
-        content.style.display = "block";
-      }
-    }
-
-    showNextText();
-
-    // Orbs effect
-    const createOrb = () => {
-      const orb = document.createElement("div");
-      orb.className = "orb";
-      const size = Math.random() * 20 + 10;
-      orb.style.width = `${size}px`;
-      orb.style.height = `${size}px`;
-      document.body.appendChild(orb);
-      return orb;
-    };
-
-    const orbs = Array.from({ length: 20 }, createOrb);
-
-    document.addEventListener("mousemove", (e) => {
-      orbs.forEach((orb, i) => {
-        setTimeout(() => {
-          orb.style.left = e.pageX + "px";
-          orb.style.top = e.pageY + "px";
-        }, i * 40);
-      });
-    });
-
-    document.addEventListener("touchmove", (e) => {
-      const touch = e.touches[0];
-      orbs.forEach((orb, i) => {
-        setTimeout(() => {
-          orb.style.left = touch.pageX + "px";
-          orb.style.top = touch.pageY + "px";
-        }, i * 40);
-      });
-    });
-  </script>
+  </header>
 </body>
 </html>
