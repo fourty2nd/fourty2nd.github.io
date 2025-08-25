@@ -1,320 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fourty's Details</title>
-<style>
-* { margin:0; padding:0; box-sizing:border-box; }
-body {
-  font-family:'Poppins',sans-serif;
-  background:#121212;
-  color:#ccc;
-  overflow:hidden;
-  position:relative;
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fourty's Details</title>
 
-/* Welcome screen */
-.welcome {
-  position:fixed;
-  top:0; left:0;
-  width:100%; height:100%;
-  background:black;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-size:2rem;
-  color:#0f0;
-  z-index:100;
-  font-family: monospace;
-}
-.welcome span {
-  position: absolute;
-  opacity: 0;
-  transition: none;
-}
+  <!-- Open Graph Meta (for Discord preview) -->
+  <meta property="og:title" content="Fourty's Details">
+  <meta property="og:description" content="Professional, and tailored Discord setups, bots, and scripts for FiveM communities and beyond.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://yourusername.github.io/yourrepo/">
+  <meta property="og:image" content="https://yourusername.github.io/yourrepo/FA2BC86E-74F3-4013-8E0B-6483E7F825DA.jpeg">
+  <meta property="og:image:width" content="512">
+  <meta property="og:image:height" content="512">
 
-/* Sidebar */
-.sidebar {
-  position:fixed;
-  left:0; top:0;
-  width:220px;
-  height:100%;
-  background:#111;
-  padding-top:30px;
-  box-shadow:2px 0 10px rgba(0,0,0,0.6);
-  z-index:10;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-}
-.sidebar button {
-  display:block;
-  width:90%;
-  margin:5px 0;
-  padding:12px;
-  background:#2c2c2c;
-  border:none;
-  border-radius:8px;
-  color:#ccc;
-  font-size:1rem;
-  cursor:pointer;
-  text-align:left;
-  transition: background 0.3s, color 0.3s, transform 0.2s, box-shadow 0.3s;
-}
-.sidebar button:hover {
-  background:#444;
-  color:white;
-  transform: scale(1.05);
-  box-shadow: 0 0 12px #fff, 0 0 18px #fff55;
-}
+  <!-- Twitter Card (extra preview support) -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Fourty's Details">
+  <meta name="twitter:description" content="Professional, and tailored Discord setups, bots, and scripts for FiveM communities and beyond.">
+  <meta name="twitter:image" content="https://yourusername.github.io/yourrepo/FA2BC86E-74F3-4013-8E0B-6483E7F825DA.jpeg">
 
-/* Discord Button */
-.discord-btn {
-  position: absolute;
-  bottom: 20px;
-  width:160px;
-  height:50px;
-  background:#7289da;
-  border-radius:10px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  cursor:pointer;
-  border:none;
-  color:white;
-  font-size:1rem;
-  gap:5px;
-  transition: transform 0.2s, box-shadow 0.3s;
-}
-.discord-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 12px #fff, 0 0 18px #fff55;
-}
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #000;
+      color: white;
+      text-align: center;
+      overflow: hidden;
+    }
 
-/* Content */
-.content {
-  margin-left:240px;
-  padding:40px;
-}
+    /* Loading screen text */
+    #loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      z-index: 10;
+    }
 
-/* Title */
-#title {
-  display:none;
-  text-align:center;
-  color:#aaa;
-  font-size:2.5rem;
-  margin-bottom:2rem;
-  transition:opacity 0.5s ease;
-  font-family: 'Mestizo', sans-serif;
-}
+    /* Container */
+    #content {
+      display: none;
+      padding-top: 60px;
+    }
 
-/* Package Details */
-.package-details {
-  display:none;
-  opacity:0;
-  max-height:80vh;
-  overflow-y:auto;
-  background:#1f1f1f;
-  border-radius:12px;
-  padding:30px;
-  margin-bottom:40px;
-  color:#ddd;
-  transition:opacity 0.5s ease;
-}
-.package-details h2 { margin-bottom:10px; }
-.package-details ul { margin-left:20px; }
-.back-button {
-  margin-top:20px;
-  background-color:#333;
-  color:#ddd;
-  border:none;
-  padding:10px 20px;
-  border-radius:8px;
-  cursor:pointer;
-  transition: transform 0.2s, box-shadow 0.3s;
-}
-.back-button:hover { 
-  background-color:#444; 
-  transform: scale(1.05);
-  box-shadow: 0 0 12px #fff, 0 0 18px #fff55;
-}
+    /* Buttons */
+    .btn {
+      display: inline-block;
+      padding: 15px 40px;
+      margin: 15px;
+      font-size: 18px;
+      color: white;
+      background: none;
+      border: 2px solid white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
 
-/* Cursor Orbs */
-.orb {
-  position: fixed;
-  width: 12px;
-  height: 12px;
-  background: #888;
-  border-radius: 50%;
-  pointer-events: none;
-  opacity: 0;
-  z-index: 999;
-  transform: translate(-50%, -50%);
-  box-shadow: 0 0 8px #666;
-  transition: opacity 0.5s ease;
-}
-</style>
-<link href="https://fonts.googleapis.com/css2?family=Mestizo&display=swap" rel="stylesheet">
+    .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px white;
+    }
+
+    /* Discord Button */
+    .discord-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 15px;
+      margin-top: 20px;
+      font-size: 16px;
+      border: 2px solid white;
+      border-radius: 6px;
+    }
+
+    .discord-btn span {
+      margin-left: 8px;
+    }
+
+    /* Orbs */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      pointer-events: none;
+      z-index: 0;
+    }
+  </style>
 </head>
 <body>
+  <!-- Loading Screen -->
+  <div id="loading-screen">Engaging system...</div>
 
-<div class="welcome" id="welcome">
-  <span>Engaging system…</span>
-  <span>Loading System…</span>
-  <span>System Loaded!</span>
-</div>
+  <!-- Main Content -->
+  <div id="content">
+    <h1>Fourty's Details</h1>
+    <p>Professional, and tailored Discord setups, bots, and scripts for FiveM communities and beyond.</p>
 
-<!-- Sidebar -->
-<div class="sidebar">
-  <button onclick="showPackage('package1')">📦 Package 1</button>
-  <button onclick="showPackage('package2')">📦 Package 2</button>
-  <button onclick="showPackage('package3')">📃 Custom Discord Bot</button>
-  <button onclick="showPackage('package4')">📃 Custom FiveM Scripts</button>
-  <button onclick="showPackage('package5')">💸 Payment Methods</button>
+    <button class="btn">Package 1</button>
+    <button class="btn">Package 2</button>
+    <button class="btn">Package 3</button>
 
-  <button class="discord-btn" onclick="window.location.href='https://discord.gg/gekCBbQk4r'">
-    <span>🌐</span>
-    <span>My Discord Server</span>
-  </button>
-</div>
-
-<div class="content">
-  <h1 id="title">Fourty's Details</h1>
-
-  <div class="package-details" id="package1">
-    <h2>🧰 Package 1: Discord Setup – <strong>$20</strong></h2>
-    <p><em>Perfect for new business owners, gang startups, or anyone wanting a streamlined Discord to manage their FiveM experience with ease and clarity.</em></p>
-    <ul>
-      <li>📁 Channel, Role & Category Setup</li>
-      <li>🖌️ Custom Embed Design</li>
-      <li>🤖 Bot Setup</li>
-      <li>🌐 Professional Layout</li>
-      <li>📞 Support: Included</li>
-    </ul>
-    <button class="back-button" onclick="goBack()">Back</button>
+    <a class="btn discord-btn" href="https://discord.gg/gekCBbQk4r" target="_blank">🌐 <span>My Discord Server</span></a>
   </div>
 
-  <div class="package-details" id="package2">
-    <h2>🛠️ Package 2: Advanced Discord Build – <strong>$30</strong></h2>
-    <p><em>Ideal for gang startups, businesses, or server owners who want structure, automation, and active oversight.</em></p>
-    <ul>
-      <li>Everything in Package 1</li>
-      <li>🔧 Custom Ticket System</li>
-      <li>📜 Rules + Guidelines Embed</li>
-      <li>🎭 Reaction Roles / Role Menus</li>
-      <li>📝 Custom Applications</li>
-      <li>📚 Resource Channels</li>
-      <li>🔒 Staff Setup & Permissions</li>
-      <li>🤖 Bot Automation</li>
-      <li>📊 Server Analytics Bots</li>
-      <li>🖼️ Branding Integration</li>
-      <li>📞 Support: Included</li>
-    </ul>
-    <button class="back-button" onclick="goBack()">Back</button>
-  </div>
+  <script>
+    // Loading screen texts
+    const texts = ["Engaging system...", "Loading system...", "System Loaded!"];
+    let i = 0;
+    const loadingScreen = document.getElementById("loading-screen");
+    const content = document.getElementById("content");
 
-  <div class="package-details" id="package3">
-    <h2>🤖 Custom Discord Bot – <strong>$20</strong></h2>
-    <p><em>Fully custom bot tailored to your server. VPS/server required.</em></p>
-    <button class="back-button" onclick="goBack()">Back</button>
-  </div>
-
-  <div class="package-details" id="package4">
-    <h2>🛠️ Custom FiveM Scripts – <strong> $5 (PER SCRIPT)</strong></h2>
-    <p><em>Custom scripts and server builds for your FiveM city. Support included.</em></p>
-    <button class="back-button" onclick="goBack()">Back</button>
-  </div>
-
-  <div class="package-details" id="package5">
-    <h2>💸 Payment Methods</h2>
-    <p>Bitcoin ₿, Ethereum Ξ, Litecoin Ł, and Gift Cards (Discord Nitro/Steam preferred) are accepted.</p>
-    <button class="back-button" onclick="goBack()">Back</button>
-  </div>
-</div>
-
-<script>
-const welcome = document.getElementById("welcome");
-const welcomeSpans = welcome.querySelectorAll("span");
-const title = document.getElementById("title");
-const packages = ["package1","package2","package3","package4","package5"];
-
-// Instant cut welcome sequence
-function runWelcomeSequence() {
-  let i = 0;
-  function showNext() {
-    welcomeSpans.forEach(s=>s.style.opacity=0); // hide all
-    if(i < welcomeSpans.length){
-      welcomeSpans[i].style.opacity=1;
-      i++;
-      setTimeout(showNext, 800); // 0.8s per line
-    } else {
-      welcome.style.display='none';
-      title.style.display='block';
-      title.style.opacity='0';
-      setTimeout(()=>{title.style.opacity='1';},50);
+    function showNextText() {
+      if (i < texts.length) {
+        loadingScreen.textContent = texts[i];
+        i++;
+        setTimeout(showNextText, 1200);
+      } else {
+        loadingScreen.style.display = "none";
+        content.style.display = "block";
+      }
     }
-  }
-  showNext();
-}
-window.onload = runWelcomeSequence;
 
-// Packages
-function showPackage(id){
-  packages.forEach(p=>{ const el=document.getElementById(p); el.style.display='none'; el.style.opacity=0; });
-  const detail=document.getElementById(id);
-  detail.style.display='block';
-  setTimeout(()=>{detail.style.opacity=1;},50);
-}
-function goBack(){
-  packages.forEach(p=>{ const el=document.getElementById(p); el.style.display='none'; el.style.opacity=0; });
-}
+    showNextText();
 
-// Orbs
-const orbCount = 6;
-const orbs = [];
-for(let i=0;i<orbCount;i++){
-  const orb=document.createElement('div');
-  orb.className='orb';
-  document.body.appendChild(orb);
-  orbs.push({el: orb, x:window.innerWidth/2, y:window.innerHeight/2});
-}
+    // Orbs effect
+    const createOrb = () => {
+      const orb = document.createElement("div");
+      orb.className = "orb";
+      const size = Math.random() * 20 + 10;
+      orb.style.width = `${size}px`;
+      orb.style.height = `${size}px`;
+      document.body.appendChild(orb);
+      return orb;
+    };
 
-let mouse={x:window.innerWidth/2,y:window.innerHeight/2};
-function updateMouse(x,y){
-  mouse.x = x;
-  mouse.y = y;
-  orbs.forEach(o=>o.el.style.opacity=1);
-}
-window.addEventListener('mousemove',e=>updateMouse(e.clientX,e.clientY));
-window.addEventListener('touchmove',e=>{ 
-  if(e.touches.length>0){
-    const t = e.touches[0];
-    updateMouse(t.clientX, t.clientY);
-  }
-});
+    const orbs = Array.from({ length: 20 }, createOrb);
 
-function animateOrbs(){
-  let x=mouse.x, y=mouse.y;
-  orbs.forEach((o,i)=>{
-    o.x += (x-o.x)*0.15;
-    o.y += (y-o.y)*0.15;
-    o.el.style.transform=`translate(${o.x}px, ${o.y}px)`;
-    x=o.x; y=o.y;
-  });
-  requestAnimationFrame(animateOrbs);
-}
-animateOrbs();
+    document.addEventListener("mousemove", (e) => {
+      orbs.forEach((orb, i) => {
+        setTimeout(() => {
+          orb.style.left = e.pageX + "px";
+          orb.style.top = e.pageY + "px";
+        }, i * 40);
+      });
+    });
 
-let orbTimeout;
-function hideOrbsDelayed(){
-  clearTimeout(orbTimeout);
-  orbTimeout=setTimeout(()=>{orbs.forEach(o=>o.el.style.opacity=0)},2000);
-}
-window.addEventListener('mousemove', hideOrbsDelayed);
-window.addEventListener('touchmove', hideOrbsDelayed);
-window.addEventListener('resize',()=>{ mouse.x=window.innerWidth/2; mouse.y=window.innerHeight/2; });
-</script>
-
+    document.addEventListener("touchmove", (e) => {
+      const touch = e.touches[0];
+      orbs.forEach((orb, i) => {
+        setTimeout(() => {
+          orb.style.left = touch.pageX + "px";
+          orb.style.top = touch.pageY + "px";
+        }, i * 40);
+      });
+    });
+  </script>
 </body>
 </html>
