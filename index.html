@@ -23,23 +23,22 @@ body {
   font-family: monospace;
   color:#0f0;
   z-index:100;
-  padding:20px;
-  overflow:hidden;
+  padding:10px;
+  overflow-y: auto;
 }
 #welcome-terminal {
-  width:100%;
-  height:100%;
-  white-space:pre-wrap;
-  font-size:14px;
-  line-height:1.3em;
-  overflow-y:auto;
+  white-space: pre-wrap;
+  line-height:1.4em;
 }
+
+/* Access Granted */
 #accessGranted {
-  position:absolute;
-  top:50%; left:50%;
-  transform:translate(-50%, -50%);
   display:none;
-  color:#00ff00;
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  color:#0f0;
   font-size:3rem;
   font-weight:bold;
   border:2px solid #0f0;
@@ -172,8 +171,7 @@ body {
 </head>
 <body>
 
-<!-- Welcome screen -->
-<div class="welcome">
+<div class="welcome" id="welcome">
   <div id="welcome-terminal"></div>
   <div id="accessGranted">ACCESS GRANTED</div>
 </div>
@@ -276,26 +274,43 @@ const lines = [
 "};"
 ];
 
-let term = document.getElementById("welcome-terminal");
-let access = document.getElementById("accessGranted");
+// Junk lines for chaos
+const junk = [
+"Initializing hack.exe...",
+"Loading kernel modules...",
+"0x4F2A1C: Memory dump complete",
+"User authentication bypassed",
+"Encrypting payload...",
+"Socket connection established",
+"Scanning ports...",
+"Warning: unusual activity detected",
+"Null pointer exception at 0x0032FF",
+"Firewall override complete"
+];
+
+const term = document.getElementById("welcome-terminal");
+const access = document.getElementById("accessGranted");
 let i = 0;
 
 function typeLine() {
-  if(i < lines.length){
-    term.innerHTML += lines[i] + "\n";
-    i++;
-    setTimeout(typeLine, 70); // speed
-  } else {
-    setTimeout(()=>{
-      access.style.display="block";
-      setTimeout(()=>{
-        document.querySelector(".welcome").style.display="none";
-        document.getElementById("title").style.display="block";
-      },1200);
-    },500);
-  }
+    if(i < lines.length){
+        if(Math.random() < 0.3){
+            let j = junk[Math.floor(Math.random()*junk.length)];
+            term.innerHTML += j + "\n\n";
+        }
+        term.innerHTML += lines[i] + "\n\n";
+        i++;
+        setTimeout(typeLine, 30 + Math.random()*80);
+    } else {
+        setTimeout(()=>{
+            access.style.display="block";
+            setTimeout(()=>{
+                document.querySelector(".welcome").style.display="none";
+                document.getElementById("title").style.display="block";
+            },1200);
+        },500);
+    }
 }
-
 window.onload = typeLine;
 
 // Packages
@@ -310,7 +325,7 @@ function goBack(){
   packages.forEach(p=>{ const el=document.getElementById(p); el.style.display='none'; el.style.opacity=0; });
 }
 
-// Cursor Orbs
+// Orbs
 const orbCount = 6;
 const orbs = [];
 for(let i=0;i<orbCount;i++){
@@ -319,6 +334,7 @@ for(let i=0;i<orbCount;i++){
   document.body.appendChild(orb);
   orbs.push({el: orb, x:window.innerWidth/2, y:window.innerHeight/2});
 }
+
 let mouse={x:window.innerWidth/2,y:window.innerHeight/2};
 function updateMouse(x,y){
   mouse.x = x;
@@ -332,6 +348,7 @@ window.addEventListener('touchmove',e=>{
     updateMouse(t.clientX, t.clientY);
   }
 });
+
 function animateOrbs(){
   let x=mouse.x, y=mouse.y;
   orbs.forEach((o,i)=>{
@@ -343,6 +360,7 @@ function animateOrbs(){
   requestAnimationFrame(animateOrbs);
 }
 animateOrbs();
+
 let orbTimeout;
 function hideOrbsDelayed(){
   clearTimeout(orbTimeout);
@@ -351,7 +369,6 @@ function hideOrbsDelayed(){
 window.addEventListener('mousemove', hideOrbsDelayed);
 window.addEventListener('touchmove', hideOrbsDelayed);
 window.addEventListener('resize',()=>{ mouse.x=window.innerWidth/2; mouse.y=window.innerHeight/2; });
-
 </script>
 
 </body>
