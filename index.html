@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fourty's Details</title>
+<link href="https://fonts.googleapis.com/css2?family=Mestizo&display=swap" rel="stylesheet">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
@@ -12,7 +13,6 @@ body {
   color:#ccc;
   overflow:hidden;
   position:relative;
-  transition: opacity 0.5s ease;
 }
 
 /* Welcome screen */
@@ -25,9 +25,10 @@ body {
   color:#0f0;
   z-index:100;
   padding:10px;
-  overflow-y: auto;
-  transition: opacity 0.8s ease;
+  overflow-y:auto;
 }
+
+/* Terminal lines */
 #welcome-terminal {
   white-space: pre-wrap;
   line-height:1.4em;
@@ -62,7 +63,7 @@ body {
   flex-direction:column;
   align-items:center;
   opacity:0;
-  transition: opacity 1s ease;
+  transition: opacity 0.3s ease;
 }
 .sidebar button {
   display:block;
@@ -112,8 +113,6 @@ body {
 .content {
   margin-left:240px;
   padding:40px;
-  opacity:0;
-  transition: opacity 1s ease;
 }
 
 /* Title */
@@ -173,17 +172,16 @@ body {
   transition: opacity 0.5s ease;
 }
 </style>
-<link href="https://fonts.googleapis.com/css2?family=Mestizo&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<div class="welcome" id="welcome">
+<div class="welcome">
   <div id="welcome-terminal"></div>
   <div id="accessGranted">ACCESS GRANTED</div>
 </div>
 
 <!-- Sidebar -->
-<div class="sidebar" id="sidebar">
+<div class="sidebar">
   <button onclick="showPackage('package1')">📦 Package 1</button>
   <button onclick="showPackage('package2')">📦 Package 2</button>
   <button onclick="showPackage('package3')">📃 Custom Discord Bot</button>
@@ -196,7 +194,7 @@ body {
   </button>
 </div>
 
-<div class="content" id="mainContent">
+<div class="content">
   <h1 id="title">Fourty's Details</h1>
 
   <div class="package-details" id="package1">
@@ -252,79 +250,75 @@ body {
 
 <script>
 // Hacker-style terminal lines
-const lines = [
-"struct group_info init_groups = { .usage = ATOMIC_INIT(2) };",
-"struct group_info *groups_alloc(int gidsetsize){",
-"    struct group_info *group_info;",
-"    int nblocks;",
-"    int i;",
-"    nblocks = (gidsetsize + NGROUPS_PER_BLOCK - 1) / NGROUPS_PER_BLOCK;",
-"    nblocks = nblocks ? : 1;",
-"    group_info = kmalloc(sizeof(*group_info) + nblocks*sizeof(gid_t *), GFP_USER);",
-"    if (!group_info) return NULL;",
-"    group_info->ngroups = gidsetsize;",
-"    group_info->nblocks = nblocks;",
-"    atomic_set(&group_info->usage, 1);",
-"    if (gidsetsize <= NGROUPS_SMALL) group_info->blocks[0] = group_info->small_block;",
-"    else { for (i = 0; i < nblocks; i++) {",
-"        gid_t *b;",
-"        b = (void *)__get_free_page(GFP_USER);",
-"        if (!b) goto out_undo_partial_alloc;",
-"        group_info->blocks[i] = b;",
-"    } }",
-"    return group_info;",
-"out_undo_partial_alloc:",
-"    while (--i >= 0) {",
-"        free_page((unsigned long)group_info->blocks[i]);",
-"    }",
-"};"
+const terminalLines = [
+  "struct group_info init_groups = { .usage = ATOMIC_INIT(2) };",
+  "struct group_info *groups_alloc(int gidsetsize){",
+  "    struct group_info *group_info;",
+  "    int nblocks;",
+  "    int i;",
+  "    nblocks = (gidsetsize + NGROUPS_PER_BLOCK - 1) / NGROUPS_PER_BLOCK;",
+  "    nblocks = nblocks ? : 1;",
+  "    group_info = kmalloc(sizeof(*group_info) + nblocks*sizeof(gid_t *), GFP_USER);",
+  "    if (!group_info) return NULL;",
+  "    group_info->ngroups = gidsetsize;",
+  "    group_info->nblocks = nblocks;",
+  "    atomic_set(&group_info->usage, 1);",
+  "    if (gidsetsize <= NGROUPS_SMALL) group_info->blocks[0] = group_info->small_block;",
+  "    else {",
+  "        for (i = 0; i < nblocks; i++) {",
+  "            gid_t *b;",
+  "            b = (void *)__get_free_page(GFP_USER);",
+  "            if (!b) goto out_undo_partial_alloc;",
+  "            group_info->blocks[i] = b;",
+  "        }",
+  "    }",
+  "    return group_info;",
+  "out_undo_partial_alloc:",
+  "    while (--i >= 0) {",
+  "        free_page((unsigned long)group_info->blocks[i]);",
+  "    }",
+  "}"
 ];
 
-const junk = [
-"Initializing hack.exe...",
-"Loading kernel modules...",
-"0x4F2A1C: Memory dump complete",
-"User authentication bypassed",
-"Encrypting payload...",
-"Socket connection established",
-"Scanning ports...",
-"Warning: unusual activity detected",
-"Null pointer exception at 0x0032FF",
-"Firewall override complete"
-];
-
-const term = document.getElementById("welcome-terminal");
+const terminal = document.getElementById("welcome-terminal");
 const access = document.getElementById("accessGranted");
-let i = 0;
+const sidebar = document.querySelector(".sidebar");
+const title = document.getElementById("title");
+const packages = ["package1","package2","package3","package4","package5"];
 
-function typeLine() {
-    if(i < lines.length){
-        if(Math.random() < 0.3){
-            let j = junk[Math.floor(Math.random()*junk.length)];
-            term.innerHTML += j + "\n\n";
-        }
-        term.innerHTML += lines[i] + "\n\n";
-        i++;
-        setTimeout(typeLine, 30 + Math.random()*80);
+function runWelcomeSequence(){
+  let i = 0;
+  function showLine(){
+    if(i < terminalLines.length){
+      const line = document.createElement("div");
+      line.textContent = terminalLines[i];
+      line.style.marginBottom = (Math.random()*20+5) + "px"; // messy spacing
+      terminal.appendChild(line);
+      i++;
+      setTimeout(showLine, 80); // speed up hacker lines
     } else {
+      setTimeout(()=>{
+        terminal.style.display="none"; // hide terminal
+        access.style.display="block"; // show access granted
         setTimeout(()=>{
-            // fade out terminal
-            term.parentElement.style.opacity=0;
-            // show access granted
-            access.style.display="block";
-            setTimeout(()=>{
-                document.getElementById("welcome").style.display="none";
-                document.getElementById("title").style.display="block";
-                document.getElementById("mainContent").style.opacity=1;
-                document.getElementById("sidebar").style.opacity=1;
-            },1200);
-        },500);
+          access.style.display="none"; // hide access granted
+          // fade in sidebar menu
+          sidebar.style.opacity="1";
+          // fade in title after 1s
+          setTimeout(()=>{
+            title.style.display="block";
+            title.style.opacity="1";
+          },1000);
+        },1000);
+      },200);
     }
+  }
+  showLine();
 }
-window.onload = typeLine;
+
+window.onload = runWelcomeSequence;
 
 // Packages
-const packages = ["package1","package2","package3","package4","package5"];
 function showPackage(id){
   packages.forEach(p=>{ const el=document.getElementById(p); el.style.display='none'; el.style.opacity=0; });
   const detail=document.getElementById(id);
@@ -380,6 +374,5 @@ window.addEventListener('mousemove', hideOrbsDelayed);
 window.addEventListener('touchmove', hideOrbsDelayed);
 window.addEventListener('resize',()=>{ mouse.x=window.innerWidth/2; mouse.y=window.innerHeight/2; });
 </script>
-
 </body>
 </html>
