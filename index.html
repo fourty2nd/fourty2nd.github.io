@@ -12,6 +12,7 @@ body {
   color:#ccc;
   overflow:hidden;
   position:relative;
+  transition: opacity 0.5s ease;
 }
 
 /* Welcome screen */
@@ -25,6 +26,7 @@ body {
   z-index:100;
   padding:10px;
   overflow-y: auto;
+  transition: opacity 0.8s ease;
 }
 #welcome-terminal {
   white-space: pre-wrap;
@@ -59,6 +61,8 @@ body {
   display:flex;
   flex-direction:column;
   align-items:center;
+  opacity:0;
+  transition: opacity 1s ease;
 }
 .sidebar button {
   display:block;
@@ -108,6 +112,8 @@ body {
 .content {
   margin-left:240px;
   padding:40px;
+  opacity:0;
+  transition: opacity 1s ease;
 }
 
 /* Title */
@@ -177,7 +183,7 @@ body {
 </div>
 
 <!-- Sidebar -->
-<div class="sidebar">
+<div class="sidebar" id="sidebar">
   <button onclick="showPackage('package1')">📦 Package 1</button>
   <button onclick="showPackage('package2')">📦 Package 2</button>
   <button onclick="showPackage('package3')">📃 Custom Discord Bot</button>
@@ -190,7 +196,7 @@ body {
   </button>
 </div>
 
-<div class="content">
+<div class="content" id="mainContent">
   <h1 id="title">Fourty's Details</h1>
 
   <div class="package-details" id="package1">
@@ -274,7 +280,6 @@ const lines = [
 "};"
 ];
 
-// Junk lines for chaos
 const junk = [
 "Initializing hack.exe...",
 "Loading kernel modules...",
@@ -303,10 +308,15 @@ function typeLine() {
         setTimeout(typeLine, 30 + Math.random()*80);
     } else {
         setTimeout(()=>{
+            // fade out terminal
+            term.parentElement.style.opacity=0;
+            // show access granted
             access.style.display="block";
             setTimeout(()=>{
-                document.querySelector(".welcome").style.display="none";
+                document.getElementById("welcome").style.display="none";
                 document.getElementById("title").style.display="block";
+                document.getElementById("mainContent").style.opacity=1;
+                document.getElementById("sidebar").style.opacity=1;
             },1200);
         },500);
     }
