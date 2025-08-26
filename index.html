@@ -32,6 +32,7 @@ body {
 }
 #welcome-terminal div {
   opacity:1;
+  transition: opacity 0.3s;
 }
 
 /* Access Granted */
@@ -47,6 +48,8 @@ body {
   padding:20px 40px;
   text-align:center;
   z-index:200;
+  opacity:0;
+  transition: opacity 0.3s;
 }
 
 /* Sidebar */
@@ -63,7 +66,7 @@ body {
   flex-direction:column;
   align-items:center;
   opacity:0;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.3s ease;
 }
 .sidebar button {
   display:block;
@@ -122,9 +125,9 @@ body {
   color:#aaa;
   font-size:2.5rem;
   margin-bottom:2rem;
-  transition:opacity 0.5s ease;
   font-family: 'Mestizo', sans-serif;
   opacity:0;
+  transition: opacity 0.5s ease;
 }
 
 /* Package Details */
@@ -251,7 +254,6 @@ body {
 </div>
 
 <script>
-// Hacker terminal lines
 const terminalLines = [
 "struct group_info init_groups = { .usage = ATOMIC_INIT(2) };",
 "struct group_info *groups_alloc(int gidsetsize){",
@@ -264,9 +266,13 @@ const terminalLines = [
 "  if (!group_info) return NULL;",
 "  group_info->ngroups = gidsetsize;",
 "  group_info->nblocks = nblocks;",
+"  atomic_set(&group_info->usage, 1);",
+"  if (gidsetsize <= NGROUPS_SMALL) group_info->blocks[0] = group_info->small_block;",
+"  else { for(i=0;i<nblocks;i++){ let b=(void *)__get_free_page(GFP_USER); if(!b) goto out_undo_partial_alloc; group_info->blocks[i]=b;}}",
+"  return group_info;",
 "}",
 "out_undo_partial_alloc:",
-"  while (--i >= 0) free_page((unsigned long)group_info->blocks[i]);"
+"while(--i>=0) free_page((unsigned long)group_info->blocks[i]);"
 ];
 
 const terminal = document.getElementById("welcome-terminal");
@@ -275,35 +281,36 @@ const sidebar = document.getElementById("sidebar");
 const title = document.getElementById("title");
 const packages = ["package1","package2","package3","package4","package5"];
 
-// Welcome sequence
 function runWelcomeSequence(){
-  let i = 0;
+  let i=0;
   function showLine(){
-    if(i < terminalLines.length){
-      const line = document.createElement("div");
-      line.textContent = terminalLines[i];
-      line.style.marginBottom = (Math.random()*20+5) + "px"; // messy spacing
+    if(i<terminalLines.length){
+      const line=document.createElement("div");
+      line.textContent=terminalLines[i];
+      line.style.marginBottom=(Math.random()*20+5)+"px";
       terminal.appendChild(line);
       i++;
-      setTimeout(showLine, 80);
+      setTimeout(showLine,80);
     } else {
-      // Small pause
+      // 0.2s pause before hiding terminal
       setTimeout(()=>{
         terminal.style.display="none";
         access.style.display="block";
-        // Access granted duration
+        access.style.opacity=1;
         setTimeout(()=>{
-          access.style.display="none";
-          // fade in sidebar menu
-          sidebar.style.display="flex";
-          setTimeout(()=>{ sidebar.style.opacity="1"; },50);
-          // fade in title 1s after menu fade-in
+          access.style.opacity=0;
           setTimeout(()=>{
-            title.style.display="block";
-            setTimeout(()=>{ title.style.opacity="1"; },50);
-          },1000);
-        },1000); // access granted visible
-      },200); // pause before access granted
+            access.style.display="none";
+            sidebar.style.display="flex";
+            setTimeout(()=>{sidebar.style.opacity=1;},50);
+            // title fades in 1s after sidebar
+            setTimeout(()=>{
+              title.style.display="block";
+              setTimeout(()=>{title.style.opacity=1;},50);
+            },1000);
+          },300); // small fade in delay for sidebar
+        },1000); // access granted visible duration
+      },200);
     }
   }
   showLine();
