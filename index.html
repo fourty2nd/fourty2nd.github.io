@@ -14,57 +14,37 @@ body {
   position:relative;
 }
 
-/* Hacker Terminal Welcome */
+/* Welcome screen */
 .welcome {
   position:fixed;
   top:0; left:0;
   width:100%; height:100%;
   background:black;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  flex-direction:column;
   font-family: monospace;
+  color:#0f0;
   z-index:100;
-  color:#0f0;
+  padding:20px;
+  overflow:hidden;
 }
-#terminal {
-  text-align:left;
-  white-space:pre;
+#welcome-terminal {
+  width:100%;
+  height:100%;
+  white-space:pre-wrap;
   font-size:14px;
-  line-height:1.8;
-  max-width:90%;
+  line-height:1.3em;
+  overflow-y:auto;
 }
-.cursor {
-  display:inline-block;
-  background:#0f0;
-  width:8px;
-  height:16px;
-  animation: blink 1s step-end infinite;
-  margin-left:2px;
-}
-@keyframes blink {
-  50% { background: transparent; }
-}
-#access {
+#accessGranted {
   position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  font-size:2.5rem;
-  color:#0f0;
+  top:50%; left:50%;
+  transform:translate(-50%, -50%);
+  display:none;
+  color:#00ff00;
+  font-size:3rem;
+  font-weight:bold;
   border:2px solid #0f0;
   padding:20px 40px;
-  display:none;
   text-align:center;
-  animation: flicker 1.2s steps(1,end) 2;
-}
-@keyframes flicker {
-  0%, 100% { opacity: 1; }
-  20% { opacity: 0; }
-  40% { opacity: 1; }
-  60% { opacity: 0; }
-  80% { opacity: 1; }
 }
 
 /* Sidebar */
@@ -192,10 +172,10 @@ body {
 </head>
 <body>
 
-<!-- Welcome Hacker Terminal -->
-<div class="welcome" id="welcome">
-  <div id="terminal"></div><span class="cursor"></span>
-  <div id="access">ACCESS GRANTED</div>
+<!-- Welcome screen -->
+<div class="welcome">
+  <div id="welcome-terminal"></div>
+  <div id="accessGranted">ACCESS GRANTED</div>
 </div>
 
 <!-- Sidebar -->
@@ -215,63 +195,111 @@ body {
 <div class="content">
   <h1 id="title">Fourty's Details</h1>
 
-  <!-- Packages (unchanged) -->
-  <div class="package-details" id="package1"> ... </div>
-  <div class="package-details" id="package2"> ... </div>
-  <div class="package-details" id="package3"> ... </div>
-  <div class="package-details" id="package4"> ... </div>
-  <div class="package-details" id="package5"> ... </div>
+  <div class="package-details" id="package1">
+    <h2>🧰 Package 1: Discord Setup – <strong>$20</strong></h2>
+    <p><em>Perfect for new business owners, gang startups, or anyone wanting a streamlined Discord to manage their FiveM experience with ease and clarity.</em></p>
+    <ul>
+      <li>📁 Channel, Role & Category Setup</li>
+      <li>🖌️ Custom Embed Design</li>
+      <li>🤖 Bot Setup</li>
+      <li>🌐 Professional Layout</li>
+      <li>📞 Support: Included</li>
+    </ul>
+    <button class="back-button" onclick="goBack()">Back</button>
+  </div>
+
+  <div class="package-details" id="package2">
+    <h2>🛠️ Package 2: Advanced Discord Build – <strong>$30</strong></h2>
+    <p><em>Ideal for gang startups, businesses, or server owners who want structure, automation, and active oversight.</em></p>
+    <ul>
+      <li>Everything in Package 1</li>
+      <li>🔧 Custom Ticket System</li>
+      <li>📜 Rules + Guidelines Embed</li>
+      <li>🎭 Reaction Roles / Role Menus</li>
+      <li>📝 Custom Applications</li>
+      <li>📚 Resource Channels</li>
+      <li>🔒 Staff Setup & Permissions</li>
+      <li>🤖 Bot Automation</li>
+      <li>📊 Server Analytics Bots</li>
+      <li>🖼️ Branding Integration</li>
+      <li>📞 Support: Included</li>
+    </ul>
+    <button class="back-button" onclick="goBack()">Back</button>
+  </div>
+
+  <div class="package-details" id="package3">
+    <h2>🤖 Custom Discord Bot – <strong>$20</strong></h2>
+    <p><em>Fully custom bot tailored to your server. VPS/server required.</em></p>
+    <button class="back-button" onclick="goBack()">Back</button>
+  </div>
+
+  <div class="package-details" id="package4">
+    <h2>🛠️ Custom FiveM Scripts – <strong> $5 (PER SCRIPT)</strong></h2>
+    <p><em>Custom scripts and server builds for your FiveM city. Support included.</em></p>
+    <button class="back-button" onclick="goBack()">Back</button>
+  </div>
+
+  <div class="package-details" id="package5">
+    <h2>💸 Payment Methods</h2>
+    <p>Bitcoin ₿, Ethereum Ξ, Litecoin Ł, and Gift Cards (Discord Nitro/Steam preferred) are accepted.</p>
+    <button class="back-button" onclick="goBack()">Back</button>
+  </div>
 </div>
 
 <script>
-const welcome = document.getElementById("welcome");
-const terminal = document.getElementById("terminal");
-const access = document.getElementById("access");
-const title = document.getElementById("title");
-const packages = ["package1","package2","package3","package4","package5"];
-
+// Hacker-style terminal lines
 const lines = [
-  "struct group_info init_groups = { .usage = ATOMIC_INIT(2) };",
-  ">>> Initializing kernel memory space...",
-  ">>> Loading /dev/null drivers...",
-  "0x7ffeefbff5ac: b8 04 00 00 00 bb 01 00 00 00 cd 80",
-  "struct group_info *groups_alloc(int gidsetsize){",
-  "[ OK ] Mounted tmpfs on /run/user/1000",
-  ">>> Injecting syscall 0x80...",
-  ">>> Decrypting secure sectors...",
-  "root@sys:/# chmod +x exploit.sh",
-  ">>> Connection established: 192.168.1.12:443",
-  "[+] Allocating memory blocks...",
-  "[+] Process fork() success - PID 3489",
-  ">>> Hash matched! SHA256: a94a8fe5ccb19ba61c4c0873...",
-  ">>> Accessing shadow file /etc/shadow...",
-  ">>> root:$6$ZJnhtFQd$JX...",
-  ">>> Exploit complete."
+"struct group_info init_groups = { .usage = ATOMIC_INIT(2) };",
+"struct group_info *groups_alloc(int gidsetsize){",
+"    struct group_info *group_info;",
+"    int nblocks;",
+"    int i;",
+"    nblocks = (gidsetsize + NGROUPS_PER_BLOCK - 1) / NGROUPS_PER_BLOCK;",
+"    nblocks = nblocks ? : 1;",
+"    group_info = kmalloc(sizeof(*group_info) + nblocks*sizeof(gid_t *), GFP_USER);",
+"    if (!group_info) return NULL;",
+"    group_info->ngroups = gidsetsize;",
+"    group_info->nblocks = nblocks;",
+"    atomic_set(&group_info->usage, 1);",
+"    if (gidsetsize <= NGROUPS_SMALL) group_info->blocks[0] = group_info->small_block;",
+"    else { for (i = 0; i < nblocks; i++) {",
+"        gid_t *b;",
+"        b = (void *)__get_free_page(GFP_USER);",
+"        if (!b) goto out_undo_partial_alloc;",
+"        group_info->blocks[i] = b;",
+"    } }",
+"    return group_info;",
+"out_undo_partial_alloc:",
+"    while (--i >= 0) {",
+"        free_page((unsigned long)group_info->blocks[i]);",
+"    }",
+"};"
 ];
 
+let term = document.getElementById("welcome-terminal");
+let access = document.getElementById("accessGranted");
 let i = 0;
+
 function typeLine() {
-  if (i < lines.length) {
-    terminal.innerHTML += lines[i] + "\n\n";
+  if(i < lines.length){
+    term.innerHTML += lines[i] + "\n";
     i++;
-    setTimeout(typeLine, 70);
+    setTimeout(typeLine, 70); // speed
   } else {
-    setTimeout(() => {
-      terminal.style.display = "none";
-      document.querySelector(".cursor").style.display="none";
-      access.style.display = "block";
+    setTimeout(()=>{
+      access.style.display="block";
       setTimeout(()=>{
-        welcome.style.display='none';
-        title.style.display='block';
-        title.style.opacity='0';
-        setTimeout(()=>{title.style.opacity='1';},50);
-      },2000);
-    }, 500);
+        document.querySelector(".welcome").style.display="none";
+        document.getElementById("title").style.display="block";
+      },1200);
+    },500);
   }
 }
+
 window.onload = typeLine;
 
-// Package logic (unchanged)
+// Packages
+const packages = ["package1","package2","package3","package4","package5"];
 function showPackage(id){
   packages.forEach(p=>{ const el=document.getElementById(p); el.style.display='none'; el.style.opacity=0; });
   const detail=document.getElementById(id);
@@ -282,7 +310,7 @@ function goBack(){
   packages.forEach(p=>{ const el=document.getElementById(p); el.style.display='none'; el.style.opacity=0; });
 }
 
-// Orbs (unchanged)
+// Cursor Orbs
 const orbCount = 6;
 const orbs = [];
 for(let i=0;i<orbCount;i++){
@@ -293,11 +321,17 @@ for(let i=0;i<orbCount;i++){
 }
 let mouse={x:window.innerWidth/2,y:window.innerHeight/2};
 function updateMouse(x,y){
-  mouse.x = x; mouse.y = y;
+  mouse.x = x;
+  mouse.y = y;
   orbs.forEach(o=>o.el.style.opacity=1);
 }
 window.addEventListener('mousemove',e=>updateMouse(e.clientX,e.clientY));
-window.addEventListener('touchmove',e=>{ if(e.touches.length>0){ const t = e.touches[0]; updateMouse(t.clientX, t.clientY);} });
+window.addEventListener('touchmove',e=>{ 
+  if(e.touches.length>0){
+    const t = e.touches[0];
+    updateMouse(t.clientX, t.clientY);
+  }
+});
 function animateOrbs(){
   let x=mouse.x, y=mouse.y;
   orbs.forEach((o,i)=>{
@@ -317,6 +351,7 @@ function hideOrbsDelayed(){
 window.addEventListener('mousemove', hideOrbsDelayed);
 window.addEventListener('touchmove', hideOrbsDelayed);
 window.addEventListener('resize',()=>{ mouse.x=window.innerWidth/2; mouse.y=window.innerHeight/2; });
+
 </script>
 
 </body>
