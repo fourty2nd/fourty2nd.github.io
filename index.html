@@ -41,10 +41,9 @@ body {
   top:50%; left:50%;
   transform:translate(-50%,-50%);
   display:none;
-  color:#00ff00;
-  font-size:3rem;
+  color:#0f0;
+  font-size:2.5rem;
   font-weight:bold;
-  text-shadow:0 0 10px #0f0, 0 0 20px #0f0;
 }
 
 /* Sidebar */
@@ -247,16 +246,36 @@ body {
 </div>
 
 <script>
-// Fake terminal lines
+// HackerTyper-style lines
 const lines = [
-  "[BOOT] Initializing secure system...",
-  "[SYS] Allocating memory chunks...",
-  "[NET] Establishing encrypted link...",
-  "[DB] Querying access nodes...",
-  "[SYS] Performing checksum...",
-  "[AUTH] Verifying credentials...",
-  "[SYS] Preparing interface...",
-  "[DONE] System ready."
+"struct group_info init_groups = { .usage = ATOMIC_INIT(2) };",
+"struct group_info *groups_alloc(int gidsetsize){",
+"    struct group_info *group_info;",
+"    int nblocks;",
+"    int i;",
+"    nblocks = (gidsetsize + NGROUPS_PER_BLOCK - 1) / NGROUPS_PER_BLOCK;",
+"    nblocks = nblocks ? : 1;",
+"    group_info = kmalloc(sizeof(*group_info) + nblocks*sizeof(gid_t *), GFP_USER);",
+"    if (!group_info) return NULL;",
+"    group_info->ngroups = gidsetsize;",
+"    group_info->nblocks = nblocks;",
+"    atomic_set(&group_info->usage, 1);",
+"    if (gidsetsize <= NGROUPS_SMALL)",
+"        group_info->blocks[0] = group_info->small_block;",
+"    else {",
+"        for (i = 0; i < nblocks; i++) {",
+"            gid_t *b;",
+"            b = (void *)__get_free_page(GFP_USER);",
+"            if (!b) goto out_undo_partial_alloc;",
+"            group_info->blocks[i] = b;",
+"        }",
+"    }",
+"    return group_info;",
+"out_undo_partial_alloc:",
+"    while (--i >= 0) {",
+"        free_page((unsigned long)group_info->blocks[i]);",
+"    }",
+"}"
 ];
 
 let term = document.getElementById("welcome-terminal");
@@ -267,21 +286,21 @@ function typeLine() {
   if (i < lines.length) {
     term.innerHTML += lines[i] + "\n";
     i++;
-    setTimeout(typeLine, 250);
+    setTimeout(typeLine, 100); // faster "flood" effect
   } else {
     setTimeout(()=>{
       term.style.display="none";
-      access.style.display="block";
+      access.style.display="block"; // perfectly centered
       setTimeout(()=>{
         document.querySelector(".welcome").style.display="none";
         document.getElementById("title").style.display="block";
         document.getElementById("title").style.opacity="1";
       },1200);
-    },200);
+    },400);
   }
 }
 
-setTimeout(typeLine,400);
+setTimeout(typeLine,200);
 
 // Packages
 const packages = ["package1","package2","package3","package4","package5"];
