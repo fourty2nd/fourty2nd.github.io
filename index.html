@@ -27,17 +27,14 @@ body {
   font-family: monospace;
 }
 #welcome-terminal {
-  width:90%;
-  max-width:1000px;
-  height:70vh;
-  border:1px solid #0f0;
-  padding:12px;
+  width:100%;
+  height:100%;
+  padding:20px;
   color:#0f0;
   font-size:14px;
   line-height:1.3em;
   white-space:pre-wrap;
   overflow:hidden;
-  box-shadow: inset 0 0 20px rgba(0,255,0,0.3);
 }
 #accessGranted {
   position:absolute;
@@ -155,7 +152,23 @@ body {
   transform: scale(1.05);
   box-shadow: 0 0 12px #fff, 0 0 18px #fff55;
 }
+
+/* Cursor Orbs */
+.orb {
+  position: fixed;
+  width: 12px;
+  height: 12px;
+  background: #888;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 999;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 8px #666;
+  transition: opacity 0.5s ease;
+}
 </style>
+<link href="https://fonts.googleapis.com/css2?family=Mestizo&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -167,34 +180,68 @@ body {
 
 <!-- Sidebar -->
 <div class="sidebar">
-  <button onclick="showDetails('basic')">Basic Package</button>
-  <button onclick="showDetails('standard')">Standard Package</button>
-  <button onclick="showDetails('premium')">Premium Package</button>
-  <button onclick="showDetails('exclusive')">Exclusive Package</button>
-  <a href="https://discord.gg/yourlink" target="_blank" class="discord-btn">Discord</a>
+  <button onclick="showPackage('package1')">📦 Package 1</button>
+  <button onclick="showPackage('package2')">📦 Package 2</button>
+  <button onclick="showPackage('package3')">📃 Custom Discord Bot</button>
+  <button onclick="showPackage('package4')">📃 Custom FiveM Scripts</button>
+  <button onclick="showPackage('package5')">💸 Payment Methods</button>
+
+  <button class="discord-btn" onclick="window.location.href='https://discord.gg/gekCBbQk4r'">
+    <span>🌐</span>
+    <span>My Discord Server</span>
+  </button>
 </div>
 
-<!-- Content -->
 <div class="content">
-  <h1 id="title">Service Packages</h1>
-  <div id="basic" class="package-details">
-    <h2>Basic Package</h2>
-    <p>Details about the Basic Package...</p>
+  <h1 id="title">Fourty's Details</h1>
+
+  <div class="package-details" id="package1">
+    <h2>🧰 Package 1: Discord Setup – <strong>$20</strong></h2>
+    <p><em>Perfect for new business owners, gang startups, or anyone wanting a streamlined Discord to manage their FiveM experience with ease and clarity.</em></p>
+    <ul>
+      <li>📁 Channel, Role & Category Setup</li>
+      <li>🖌️ Custom Embed Design</li>
+      <li>🤖 Bot Setup</li>
+      <li>🌐 Professional Layout</li>
+      <li>📞 Support: Included</li>
+    </ul>
     <button class="back-button" onclick="goBack()">Back</button>
   </div>
-  <div id="standard" class="package-details">
-    <h2>Standard Package</h2>
-    <p>Details about the Standard Package...</p>
+
+  <div class="package-details" id="package2">
+    <h2>🛠️ Package 2: Advanced Discord Build – <strong>$30</strong></h2>
+    <p><em>Ideal for gang startups, businesses, or server owners who want structure, automation, and active oversight.</em></p>
+    <ul>
+      <li>Everything in Package 1</li>
+      <li>🔧 Custom Ticket System</li>
+      <li>📜 Rules + Guidelines Embed</li>
+      <li>🎭 Reaction Roles / Role Menus</li>
+      <li>📝 Custom Applications</li>
+      <li>📚 Resource Channels</li>
+      <li>🔒 Staff Setup & Permissions</li>
+      <li>🤖 Bot Automation</li>
+      <li>📊 Server Analytics Bots</li>
+      <li>🖼️ Branding Integration</li>
+      <li>📞 Support: Included</li>
+    </ul>
     <button class="back-button" onclick="goBack()">Back</button>
   </div>
-  <div id="premium" class="package-details">
-    <h2>Premium Package</h2>
-    <p>Details about the Premium Package...</p>
+
+  <div class="package-details" id="package3">
+    <h2>🤖 Custom Discord Bot – <strong>$20</strong></h2>
+    <p><em>Fully custom bot tailored to your server. VPS/server required.</em></p>
     <button class="back-button" onclick="goBack()">Back</button>
   </div>
-  <div id="exclusive" class="package-details">
-    <h2>Exclusive Package</h2>
-    <p>Details about the Exclusive Package...</p>
+
+  <div class="package-details" id="package4">
+    <h2>🛠️ Custom FiveM Scripts – <strong> $5 (PER SCRIPT)</strong></h2>
+    <p><em>Custom scripts and server builds for your FiveM city. Support included.</em></p>
+    <button class="back-button" onclick="goBack()">Back</button>
+  </div>
+
+  <div class="package-details" id="package5">
+    <h2>💸 Payment Methods</h2>
+    <p>Bitcoin ₿, Ethereum Ξ, Litecoin Ł, and Gift Cards (Discord Nitro/Steam preferred) are accepted.</p>
     <button class="back-button" onclick="goBack()">Back</button>
   </div>
 </div>
@@ -218,17 +265,17 @@ let i = 0;
 
 function typeLine() {
   if (i < lines.length) {
-    term.innerHTML += lines[i] + "\\n";
+    term.innerHTML += lines[i] + "\n";
     i++;
-    setTimeout(typeLine, 250); // speed of typing
+    setTimeout(typeLine, 250);
   } else {
-    // after lines done
     setTimeout(()=>{
-      term.style.display="none"; // hide terminal instantly
+      term.style.display="none";
       access.style.display="block";
       setTimeout(()=>{
         document.querySelector(".welcome").style.display="none";
         document.getElementById("title").style.display="block";
+        document.getElementById("title").style.opacity="1";
       },1200);
     },200);
   }
@@ -236,22 +283,64 @@ function typeLine() {
 
 setTimeout(typeLine,400);
 
-// Sidebar controls
-function showDetails(pkg) {
-  document.getElementById("title").style.display="none";
-  document.querySelectorAll(".package-details").forEach(el=>{
-    el.style.display="none"; el.style.opacity=0;
-  });
-  let target=document.getElementById(pkg);
-  target.style.display="block";
-  setTimeout(()=>target.style.opacity=1,50);
+// Packages
+const packages = ["package1","package2","package3","package4","package5"];
+function showPackage(id){
+  packages.forEach(p=>{ const el=document.getElementById(p); el.style.display='none'; el.style.opacity=0; });
+  const detail=document.getElementById(id);
+  detail.style.display='block';
+  setTimeout(()=>{detail.style.opacity=1;},50);
 }
-function goBack() {
-  document.querySelectorAll(".package-details").forEach(el=>{
-    el.style.display="none"; el.style.opacity=0;
-  });
-  document.getElementById("title").style.display="block";
+function goBack(){
+  packages.forEach(p=>{ const el=document.getElementById(p); el.style.display='none'; el.style.opacity=0; });
+  document.getElementById("title").style.display='block';
 }
+
+// Orbs
+const orbCount = 6;
+const orbs = [];
+for(let i=0;i<orbCount;i++){
+  const orb=document.createElement('div');
+  orb.className='orb';
+  document.body.appendChild(orb);
+  orbs.push({el: orb, x:window.innerWidth/2, y:window.innerHeight/2});
+}
+
+let mouse={x:window.innerWidth/2,y:window.innerHeight/2};
+function updateMouse(x,y){
+  mouse.x = x;
+  mouse.y = y;
+  orbs.forEach(o=>o.el.style.opacity=1);
+}
+window.addEventListener('mousemove',e=>updateMouse(e.clientX,e.clientY));
+window.addEventListener('touchmove',e=>{ 
+  if(e.touches.length>0){
+    const t = e.touches[0];
+    updateMouse(t.clientX, t.clientY);
+  }
+});
+
+function animateOrbs(){
+  let x=mouse.x, y=mouse.y;
+  orbs.forEach((o,i)=>{
+    o.x += (x-o.x)*0.15;
+    o.y += (y-o.y)*0.15;
+    o.el.style.transform=`translate(${o.x}px, ${o.y}px)`;
+    x=o.x; y=o.y;
+  });
+  requestAnimationFrame(animateOrbs);
+}
+animateOrbs();
+
+let orbTimeout;
+function hideOrbsDelayed(){
+  clearTimeout(orbTimeout);
+  orbTimeout=setTimeout(()=>{orbs.forEach(o=>o.el.style.opacity=0)},2000);
+}
+window.addEventListener('mousemove', hideOrbsDelayed);
+window.addEventListener('touchmove', hideOrbsDelayed);
+window.addEventListener('resize',()=>{ mouse.x=window.innerWidth/2; mouse.y=window.innerHeight/2; });
 </script>
+
 </body>
 </html>
