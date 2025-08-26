@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fourty's Details</title>
+<link href="https://fonts.googleapis.com/css2?family=Mestizo&display=swap" rel="stylesheet">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
@@ -20,36 +21,32 @@ body {
   top:0; left:0;
   width:100%; height:100%;
   background:black;
-  display:flex;
-  justify-content:flex-start;
-  align-items:flex-start;
-  font-size:1rem;
-  color:#0f0;
-  z-index:100;
   font-family: monospace;
-  padding: 20px;
+  z-index:100;
   overflow:hidden;
 }
-#welcome-terminal div {
-  opacity:1;
-  transition: opacity 0.3s;
+.welcome span {
+  position:absolute;
+  color:#0f0;
+  font-size:1rem;
+  opacity:0;
+  white-space:pre;
 }
 
-/* Access Granted */
+/* ACCESS GRANTED */
 #accessGranted {
   position:fixed;
-  top:50%; left:50%;
+  top:50%;
+  left:50%;
   transform:translate(-50%,-50%);
-  display:none;
-  color:#00ff00;
+  color:#0f0;
   font-size:3rem;
   font-weight:bold;
+  opacity:0;
+  transition: opacity 0.3s ease;
   border:2px solid #0f0;
   padding:20px 40px;
   text-align:center;
-  z-index:200;
-  opacity:0;
-  transition: opacity 0.3s;
 }
 
 /* Sidebar */
@@ -62,7 +59,7 @@ body {
   padding-top:30px;
   box-shadow:2px 0 10px rgba(0,0,0,0.6);
   z-index:10;
-  display:flex;
+  display:none;
   flex-direction:column;
   align-items:center;
   opacity:0;
@@ -125,9 +122,9 @@ body {
   color:#aaa;
   font-size:2.5rem;
   margin-bottom:2rem;
+  transition: opacity 0.5s ease;
   font-family: 'Mestizo', sans-serif;
   opacity:0;
-  transition: opacity 0.5s ease;
 }
 
 /* Package Details */
@@ -141,7 +138,7 @@ body {
   padding:30px;
   margin-bottom:40px;
   color:#ddd;
-  transition:opacity 0.5s ease;
+  transition: opacity 0.5s ease;
 }
 .package-details h2 { margin-bottom:10px; }
 .package-details ul { margin-left:20px; }
@@ -176,13 +173,10 @@ body {
   transition: opacity 0.5s ease;
 }
 </style>
-<link href="https://fonts.googleapis.com/css2?family=Mestizo&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<div class="welcome" id="welcome">
-  <div id="welcome-terminal"></div>
-</div>
+<div class="welcome" id="welcome"></div>
 <div id="accessGranted">ACCESS GRANTED</div>
 
 <!-- Sidebar -->
@@ -254,7 +248,14 @@ body {
 </div>
 
 <script>
-const terminalLines = [
+// TERMINAL LINES
+const terminal = document.getElementById("welcome");
+const access = document.getElementById("accessGranted");
+const sidebar = document.getElementById("sidebar");
+const title = document.getElementById("title");
+const packages = ["package1","package2","package3","package4","package5"];
+
+const lines = [
 "struct group_info init_groups = { .usage = ATOMIC_INIT(2) };",
 "struct group_info *groups_alloc(int gidsetsize){",
 "  struct group_info *group_info;",
@@ -268,56 +269,67 @@ const terminalLines = [
 "  group_info->nblocks = nblocks;",
 "  atomic_set(&group_info->usage, 1);",
 "  if (gidsetsize <= NGROUPS_SMALL) group_info->blocks[0] = group_info->small_block;",
-"  else { for(i=0;i<nblocks;i++){ let b=(void *)__get_free_page(GFP_USER); if(!b) goto out_undo_partial_alloc; group_info->blocks[i]=b;}}",
+"  else { for (i = 0; i < nblocks; i++) {",
+"    gid_t *b;",
+"    b = (void *)__get_free_page(GFP_USER);",
+"    if (!b) goto out_undo_partial_alloc;",
+"    group_info->blocks[i] = b;",
+"  } }",
 "  return group_info;",
-"}",
 "out_undo_partial_alloc:",
-"while(--i>=0) free_page((unsigned long)group_info->blocks[i]);"
+"  while (--i >= 0) {",
+"    free_page((unsigned long)group_info->blocks[i]);",
+"  }",
+"}"
 ];
 
-const terminal = document.getElementById("welcome-terminal");
-const access = document.getElementById("accessGranted");
-const sidebar = document.getElementById("sidebar");
-const title = document.getElementById("title");
-const packages = ["package1","package2","package3","package4","package5"];
-
-function runWelcomeSequence(){
-  let i=0;
-  function showLine(){
-    if(i<terminalLines.length){
-      const line=document.createElement("div");
-      line.textContent=terminalLines[i];
-      line.style.marginBottom=(Math.random()*20+5)+"px";
-      terminal.appendChild(line);
+function spawnLines() {
+  let yOffset = 10;
+  let i = 0;
+  function showLine() {
+    if(i < lines.length){
+      const span = document.createElement("span");
+      span.textContent = lines[i];
+      span.style.top = yOffset + "px";
+      span.style.left = "10px";
+      terminal.appendChild(span);
+      span.style.opacity = 1;
+      yOffset += 20 + Math.random()*10; // space for hackerish look
       i++;
-      setTimeout(showLine,80);
+      setTimeout(showLine, 80);
     } else {
-      // 0.2s pause before hiding terminal
-      setTimeout(()=>{
-        terminal.style.display="none";
-        access.style.display="block";
-        access.style.opacity=1;
-        setTimeout(()=>{
-          access.style.opacity=0;
-          setTimeout(()=>{
-            access.style.display="none";
-            sidebar.style.display="flex";
-            setTimeout(()=>{sidebar.style.opacity=1;},50);
-            // title fades in 1s after sidebar
-            setTimeout(()=>{
-              title.style.display="block";
-              setTimeout(()=>{title.style.opacity=1;},50);
-            },1000);
-          },300); // small fade in delay for sidebar
-        },1000); // access granted visible duration
-      },200);
+      setTimeout(()=>{terminal.style.opacity=0}, 200);
+      setTimeout(showAccess, 400);
     }
   }
   showLine();
 }
-window.onload = runWelcomeSequence;
 
-// Packages
+function showAccess(){
+  terminal.style.display="none";
+  access.style.opacity=1;
+  access.style.display="block";
+  setTimeout(()=>{
+    access.style.opacity=0;
+    setTimeout(showMenu,300);
+  },1000);
+}
+
+function showMenu(){
+  sidebar.style.display="flex";
+  sidebar.offsetHeight; // force reflow
+  sidebar.style.opacity=1;
+
+  setTimeout(()=>{
+    title.style.display="block";
+    title.offsetHeight;
+    title.style.opacity=1;
+  },1000);
+}
+
+window.onload = spawnLines;
+
+// PACKAGE LOGIC
 function showPackage(id){
   packages.forEach(p=>{ const el=document.getElementById(p); el.style.display='none'; el.style.opacity=0; });
   const detail=document.getElementById(id);
@@ -372,7 +384,7 @@ function hideOrbsDelayed(){
 window.addEventListener('mousemove', hideOrbsDelayed);
 window.addEventListener('touchmove', hideOrbsDelayed);
 window.addEventListener('resize',()=>{ mouse.x=window.innerWidth/2; mouse.y=window.innerHeight/2; });
-</script>
 
+</script>
 </body>
 </html>
