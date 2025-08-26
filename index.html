@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fourty's Details</title>
-<link href="https://fonts.googleapis.com/css2?family=Mestizo&display=swap" rel="stylesheet">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
@@ -21,32 +20,33 @@ body {
   top:0; left:0;
   width:100%; height:100%;
   background:black;
-  font-family: monospace;
+  display:flex;
+  justify-content:flex-start;
+  align-items:flex-start;
+  font-size:1rem;
   color:#0f0;
   z-index:100;
-  padding:10px;
-  overflow-y:auto;
+  font-family: monospace;
+  padding: 20px;
+  overflow:hidden;
 }
-
-/* Terminal lines */
-#welcome-terminal {
-  white-space: pre-wrap;
-  line-height:1.4em;
+#welcome-terminal div {
+  opacity:1;
 }
 
 /* Access Granted */
 #accessGranted {
-  display:none;
   position:fixed;
-  top:50%;
-  left:50%;
+  top:50%; left:50%;
   transform:translate(-50%,-50%);
-  color:#0f0;
+  display:none;
+  color:#00ff00;
   font-size:3rem;
   font-weight:bold;
   border:2px solid #0f0;
   padding:20px 40px;
   text-align:center;
+  z-index:200;
 }
 
 /* Sidebar */
@@ -63,7 +63,7 @@ body {
   flex-direction:column;
   align-items:center;
   opacity:0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.5s ease;
 }
 .sidebar button {
   display:block;
@@ -124,6 +124,7 @@ body {
   margin-bottom:2rem;
   transition:opacity 0.5s ease;
   font-family: 'Mestizo', sans-serif;
+  opacity:0;
 }
 
 /* Package Details */
@@ -172,16 +173,17 @@ body {
   transition: opacity 0.5s ease;
 }
 </style>
+<link href="https://fonts.googleapis.com/css2?family=Mestizo&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<div class="welcome">
+<div class="welcome" id="welcome">
   <div id="welcome-terminal"></div>
-  <div id="accessGranted">ACCESS GRANTED</div>
 </div>
+<div id="accessGranted">ACCESS GRANTED</div>
 
 <!-- Sidebar -->
-<div class="sidebar">
+<div class="sidebar" id="sidebar">
   <button onclick="showPackage('package1')">📦 Package 1</button>
   <button onclick="showPackage('package2')">📦 Package 2</button>
   <button onclick="showPackage('package3')">📃 Custom Discord Bot</button>
@@ -249,43 +251,31 @@ body {
 </div>
 
 <script>
-// Hacker-style terminal lines
+// Hacker terminal lines
 const terminalLines = [
-  "struct group_info init_groups = { .usage = ATOMIC_INIT(2) };",
-  "struct group_info *groups_alloc(int gidsetsize){",
-  "    struct group_info *group_info;",
-  "    int nblocks;",
-  "    int i;",
-  "    nblocks = (gidsetsize + NGROUPS_PER_BLOCK - 1) / NGROUPS_PER_BLOCK;",
-  "    nblocks = nblocks ? : 1;",
-  "    group_info = kmalloc(sizeof(*group_info) + nblocks*sizeof(gid_t *), GFP_USER);",
-  "    if (!group_info) return NULL;",
-  "    group_info->ngroups = gidsetsize;",
-  "    group_info->nblocks = nblocks;",
-  "    atomic_set(&group_info->usage, 1);",
-  "    if (gidsetsize <= NGROUPS_SMALL) group_info->blocks[0] = group_info->small_block;",
-  "    else {",
-  "        for (i = 0; i < nblocks; i++) {",
-  "            gid_t *b;",
-  "            b = (void *)__get_free_page(GFP_USER);",
-  "            if (!b) goto out_undo_partial_alloc;",
-  "            group_info->blocks[i] = b;",
-  "        }",
-  "    }",
-  "    return group_info;",
-  "out_undo_partial_alloc:",
-  "    while (--i >= 0) {",
-  "        free_page((unsigned long)group_info->blocks[i]);",
-  "    }",
-  "}"
+"struct group_info init_groups = { .usage = ATOMIC_INIT(2) };",
+"struct group_info *groups_alloc(int gidsetsize){",
+"  struct group_info *group_info;",
+"  int nblocks;",
+"  int i;",
+"  nblocks = (gidsetsize + NGROUPS_PER_BLOCK - 1) / NGROUPS_PER_BLOCK;",
+"  nblocks = nblocks ? : 1;",
+"  group_info = kmalloc(sizeof(*group_info) + nblocks*sizeof(gid_t *), GFP_USER);",
+"  if (!group_info) return NULL;",
+"  group_info->ngroups = gidsetsize;",
+"  group_info->nblocks = nblocks;",
+"}",
+"out_undo_partial_alloc:",
+"  while (--i >= 0) free_page((unsigned long)group_info->blocks[i]);"
 ];
 
 const terminal = document.getElementById("welcome-terminal");
 const access = document.getElementById("accessGranted");
-const sidebar = document.querySelector(".sidebar");
+const sidebar = document.getElementById("sidebar");
 const title = document.getElementById("title");
 const packages = ["package1","package2","package3","package4","package5"];
 
+// Welcome sequence
 function runWelcomeSequence(){
   let i = 0;
   function showLine(){
@@ -295,27 +285,29 @@ function runWelcomeSequence(){
       line.style.marginBottom = (Math.random()*20+5) + "px"; // messy spacing
       terminal.appendChild(line);
       i++;
-      setTimeout(showLine, 80); // speed up hacker lines
+      setTimeout(showLine, 80);
     } else {
+      // Small pause
       setTimeout(()=>{
-        terminal.style.display="none"; // hide terminal
-        access.style.display="block"; // show access granted
+        terminal.style.display="none";
+        access.style.display="block";
+        // Access granted duration
         setTimeout(()=>{
-          access.style.display="none"; // hide access granted
+          access.style.display="none";
           // fade in sidebar menu
-          sidebar.style.opacity="1";
-          // fade in title after 1s
+          sidebar.style.display="flex";
+          setTimeout(()=>{ sidebar.style.opacity="1"; },50);
+          // fade in title 1s after menu fade-in
           setTimeout(()=>{
             title.style.display="block";
-            title.style.opacity="1";
+            setTimeout(()=>{ title.style.opacity="1"; },50);
           },1000);
-        },1000);
-      },200);
+        },1000); // access granted visible
+      },200); // pause before access granted
     }
   }
   showLine();
 }
-
 window.onload = runWelcomeSequence;
 
 // Packages
@@ -374,5 +366,6 @@ window.addEventListener('mousemove', hideOrbsDelayed);
 window.addEventListener('touchmove', hideOrbsDelayed);
 window.addEventListener('resize',()=>{ mouse.x=window.innerWidth/2; mouse.y=window.innerHeight/2; });
 </script>
+
 </body>
 </html>
