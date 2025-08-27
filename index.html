@@ -23,7 +23,6 @@ body {
   position:relative;
 }
 
-/* Welcome screen replacement */
 .welcomeScreen {
   position:fixed;
   top:0; left:0;
@@ -34,13 +33,12 @@ body {
   align-items:center;
   font-family:'Mestizo', sans-serif;
   font-size:3rem;
-  color:#fff; /* changed to white */
+  color:#fff;
   opacity:0;
   transition: opacity 1s ease;
   z-index:100;
 }
 
-/* Sidebar */
 .sidebar {
   position:fixed;
   left:0; top:0;
@@ -98,7 +96,6 @@ body {
   box-shadow: 0 0 12px #fff, 0 0 18px #fff55;
 }
 
-/* Content */
 .content {
   margin-left:240px;
   padding:40px;
@@ -113,7 +110,7 @@ body {
   font-family:'Mestizo', sans-serif;
   opacity:0;
 }
-/* Packages */
+
 .package-details {
   display:none;
   opacity:0;
@@ -144,7 +141,6 @@ body {
   box-shadow: 0 0 12px #fff, 0 0 18px #fff55;
 }
 
-/* Cursor Orbs */
 .orb {
   position: fixed;
   width: 12px;
@@ -190,45 +186,46 @@ const packages = ["package1","package2","package3","package4","package5"];
 // Orbs
 const orbCount = 6;
 const orbs = [];
-const centerX = window.innerWidth/2;
-const centerY = window.innerHeight/2;
-const radius = 100;
+const spacing = 20; // space between orbs
+window.onload = () => {
+  const rect = welcome.getBoundingClientRect();
+  const startX = rect.left - (orbCount * spacing);
+  const startY = rect.top + rect.height / 2;
 
-for(let i=0;i<orbCount;i++){
-  const orb=document.createElement('div');
-  orb.className='orb';
-  document.body.appendChild(orb);
-  orbs.push({el: orb, angle: i*(2*Math.PI/orbCount), x: centerX, y: centerY});
-}
-
-// Variables for spin animation
-let spin = true;
-let spinAngle = 0;
-function animateOrbs(){
-  if(spin){
-    spinAngle += 0.02;
-    orbs.forEach((o,i)=>{
-      o.x = centerX + radius*Math.cos(o.angle + spinAngle);
-      o.y = centerY + radius*Math.sin(o.angle + spinAngle);
-      o.el.style.transform = `translate(${o.x}px, ${o.y}px)`;
-      o.el.style.opacity = 1;
-    });
-  } else {
-    // Mouse tracking
-    let x=mouse.x, y=mouse.y;
-    orbs.forEach((o,i)=>{
-      o.x += (x-o.x)*0.15;
-      o.y += (y-o.y)*0.15;
-      o.el.style.transform=`translate(${o.x}px, ${o.y}px)`;
-      x=o.x; y=o.y;
-    });
+  for(let i=0;i<orbCount;i++){
+    const orb=document.createElement('div');
+    orb.className='orb';
+    document.body.appendChild(orb);
+    orb.style.opacity = 1;
+    orb.style.background = "#888";
+    orbs.push({el: orb, x: startX + i*spacing, y: startY});
+    orb.el.style.transform = `translate(${startX + i*spacing}px, ${startY}px)`;
   }
-  requestAnimationFrame(animateOrbs);
-}
-animateOrbs();
 
-// Mouse tracking setup
-let mouse={x:centerX, y:centerY};
+  // Show welcome
+  welcome.style.opacity = 1;
+
+  // Fade out welcome and show menu after 1.5s
+  setTimeout(()=>{
+    welcome.style.opacity = 0;
+    setTimeout(()=>{
+      welcome.style.display = "none";
+      sidebar.style.display = "flex";
+      sidebar.offsetHeight;
+      sidebar.style.opacity = 1;
+      title.style.display = "block";
+      title.offsetHeight;
+      title.style.opacity = 1;
+
+      // Start mouse follow
+      spin = false;
+    }, 1000);
+  }, 1500);
+};
+
+// Mouse follow
+let spin = false;
+let mouse={x:window.innerWidth/2, y:window.innerHeight/2};
 function updateMouse(x,y){
   mouse.x = x; mouse.y = y;
   orbs.forEach(o=>o.el.style.opacity=1);
@@ -241,33 +238,19 @@ window.addEventListener('touchmove', e=>{
   }
 });
 
-// Hide orbs when idle
-let orbTimeout;
-function hideOrbsDelayed(){
-  clearTimeout(orbTimeout);
-  orbTimeout=setTimeout(()=>{orbs.forEach(o=>o.el.style.opacity=0)},2000);
+function animateOrbs(){
+  if(!spin){
+    let x=mouse.x, y=mouse.y;
+    orbs.forEach((o,i)=>{
+      o.x += (x-o.x)*0.15;
+      o.y += (y-o.y)*0.15;
+      o.el.style.transform=`translate(${o.x}px, ${o.y}px)`;
+      x=o.x; y=o.y;
+    });
+  }
+  requestAnimationFrame(animateOrbs);
 }
-window.addEventListener('mousemove', hideOrbsDelayed);
-window.addEventListener('touchmove', hideOrbsDelayed);
-window.addEventListener('resize',()=>{ mouse.x=window.innerWidth/2; mouse.y=window.innerHeight/2; });
-
-// Welcome animation then show menu
-window.onload = () => {
-  welcome.style.opacity = 1;
-  setTimeout(()=>{
-    welcome.style.opacity = 0;
-    setTimeout(()=>{
-      welcome.style.display = "none";
-      spin = false; // stop spinning and switch to mouse follow
-      sidebar.style.display = "flex";
-      sidebar.offsetHeight; 
-      sidebar.style.opacity = 1;
-      title.style.display = "block";
-      title.offsetHeight;
-      title.style.opacity = 1;
-    }, 1000);
-  }, 1500); // visible for 1.5s
-};
+animateOrbs();
 
 // Package logic
 function showPackage(id){
@@ -280,6 +263,5 @@ function goBack(){
   packages.forEach(p=>{ const el=document.getElementById(p); el.style.display='none'; el.style.opacity=0; });
 }
 </script>
-
 </body>
 </html>
