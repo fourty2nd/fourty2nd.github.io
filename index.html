@@ -4,13 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fourty's Details</title>
-
 <style>
-@font-face {
-  font-family: 'Mestizo';
-  src: url('./fonts/MestizoFont.ttf') format('truetype');
-}
-
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
   font-family:'Poppins',sans-serif;
@@ -20,7 +14,8 @@ body {
   position:relative;
 }
 
-.welcomeScreen {
+/* Welcome screen */
+.welcome {
   position:fixed;
   top:0; left:0;
   width:100%; height:100%;
@@ -28,14 +23,15 @@ body {
   display:flex;
   justify-content:center;
   align-items:center;
-  font-family:'Mestizo', sans-serif;
   font-size:3rem;
-  color:#fff;
-  opacity:0;
-  transition: opacity 1s ease;
+  color:white;
   z-index:100;
+  opacity:1;
+  transition:opacity 0.8s ease;
 }
+#welcomeText { margin-left:60px; }
 
+/* Sidebar */
 .sidebar {
   position:fixed;
   left:0; top:0;
@@ -45,7 +41,7 @@ body {
   padding-top:30px;
   box-shadow:2px 0 10px rgba(0,0,0,0.6);
   z-index:10;
-  display:none;
+  display:flex;
   flex-direction:column;
   align-items:center;
   opacity:0;
@@ -93,6 +89,7 @@ body {
   box-shadow: 0 0 12px #fff, 0 0 18px #fff55;
 }
 
+/* Content */
 .content {
   margin-left:240px;
   padding:40px;
@@ -103,11 +100,40 @@ body {
   color:#aaa;
   font-size:2.5rem;
   margin-bottom:2rem;
-  transition: opacity 0.8s ease;
-  font-family:'Mestizo', sans-serif;
+  transition:opacity 0.5s ease;
+  font-family: 'Mestizo', sans-serif;
+}
+.package-details {
+  display:none;
   opacity:0;
+  max-height:80vh;
+  overflow-y:auto;
+  background:#1f1f1f;
+  border-radius:12px;
+  padding:30px;
+  margin-bottom:40px;
+  color:#ddd;
+  transition:opacity 0.5s ease;
+}
+.package-details h2 { margin-bottom:10px; }
+.package-details ul { margin-left:20px; }
+.back-button {
+  margin-top:20px;
+  background-color:#333;
+  color:#ddd;
+  border:none;
+  padding:10px 20px;
+  border-radius:8px;
+  cursor:pointer;
+  transition: transform 0.2s, box-shadow 0.3s;
+}
+.back-button:hover { 
+  background-color:#444; 
+  transform: scale(1.05);
+  box-shadow: 0 0 12px #fff, 0 0 18px #fff55;
 }
 
+/* Orbs */
 .orb {
   position: fixed;
   width: 12px;
@@ -115,24 +141,29 @@ body {
   background: #888;
   border-radius: 50%;
   pointer-events: none;
-  opacity:0;
+  opacity: 1;
   z-index: 999;
   transform: translate(-50%, -50%);
   box-shadow: 0 0 8px #666;
-  transition: opacity 0.5s ease, background 0.3s;
+  transition: opacity 0.5s ease;
 }
 </style>
+<link href="https://fonts.googleapis.com/css2?family=Mestizo&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<div class="welcomeScreen" id="welcomeScreen">Welcome.</div>
+<div class="welcome">
+  <div id="orbsContainer"></div>
+  <div id="welcomeText">Welcome.</div>
+</div>
 
-<div class="sidebar" id="sidebar">
+<div class="sidebar">
   <button onclick="showPackage('package1')">📦 Package 1</button>
   <button onclick="showPackage('package2')">📦 Package 2</button>
   <button onclick="showPackage('package3')">📃 Custom Discord Bot</button>
   <button onclick="showPackage('package4')">📃 Custom FiveM Scripts</button>
   <button onclick="showPackage('package5')">💸 Payment Methods</button>
+
   <button class="discord-btn" onclick="window.location.href='https://discord.gg/gekCBbQk4r'">
     <span>🌐</span>
     <span>My Discord Server</span>
@@ -141,92 +172,131 @@ body {
 
 <div class="content">
   <h1 id="title">Fourty's Details</h1>
+
+  <!-- Package contents exactly like your last full HTML -->
+  <div class="package-details" id="package1">
+    <h2>🧰 Package 1: Discord Setup – <strong>$20</strong></h2>
+    <p><em>Perfect for new business owners, gang startups, or anyone wanting a streamlined Discord to manage their FiveM experience with ease and clarity.</em></p>
+    <ul>
+      <li>📁 Channel, Role & Category Setup</li>
+      <li>🖌️ Custom Embed Design</li>
+      <li>🤖 Bot Setup</li>
+      <li>🌐 Professional Layout</li>
+      <li>📞 Support: Included</li>
+    </ul>
+    <button class="back-button" onclick="goBack()">Back</button>
+  </div>
+  <div class="package-details" id="package2">
+    <h2>🛠️ Package 2: Advanced Discord Build – <strong>$30</strong></h2>
+    <p><em>Ideal for gang startups, businesses, or server owners who want structure, automation, and active oversight.</em></p>
+    <ul>
+      <li>Everything in Package 1</li>
+      <li>🔧 Custom Ticket System</li>
+      <li>📜 Rules + Guidelines Embed</li>
+      <li>🎭 Reaction Roles / Role Menus</li>
+      <li>📝 Custom Applications</li>
+      <li>📚 Resource Channels</li>
+      <li>🔒 Staff Setup & Permissions</li>
+      <li>🤖 Bot Automation</li>
+      <li>📊 Server Analytics Bots</li>
+      <li>🖼️ Branding Integration</li>
+      <li>📞 Support: Included</li>
+    </ul>
+    <button class="back-button" onclick="goBack()">Back</button>
+  </div>
+  <div class="package-details" id="package3">
+    <h2>🤖 Custom Discord Bot – <strong>$20</strong></h2>
+    <p><em>Fully custom bot tailored to your server. VPS/server required.</em></p>
+    <button class="back-button" onclick="goBack()">Back</button>
+  </div>
+  <div class="package-details" id="package4">
+    <h2>🛠️ Custom FiveM Scripts – <strong> $5 (PER SCRIPT)</strong></h2>
+    <p><em>Custom scripts and server builds for your FiveM city. Support included.</em></p>
+    <button class="back-button" onclick="goBack()">Back</button>
+  </div>
+  <div class="package-details" id="package5">
+    <h2>💸 Payment Methods</h2>
+    <p>Bitcoin ₿, Ethereum Ξ, Litecoin Ł, and Gift Cards (Discord Nitro/Steam preferred) are accepted.</p>
+    <button class="back-button" onclick="goBack()">Back</button>
+  </div>
 </div>
 
 <script>
-const welcome = document.getElementById("welcomeScreen");
-const sidebar = document.getElementById("sidebar");
-const title = document.getElementById("title");
-const orbCount = 6;
+const welcome = document.querySelector('.welcome');
+const title = document.getElementById('title');
+const packages = ["package1","package2","package3","package4","package5"];
 const orbs = [];
-const spacing = 18;
-let mouse={x:window.innerWidth/2,y:window.innerHeight/2};
-let followMouse = false;
+const orbCount = 6;
+const orbsContainer = document.getElementById("orbsContainer");
 
-// Initialize orbs
-function initOrbs(){
-  const rect = welcome.getBoundingClientRect();
-  const startX = rect.left - orbCount*spacing - 10;
-  const startY = rect.top + rect.height/2;
-
-  for(let i=0;i<orbCount;i++){
-    const orb = document.createElement('div');
-    orb.className='orb';
-    document.body.appendChild(orb);
-    orb.style.opacity = 1;
-    orb.x = startX + i*spacing;
-    orb.y = startY;
-    orb.el = orb;
-    orb.el.style.transform = `translate(${orb.x}px, ${orb.y}px)`;
-    orbs.push(orb);
-  }
+for(let i=0;i<orbCount;i++){
+  const orb=document.createElement('div');
+  orb.className='orb';
+  document.body.appendChild(orb);
+  orbs.push({el: orb, angle: i*(360/orbCount), radius: 50});
 }
 
-// Animate orbs
-function animateOrbs(){
-  if(followMouse){
-    let x=mouse.x, y=mouse.y;
-    orbs.forEach(o=>{
-      o.x += (x-o.x)*0.15;
-      o.y += (y-o.y)*0.15;
-      o.el.style.transform = `translate(${o.x}px, ${o.y}px)`;
-      x=o.x; y=o.y;
+// Animate orbs spinning left of welcome text
+function spinOrbs(duration=2000){
+  const start = performance.now();
+  function spin(time){
+    const elapsed = time-start;
+    const progress = Math.min(elapsed/duration,1);
+    orbs.forEach((o,i)=>{
+      const rad = (o.angle + progress*360)*Math.PI/180;
+      o.el.style.left = (window.innerWidth/2 - 100 + Math.cos(rad)*o.radius) + 'px';
+      o.el.style.top = (window.innerHeight/2 + Math.sin(rad)*o.radius) + 'px';
     });
+    if(progress<1) requestAnimationFrame(spin);
+    else startMouseFollow();
   }
+  spin(performance.now());
+}
+
+let mouse={x:window.innerWidth/2,y:window.innerHeight/2};
+function updateMouse(x,y){
+  mouse.x=x;
+  mouse.y=y;
+}
+window.addEventListener('mousemove',e=>updateMouse(e.clientX,e.clientY));
+
+function startMouseFollow(){
+  welcome.style.opacity=0;
+  setTimeout(()=>welcome.style.display='none',500);
+  // fade in sidebar & title
+  document.querySelector('.sidebar').style.opacity=1;
+  title.style.display='block';
+  setTimeout(()=>title.style.opacity=1,50);
+  // orbs follow mouse
+  orbs.forEach(o=>{o.radius=0;});
+}
+
+function animateOrbs(){
+  orbs.forEach(o=>{
+    o.el.style.opacity=1;
+    o.el.x = o.el.x||window.innerWidth/2;
+    o.el.y = o.el.y||window.innerHeight/2;
+    o.el.x += (mouse.x - o.el.x)*0.15;
+    o.el.y += (mouse.y - o.el.y)*0.15;
+    o.el.style.transform=`translate(${o.el.x}px, ${o.el.y}px)`;
+  });
   requestAnimationFrame(animateOrbs);
 }
-
-window.addEventListener('mousemove', e=>{ mouse.x=e.clientX; mouse.y=e.clientY; });
-window.addEventListener('touchmove', e=>{
-  if(e.touches.length>0){
-    mouse.x=e.touches[0].clientX;
-    mouse.y=e.touches[0].clientY;
-  }
-});
-
-// Show welcome, then fade menu
-window.onload = () => {
-  initOrbs();
-  welcome.style.opacity = 1;
-
-  setTimeout(()=>{
-    welcome.style.opacity = 0;
-    setTimeout(()=>{
-      welcome.style.display = "none";
-      sidebar.style.display = "flex";
-      sidebar.offsetHeight;
-      sidebar.style.opacity = 1;
-      title.style.display = "block";
-      title.offsetHeight;
-      title.style.opacity = 1;
-      followMouse = true;
-    }, 1000);
-  }, 1500);
-
-  animateOrbs();
-};
+animateOrbs();
 
 // Package logic
 function showPackage(id){
-  const packages = ["package1","package2","package3","package4","package5"];
-  packages.forEach(p=>{ const el=document.getElementById(p); if(el){ el.style.display='none'; el.style.opacity=0; }});
+  packages.forEach(p=>{ const el=document.getElementById(p); el.style.display='none'; el.style.opacity=0; });
   const detail=document.getElementById(id);
-  if(detail){ detail.style.display='block'; setTimeout(()=>{detail.style.opacity=1;},50); }
+  detail.style.display='block';
+  setTimeout(()=>{detail.style.opacity=1;},50);
 }
 function goBack(){
-  const packages = ["package1","package2","package3","package4","package5"];
-  packages.forEach(p=>{ const el=document.getElementById(p); if(el){ el.style.display='none'; el.style.opacity=0; }});
+  packages.forEach(p=>{ const el=document.getElementById(p); el.style.display='none'; el.style.opacity=0; });
 }
+
+// Start welcome sequence
+window.onload = spinOrbs;
 </script>
 </body>
 </html>
