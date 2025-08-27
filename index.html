@@ -34,7 +34,7 @@ body {
   align-items:center;
   font-family:'Mestizo', sans-serif;
   font-size:3rem;
-  color:#0f0;
+  color:#fff; /* changed to white */
   opacity:0;
   transition: opacity 1s ease;
   z-index:100;
@@ -156,7 +156,7 @@ body {
   z-index: 999;
   transform: translate(-50%, -50%);
   box-shadow: 0 0 8px #666;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.5s ease, background 0.3s;
 }
 </style>
 </head>
@@ -187,13 +187,78 @@ const sidebar = document.getElementById("sidebar");
 const title = document.getElementById("title");
 const packages = ["package1","package2","package3","package4","package5"];
 
-// Fade in "Welcome." then fade out and show menu
+// Orbs
+const orbCount = 6;
+const orbs = [];
+const centerX = window.innerWidth/2;
+const centerY = window.innerHeight/2;
+const radius = 100;
+
+for(let i=0;i<orbCount;i++){
+  const orb=document.createElement('div');
+  orb.className='orb';
+  document.body.appendChild(orb);
+  orbs.push({el: orb, angle: i*(2*Math.PI/orbCount), x: centerX, y: centerY});
+}
+
+// Variables for spin animation
+let spin = true;
+let spinAngle = 0;
+function animateOrbs(){
+  if(spin){
+    spinAngle += 0.02;
+    orbs.forEach((o,i)=>{
+      o.x = centerX + radius*Math.cos(o.angle + spinAngle);
+      o.y = centerY + radius*Math.sin(o.angle + spinAngle);
+      o.el.style.transform = `translate(${o.x}px, ${o.y}px)`;
+      o.el.style.opacity = 1;
+    });
+  } else {
+    // Mouse tracking
+    let x=mouse.x, y=mouse.y;
+    orbs.forEach((o,i)=>{
+      o.x += (x-o.x)*0.15;
+      o.y += (y-o.y)*0.15;
+      o.el.style.transform=`translate(${o.x}px, ${o.y}px)`;
+      x=o.x; y=o.y;
+    });
+  }
+  requestAnimationFrame(animateOrbs);
+}
+animateOrbs();
+
+// Mouse tracking setup
+let mouse={x:centerX, y:centerY};
+function updateMouse(x,y){
+  mouse.x = x; mouse.y = y;
+  orbs.forEach(o=>o.el.style.opacity=1);
+}
+window.addEventListener('mousemove', e=>updateMouse(e.clientX,e.clientY));
+window.addEventListener('touchmove', e=>{
+  if(e.touches.length>0){
+    const t = e.touches[0];
+    updateMouse(t.clientX,t.clientY);
+  }
+});
+
+// Hide orbs when idle
+let orbTimeout;
+function hideOrbsDelayed(){
+  clearTimeout(orbTimeout);
+  orbTimeout=setTimeout(()=>{orbs.forEach(o=>o.el.style.opacity=0)},2000);
+}
+window.addEventListener('mousemove', hideOrbsDelayed);
+window.addEventListener('touchmove', hideOrbsDelayed);
+window.addEventListener('resize',()=>{ mouse.x=window.innerWidth/2; mouse.y=window.innerHeight/2; });
+
+// Welcome animation then show menu
 window.onload = () => {
   welcome.style.opacity = 1;
   setTimeout(()=>{
     welcome.style.opacity = 0;
     setTimeout(()=>{
       welcome.style.display = "none";
+      spin = false; // stop spinning and switch to mouse follow
       sidebar.style.display = "flex";
       sidebar.offsetHeight; 
       sidebar.style.opacity = 1;
@@ -214,47 +279,6 @@ function showPackage(id){
 function goBack(){
   packages.forEach(p=>{ const el=document.getElementById(p); el.style.display='none'; el.style.opacity=0; });
 }
-
-// Orbs
-const orbCount = 6;
-const orbs = [];
-for(let i=0;i<orbCount;i++){
-  const orb=document.createElement('div');
-  orb.className='orb';
-  document.body.appendChild(orb);
-  orbs.push({el: orb, x:window.innerWidth/2, y:window.innerHeight/2});
-}
-let mouse={x:window.innerWidth/2,y:window.innerHeight/2};
-function updateMouse(x,y){
-  mouse.x = x; mouse.y = y;
-  orbs.forEach(o=>o.el.style.opacity=1);
-}
-window.addEventListener('mousemove', e=>updateMouse(e.clientX,e.clientY));
-window.addEventListener('touchmove', e=>{
-  if(e.touches.length>0){
-    const t = e.touches[0];
-    updateMouse(t.clientX,t.clientY);
-  }
-});
-function animateOrbs(){
-  let x=mouse.x, y=mouse.y;
-  orbs.forEach((o,i)=>{
-    o.x += (x-o.x)*0.15;
-    o.y += (y-o.y)*0.15;
-    o.el.style.transform=`translate(${o.x}px, ${o.y}px)`;
-    x=o.x; y=o.y;
-  });
-  requestAnimationFrame(animateOrbs);
-}
-animateOrbs();
-let orbTimeout;
-function hideOrbsDelayed(){
-  clearTimeout(orbTimeout);
-  orbTimeout=setTimeout(()=>{orbs.forEach(o=>o.el.style.opacity=0)},2000);
-}
-window.addEventListener('mousemove', hideOrbsDelayed);
-window.addEventListener('touchmove', hideOrbsDelayed);
-window.addEventListener('resize',()=>{ mouse.x=window.innerWidth/2; mouse.y=window.innerHeight/2; });
 </script>
 
 </body>
