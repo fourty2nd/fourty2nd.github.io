@@ -13,6 +13,7 @@
   font-weight: normal;
   font-style: normal;
 }
+
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
   font-family:'Poppins',sans-serif;
@@ -22,41 +23,21 @@ body {
   position:relative;
 }
 
-/* Welcome screen */
-.welcome {
+/* Welcome screen replacement */
+.welcomeScreen {
   position:fixed;
   top:0; left:0;
   width:100%; height:100%;
   background:black;
-  font-family: monospace;
-  z-index:100;
-  overflow:hidden;
-}
-.welcome span {
-  position:absolute;
-  color:#0f0;
-  font-size:1rem;
-  opacity:0;
-  white-space:pre;
-  font-weight:normal;
-}
-
-/* ACCESS GRANTED */
-#accessGranted {
-  position:fixed;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  color:#0f0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-family:'Mestizo', sans-serif;
   font-size:3rem;
-  font-weight:bold;
+  color:#0f0;
   opacity:0;
-  transition: opacity 0.3s ease;
-  border:2px solid #0f0;
-  padding:20px 40px;
-  text-align:center;
-  background:black;
-  z-index:101;
+  transition: opacity 1s ease;
+  z-index:100;
 }
 
 /* Sidebar */
@@ -132,6 +113,7 @@ body {
   font-family:'Mestizo', sans-serif;
   opacity:0;
 }
+/* Packages */
 .package-details {
   display:none;
   opacity:0;
@@ -161,6 +143,7 @@ body {
   transform: scale(1.05);
   box-shadow: 0 0 12px #fff, 0 0 18px #fff55;
 }
+
 /* Cursor Orbs */
 .orb {
   position: fixed;
@@ -179,8 +162,7 @@ body {
 </head>
 <body>
 
-<div class="welcome" id="welcome"></div>
-<div id="accessGranted">ACCESS GRANTED</div>
+<div class="welcomeScreen" id="welcomeScreen">Welcome.</div>
 
 <div class="sidebar" id="sidebar">
   <button onclick="showPackage('package1')">📦 Package 1</button>
@@ -200,85 +182,29 @@ body {
 </div>
 
 <script>
-const terminal = document.getElementById("welcome");
-const access = document.getElementById("accessGranted");
+const welcome = document.getElementById("welcomeScreen");
 const sidebar = document.getElementById("sidebar");
 const title = document.getElementById("title");
 const packages = ["package1","package2","package3","package4","package5"];
 
-const lines = [
-"struct group_info init_groups = { .usage = ATOMIC_INIT(2) };",
-"struct group_info *groups_alloc(int gidsetsize){",
-"  struct group_info *group_info;",
-"  int nblocks;",
-"  int i;",
-"  nblocks = (gidsetsize + NGROUPS_PER_BLOCK - 1) / NGROUPS_PER_BLOCK;",
-"  nblocks = nblocks ? : 1;",
-"  group_info = kmalloc(sizeof(*group_info) + nblocks*sizeof(gid_t *), GFP_USER);",
-"  if (!group_info) return NULL;",
-"  group_info->ngroups = gidsetsize;",
-"  group_info->nblocks = nblocks;",
-"  atomic_set(&group_info->usage, 1);",
-"  if (gidsetsize <= NGROUPS_SMALL) group_info->blocks[0] = group_info->small_block;",
-"  else { for (i = 0; i < nblocks; i++) {",
-"    gid_t *b;",
-"    b = (void *)__get_free_page(GFP_USER);",
-"    if (!b) goto out_undo_partial_alloc;",
-"    group_info->blocks[i] = b;",
-"  } }",
-"  return group_info;",
-"out_undo_partial_alloc:",
-"  while (--i >= 0) {",
-"    free_page((unsigned long)group_info->blocks[i]);",
-"  }",
-"}"
-];
-
-function spawnLines() {
-  let yOffset = 10;
-  let i = 0;
-  function showLine() {
-    if(i < lines.length){
-      const span = document.createElement("span");
-      span.textContent = lines[i];
-      span.style.top = yOffset + "px";
-      span.style.left = "10px";
-      terminal.appendChild(span);
-      span.style.opacity = 1;
-      yOffset += 22 + Math.random()*12;
-      i++;
-      setTimeout(showLine, 80);
-    } else {
-      setTimeout(()=>{terminal.style.opacity=0},200);
-      setTimeout(showAccess, 500);
-    }
-  }
-  showLine();
-}
-
-function showAccess(){
-  terminal.style.display="none";
-  access.style.opacity=1;
-  access.style.display="block";
+// Fade in "Welcome." then fade out and show menu
+window.onload = () => {
+  welcome.style.opacity = 1;
   setTimeout(()=>{
-    access.style.opacity=0;
-    setTimeout(showMenu,500);
-  },1000);
-}
+    welcome.style.opacity = 0;
+    setTimeout(()=>{
+      welcome.style.display = "none";
+      sidebar.style.display = "flex";
+      sidebar.offsetHeight; 
+      sidebar.style.opacity = 1;
+      title.style.display = "block";
+      title.offsetHeight;
+      title.style.opacity = 1;
+    }, 1000);
+  }, 1500); // visible for 1.5s
+};
 
-function showMenu(){
-  sidebar.style.display="flex";
-  sidebar.offsetHeight;
-  sidebar.style.opacity=1;
-  setTimeout(()=>{
-    title.style.display="block";
-    title.offsetHeight;
-    title.style.opacity=1;
-  },800);
-}
-
-window.onload = spawnLines;
-
+// Package logic
 function showPackage(id){
   packages.forEach(p=>{ const el=document.getElementById(p); el.style.display='none'; el.style.opacity=0; });
   const detail=document.getElementById(id);
@@ -289,7 +215,7 @@ function goBack(){
   packages.forEach(p=>{ const el=document.getElementById(p); el.style.display='none'; el.style.opacity=0; });
 }
 
-// ORBS
+// Orbs
 const orbCount = 6;
 const orbs = [];
 for(let i=0;i<orbCount;i++){
@@ -330,5 +256,6 @@ window.addEventListener('mousemove', hideOrbsDelayed);
 window.addEventListener('touchmove', hideOrbsDelayed);
 window.addEventListener('resize',()=>{ mouse.x=window.innerWidth/2; mouse.y=window.innerHeight/2; });
 </script>
+
 </body>
 </html>
