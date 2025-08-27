@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fourty's Details</title>
 
-<!-- USE YOUR HOSTED FONT -->
+<!-- Mestizo Font -->
 <style>
 @font-face {
   font-family: 'Mestizo';
@@ -22,7 +22,7 @@ body {
   position:relative;
 }
 
-/* Welcome Terminal */
+/* Welcome screen (Terminal) */
 .welcome {
   position:fixed;
   top:0; left:0;
@@ -38,19 +38,8 @@ body {
   font-size:1rem;
   opacity:0;
   white-space:pre;
-}
-
-/* Blinking Cursor */
-.cursor {
-  display:inline-block;
-  width:10px;
-  background:#0f0;
-  margin-left:2px;
-  animation: blink 0.7s infinite;
-}
-@keyframes blink {
-  0%,50%,100% { opacity:1; }
-  25%,75% { opacity:0; }
+  display:block;
+  line-height:1.2rem;
 }
 
 /* ACCESS GRANTED */
@@ -67,7 +56,8 @@ body {
   border:2px solid #0f0;
   padding:20px 40px;
   text-align:center;
-  background:black;
+  background:#000;
+  z-index:101;
 }
 
 /* Sidebar */
@@ -264,11 +254,11 @@ function spawnLines() {
       span.textContent = lines[i];
       span.style.top = yOffset + "px";
       span.style.left = "10px";
-      span.style.opacity=1;
       terminal.appendChild(span);
-      yOffset += 22 + Math.random()*10; 
+      span.style.opacity = 1;
+      yOffset += 22 + Math.random()*8; // random spacing
       i++;
-      setTimeout(showLine, 60);
+      setTimeout(showLine, 80);
     } else {
       setTimeout(()=>{terminal.style.opacity=0}, 200);
       setTimeout(showAccess, 600);
@@ -279,24 +269,24 @@ function spawnLines() {
 
 function showAccess(){
   terminal.style.display="none";
-  access.style.opacity=1;
   access.style.display="block";
+  setTimeout(()=>{access.style.opacity=1}, 50); // small delay
   setTimeout(()=>{
     access.style.opacity=0;
-    setTimeout(showMenu,600);
+    setTimeout(showMenu, 600);
   },1200);
 }
 
 function showMenu(){
   sidebar.style.display="flex";
-  sidebar.offsetHeight; 
+  sidebar.offsetHeight;
   sidebar.style.opacity=1;
 
   setTimeout(()=>{
     title.style.display="block";
     title.offsetHeight;
     title.style.opacity=1;
-  },1000);
+  },800);
 }
 
 window.onload = spawnLines;
@@ -356,6 +346,7 @@ function hideOrbsDelayed(){
 window.addEventListener('mousemove', hideOrbsDelayed);
 window.addEventListener('touchmove', hideOrbsDelayed);
 window.addEventListener('resize',()=>{ mouse.x=window.innerWidth/2; mouse.y=window.innerHeight/2; });
+
 </script>
 </body>
 </html>
