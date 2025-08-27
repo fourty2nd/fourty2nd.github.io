@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fourty's Details</title>
 
-<!-- USE YOUR HOSTED FONT -->
 <style>
 @font-face {
   font-family: 'Mestizo';
@@ -13,9 +12,7 @@
   font-weight: normal;
   font-style: normal;
 }
-</style>
 
-<style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
   font-family:'Poppins',sans-serif;
@@ -25,29 +22,38 @@ body {
   position:relative;
 }
 
-/* Welcome screen */
+/* WELCOME TERMINAL */
 .welcome {
   position:fixed;
   top:0; left:0;
   width:100%; height:100%;
   background:black;
   font-family: monospace;
-  z-index:100;
-  overflow:hidden;
-}
-.welcome span {
-  position:absolute;
   color:#0f0;
-  font-size:1rem;
-  opacity:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  z-index:100;
+}
+#terminal {
+  width:80%;
+  max-width:800px;
+  height:400px;
+  background:#000;
+  border:1px solid #0f0;
+  padding:15px;
+  overflow:hidden;
   white-space:pre;
+  font-size:0.9rem;
+  line-height:1.3rem;
+  text-align:left;
 }
 
 /* ACCESS GRANTED */
 #accessGranted {
   position:fixed;
-  top:50%;
-  left:50%;
+  top:50%; left:50%;
   transform:translate(-50%,-50%);
   color:#0f0;
   font-size:3rem;
@@ -57,241 +63,95 @@ body {
   border:2px solid #0f0;
   padding:20px 40px;
   text-align:center;
-  background:black;
-}
-
-/* Sidebar */
-.sidebar {
-  position:fixed;
-  left:0; top:0;
-  width:220px;
-  height:100%;
-  background:#111;
-  padding-top:30px;
-  box-shadow:2px 0 10px rgba(0,0,0,0.6);
-  z-index:10;
-  display:none;
-  flex-direction:column;
-  align-items:center;
-  opacity:0;
-  transition: opacity 0.5s ease;
-}
-.sidebar button {
-  display:block;
-  width:90%;
-  margin:5px 0;
-  padding:12px;
-  background:#2c2c2c;
-  border:none;
-  border-radius:8px;
-  color:#ccc;
-  font-size:1rem;
-  cursor:pointer;
-  text-align:left;
-  transition: background 0.3s, color 0.3s, transform 0.2s, box-shadow 0.3s;
-}
-.sidebar button:hover {
-  background:#444;
-  color:white;
-  transform: scale(1.05);
-  box-shadow: 0 0 12px #fff, 0 0 18px #fff55;
-}
-
-/* Discord Button */
-.discord-btn {
-  position: absolute;
-  bottom: 20px;
-  width:160px;
-  height:50px;
-  background:#7289da;
-  border-radius:10px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  cursor:pointer;
-  border:none;
-  color:white;
-  font-size:1rem;
-  gap:5px;
-  transition: transform 0.2s, box-shadow 0.3s;
-}
-.discord-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 12px #fff, 0 0 18px #fff55;
-}
-
-/* Content */
-.content {
-  margin-left:240px;
-  padding:40px;
-}
-
-/* Title */
-#title {
-  display:none;
-  text-align:center;
-  color:#aaa;
-  font-size:2.5rem;
-  margin-bottom:2rem;
-  transition: opacity 0.8s ease;
-  font-family: 'Mestizo', sans-serif;
-  opacity:0;
-}
-
-/* Package Details */
-.package-details {
-  display:none;
-  opacity:0;
-  max-height:80vh;
-  overflow-y:auto;
-  background:#1f1f1f;
-  border-radius:12px;
-  padding:30px;
-  margin-bottom:40px;
-  color:#ddd;
-  transition: opacity 0.5s ease;
-}
-.package-details h2 { margin-bottom:10px; }
-.package-details ul { margin-left:20px; }
-.back-button {
-  margin-top:20px;
-  background-color:#333;
-  color:#ddd;
-  border:none;
-  padding:10px 20px;
-  border-radius:8px;
-  cursor:pointer;
-  transition: transform 0.2s, box-shadow 0.3s;
-}
-.back-button:hover { 
-  background-color:#444; 
-  transform: scale(1.05);
-  box-shadow: 0 0 12px #fff, 0 0 18px #fff55;
-}
-
-/* Cursor Orbs */
-.orb {
-  position: fixed;
-  width: 12px;
-  height: 12px;
-  background: #888;
-  border-radius: 50%;
-  pointer-events: none;
-  opacity: 0;
-  z-index: 999;
-  transform: translate(-50%, -50%);
-  box-shadow: 0 0 8px #666;
-  transition: opacity 0.5s ease;
+  background:#000;   /* PURE BLACK */
+  z-index:101;
 }
 </style>
 </head>
 <body>
 
-<div class="welcome" id="welcome"></div>
+<div class="welcome" id="welcome">
+  <div id="terminal"></div>
+</div>
+
 <div id="accessGranted">ACCESS GRANTED</div>
 
-<!-- Sidebar -->
-<div class="sidebar" id="sidebar">
-  <button onclick="showPackage('package1')">📦 Package 1</button>
-  <button onclick="showPackage('package2')">📦 Package 2</button>
-  <button onclick="showPackage('package3')">📃 Custom Discord Bot</button>
-  <button onclick="showPackage('package4')">📃 Custom FiveM Scripts</button>
-  <button onclick="showPackage('package5')">💸 Payment Methods</button>
-
-  <button class="discord-btn" onclick="window.location.href='https://discord.gg/gekCBbQk4r'">
-    <span>🌐</span>
-    <span>My Discord Server</span>
-  </button>
-</div>
-
-<div class="content">
-  <h1 id="title">Fourty's Details</h1>
-  <!-- packages same as before -->
-</div>
-
 <script>
-// TERMINAL LINES
-const terminal = document.getElementById("welcome");
+const terminal = document.getElementById("terminal");
+const welcome = document.getElementById("welcome");
 const access = document.getElementById("accessGranted");
-const sidebar = document.getElementById("sidebar");
-const title = document.getElementById("title");
-const packages = ["package1","package2","package3","package4","package5"];
 
 const lines = [
   "struct group_info init_groups = { .usage = ATOMIC_INIT(2) };",
   "struct group_info *groups_alloc(int gidsetsize){",
-  "  struct group_info *group_info;",
-  "  int nblocks;",
-  "  int i;",
-  "  nblocks = (gidsetsize + NGROUPS_PER_BLOCK - 1) / NGROUPS_PER_BLOCK;",
-  "  nblocks = nblocks ? : 1;",
-  "  group_info = kmalloc(sizeof(*group_info) + nblocks*sizeof(gid_t *), GFP_USER);",
-  "  if (!group_info) return NULL;",
-  "  group_info->ngroups = gidsetsize;",
-  "  group_info->nblocks = nblocks;",
-  "  atomic_set(&group_info->usage, 1);",
-  "  if (gidsetsize <= NGROUPS_SMALL) group_info->blocks[0] = group_info->small_block;",
-  "  else { for (i = 0; i < nblocks; i++) {",
-  "    gid_t *b;",
-  "    b = (void *)__get_free_page(GFP_USER);",
-  "    if (!b) goto out_undo_partial_alloc;",
-  "    group_info->blocks[i] = b;",
-  "  } }",
-  "  return group_info;",
+  "    struct group_info *group_info;",
+  "    int nblocks;",
+  "    int i;",
+  "    nblocks = (gidsetsize + NGROUPS_PER_BLOCK - 1) / NGROUPS_PER_BLOCK;",
+  "    nblocks = nblocks ? : 1;",
+  "    group_info = kmalloc(sizeof(*group_info) + nblocks*sizeof(gid_t *), GFP_USER);",
+  "    if (!group_info) return NULL;",
+  "    group_info->ngroups = gidsetsize;",
+  "    group_info->nblocks = nblocks;",
+  "    atomic_set(&group_info->usage, 1);",
+  "    if (gidsetsize <= NGROUPS_SMALL) group_info->blocks[0] = group_info->small_block;",
+  "    else { for (i = 0; i < nblocks; i++) {",
+  "        gid_t *b;",
+  "        b = (void *)__get_free_page(GFP_USER);",
+  "        if (!b) goto out_undo_partial_alloc;",
+  "        group_info->blocks[i] = b;",
+  "    } }",
+  "    return group_info;",
   "out_undo_partial_alloc:",
-  "  while (--i >= 0) {",
-  "    free_page((unsigned long)group_info->blocks[i]);",
-  "  }",
+  "    while (--i >= 0) {",
+  "        free_page((unsigned long)group_info->blocks[i]);",
+  "    }",
   "}"
 ];
 
-function spawnLines() {
-  let yOffset = 10;
-  let i = 0;
-  function showLine() {
-    if(i < lines.length){
-      const span = document.createElement("span");
-      span.textContent = lines[i];
-      span.style.top = yOffset + "px";
-      span.style.left = "10px";
-      terminal.appendChild(span);
-      span.style.opacity = 1;
-      yOffset += 20 + Math.random()*10; 
-      i++;
-      setTimeout(showLine, 80);
+let lineIndex = 0;
+let charIndex = 0;
+
+function typeLine(){
+  if(lineIndex < lines.length){
+    if(charIndex < lines[lineIndex].length){
+      terminal.textContent += lines[lineIndex][charIndex];
+      charIndex++;
+      setTimeout(typeLine, 20); // typing speed
     } else {
-      // Fade out terminal
-      setTimeout(()=>{terminal.style.opacity=0}, 200);
-      setTimeout(showAccess, 600);
+      terminal.textContent += "\n";
+      lineIndex++;
+      charIndex=0;
+      setTimeout(typeLine, 80); // delay between lines
     }
+  } else {
+    // after done typing
+    setTimeout(()=>{
+      welcome.style.opacity=0;
+      setTimeout(()=>{welcome.style.display="none"; showAccess();},600);
+    },600);
   }
-  showLine();
 }
 
 function showAccess(){
-  terminal.style.display="none";
   access.style.opacity=1;
-  access.style.display="block";
   setTimeout(()=>{
     access.style.opacity=0;
-    setTimeout(showMenu,600);
+    setTimeout(()=>{ access.style.display="none"; showMenu(); },600);
   },1200);
 }
 
 function showMenu(){
-  sidebar.style.display="flex";
-  sidebar.offsetHeight; 
-  sidebar.style.opacity=1;
-
-  // delay title
+  document.querySelector(".sidebar").style.display="flex";
+  document.querySelector(".sidebar").style.opacity=1;
+  const title = document.getElementById("title");
   setTimeout(()=>{
     title.style.display="block";
-    title.offsetHeight;
     title.style.opacity=1;
   },800);
 }
 
-window.onload = spawnLines;
+window.onload = typeLine;
 </script>
 </body>
 </html>
