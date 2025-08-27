@@ -5,13 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fourty's Details</title>
 
-<!-- Mestizo Font -->
 <style>
 @font-face {
   font-family: 'Mestizo';
   src: url('./fonts/MestizoFont.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
 }
 
 * { margin:0; padding:0; box-sizing:border-box; }
@@ -111,36 +108,6 @@ body {
   opacity:0;
 }
 
-.package-details {
-  display:none;
-  opacity:0;
-  max-height:80vh;
-  overflow-y:auto;
-  background:#1f1f1f;
-  border-radius:12px;
-  padding:30px;
-  margin-bottom:40px;
-  color:#ddd;
-  transition: opacity 0.5s ease;
-}
-.package-details h2 { margin-bottom:10px; }
-.package-details ul { margin-left:20px; }
-.back-button {
-  margin-top:20px;
-  background-color:#333;
-  color:#ddd;
-  border:none;
-  padding:10px 20px;
-  border-radius:8px;
-  cursor:pointer;
-  transition: transform 0.2s, box-shadow 0.3s;
-}
-.back-button:hover { 
-  background-color:#444; 
-  transform: scale(1.05);
-  box-shadow: 0 0 12px #fff, 0 0 18px #fff55;
-}
-
 .orb {
   position: fixed;
   width: 12px;
@@ -148,7 +115,7 @@ body {
   background: #888;
   border-radius: 50%;
   pointer-events: none;
-  opacity: 0;
+  opacity:0;
   z-index: 999;
   transform: translate(-50%, -50%);
   box-shadow: 0 0 8px #666;
@@ -174,38 +141,64 @@ body {
 
 <div class="content">
   <h1 id="title">Fourty's Details</h1>
-  <!-- Packages go here -->
 </div>
 
 <script>
 const welcome = document.getElementById("welcomeScreen");
 const sidebar = document.getElementById("sidebar");
 const title = document.getElementById("title");
-const packages = ["package1","package2","package3","package4","package5"];
-
-// Orbs
 const orbCount = 6;
 const orbs = [];
-const spacing = 20; // space between orbs
-window.onload = () => {
+const spacing = 18;
+let mouse={x:window.innerWidth/2,y:window.innerHeight/2};
+let followMouse = false;
+
+// Initialize orbs
+function initOrbs(){
   const rect = welcome.getBoundingClientRect();
-  const startX = rect.left - (orbCount * spacing);
-  const startY = rect.top + rect.height / 2;
+  const startX = rect.left - orbCount*spacing - 10;
+  const startY = rect.top + rect.height/2;
 
   for(let i=0;i<orbCount;i++){
-    const orb=document.createElement('div');
+    const orb = document.createElement('div');
     orb.className='orb';
     document.body.appendChild(orb);
     orb.style.opacity = 1;
-    orb.style.background = "#888";
-    orbs.push({el: orb, x: startX + i*spacing, y: startY});
-    orb.el.style.transform = `translate(${startX + i*spacing}px, ${startY}px)`;
+    orb.x = startX + i*spacing;
+    orb.y = startY;
+    orb.el = orb;
+    orb.el.style.transform = `translate(${orb.x}px, ${orb.y}px)`;
+    orbs.push(orb);
   }
+}
 
-  // Show welcome
+// Animate orbs
+function animateOrbs(){
+  if(followMouse){
+    let x=mouse.x, y=mouse.y;
+    orbs.forEach(o=>{
+      o.x += (x-o.x)*0.15;
+      o.y += (y-o.y)*0.15;
+      o.el.style.transform = `translate(${o.x}px, ${o.y}px)`;
+      x=o.x; y=o.y;
+    });
+  }
+  requestAnimationFrame(animateOrbs);
+}
+
+window.addEventListener('mousemove', e=>{ mouse.x=e.clientX; mouse.y=e.clientY; });
+window.addEventListener('touchmove', e=>{
+  if(e.touches.length>0){
+    mouse.x=e.touches[0].clientX;
+    mouse.y=e.touches[0].clientY;
+  }
+});
+
+// Show welcome, then fade menu
+window.onload = () => {
+  initOrbs();
   welcome.style.opacity = 1;
 
-  // Fade out welcome and show menu after 1.5s
   setTimeout(()=>{
     welcome.style.opacity = 0;
     setTimeout(()=>{
@@ -216,51 +209,23 @@ window.onload = () => {
       title.style.display = "block";
       title.offsetHeight;
       title.style.opacity = 1;
-
-      // Start mouse follow
-      spin = false;
+      followMouse = true;
     }, 1000);
   }, 1500);
+
+  animateOrbs();
 };
-
-// Mouse follow
-let spin = false;
-let mouse={x:window.innerWidth/2, y:window.innerHeight/2};
-function updateMouse(x,y){
-  mouse.x = x; mouse.y = y;
-  orbs.forEach(o=>o.el.style.opacity=1);
-}
-window.addEventListener('mousemove', e=>updateMouse(e.clientX,e.clientY));
-window.addEventListener('touchmove', e=>{
-  if(e.touches.length>0){
-    const t = e.touches[0];
-    updateMouse(t.clientX,t.clientY);
-  }
-});
-
-function animateOrbs(){
-  if(!spin){
-    let x=mouse.x, y=mouse.y;
-    orbs.forEach((o,i)=>{
-      o.x += (x-o.x)*0.15;
-      o.y += (y-o.y)*0.15;
-      o.el.style.transform=`translate(${o.x}px, ${o.y}px)`;
-      x=o.x; y=o.y;
-    });
-  }
-  requestAnimationFrame(animateOrbs);
-}
-animateOrbs();
 
 // Package logic
 function showPackage(id){
-  packages.forEach(p=>{ const el=document.getElementById(p); el.style.display='none'; el.style.opacity=0; });
+  const packages = ["package1","package2","package3","package4","package5"];
+  packages.forEach(p=>{ const el=document.getElementById(p); if(el){ el.style.display='none'; el.style.opacity=0; }});
   const detail=document.getElementById(id);
-  detail.style.display='block';
-  setTimeout(()=>{detail.style.opacity=1;},50);
+  if(detail){ detail.style.display='block'; setTimeout(()=>{detail.style.opacity=1;},50); }
 }
 function goBack(){
-  packages.forEach(p=>{ const el=document.getElementById(p); el.style.display='none'; el.style.opacity=0; });
+  const packages = ["package1","package2","package3","package4","package5"];
+  packages.forEach(p=>{ const el=document.getElementById(p); if(el){ el.style.display='none'; el.style.opacity=0; }});
 }
 </script>
 </body>
