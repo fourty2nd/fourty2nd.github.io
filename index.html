@@ -148,8 +148,6 @@ body {
   opacity: 0;
   z-index: 999;
   box-shadow: 0 0 8px #666;
-
-  /* ❗ REMOVED transform: translate(-50%, -50%) */
 }
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Mestizo&display=swap" rel="stylesheet">
@@ -264,7 +262,7 @@ for(let i=0;i<orbCount;i++){
   const orb=document.createElement('div');
   orb.className='orb';
   document.body.appendChild(orb);
-  orbs.push({el: orb, x:window.innerWidth/2, y:window.innerHeight/2});
+  orbs.push({el: orb, x:0, y:0}); // start at 0,0 to avoid offscreen jump
 }
 
 let mouse={x:window.innerWidth/2,y:window.innerHeight/2};
@@ -284,13 +282,12 @@ window.addEventListener('touchmove',e=>{
 function animateOrbs(){
   let x=mouse.x, y=mouse.y;
   orbs.forEach((o,i)=>{
+    // smooth follow
     o.x += (x-o.x)*0.15;
     o.y += (y-o.y)*0.15;
-
-    /* center orb manually (subtract half size = 6px) */
-    o.el.style.transform=`translate(${o.x - 6}px, ${o.y - 6}px)`;
-
-    x=o.x; 
+    o.el.style.left = `${o.x - 6}px`;
+    o.el.style.top = `${o.y - 6}px`;
+    x=o.x;
     y=o.y;
   });
   requestAnimationFrame(animateOrbs);
