@@ -234,9 +234,9 @@ const packages = ["package1","package2","package3","package4","package5"];
 
 // Clean Welcome Fade In & Out
 window.onload = () => {
-  welcome.style.opacity = 1; // fade in 0.5s
+  welcome.style.opacity = 1; 
   setTimeout(() => {
-    welcome.style.opacity = 0; // fade out 0.5s after 2s
+    welcome.style.opacity = 0;
   }, 2500);
   setTimeout(() => {
     welcome.style.display = 'none';
@@ -286,8 +286,12 @@ function animateOrbs(){
   orbs.forEach((o,i)=>{
     o.x += (x-o.x)*0.15;
     o.y += (y-o.y)*0.15;
-    o.el.style.transform=`translate(${o.x}px, ${o.y}px)`;
-    x=o.x; y=o.y;
+
+    /* FIXED ORB CENTERING */
+    o.el.style.transform=`translate(${o.x - 6}px, ${o.y - 6}px)`;
+
+    x=o.x; 
+    y=o.y;
   });
   requestAnimationFrame(animateOrbs);
 }
