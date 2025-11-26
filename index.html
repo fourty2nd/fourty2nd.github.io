@@ -147,9 +147,9 @@ body {
   pointer-events: none;
   opacity: 0;
   z-index: 999;
-  transform: translate(-50%, -50%);
   box-shadow: 0 0 8px #666;
-  transition: opacity 0.5s ease;
+
+  /* ❗ REMOVED transform: translate(-50%, -50%) */
 }
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Mestizo&display=swap" rel="stylesheet">
@@ -287,7 +287,7 @@ function animateOrbs(){
     o.x += (x-o.x)*0.15;
     o.y += (y-o.y)*0.15;
 
-    /* FIXED ORB CENTERING */
+    /* center orb manually (subtract half size = 6px) */
     o.el.style.transform=`translate(${o.x - 6}px, ${o.y - 6}px)`;
 
     x=o.x; 
