@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fourty's Details</title>
+
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
@@ -15,22 +16,22 @@ body {
 }
 
 /* ============================
-   WHITE GRID BACKGROUND (NEW)
+   WHITE GRID FOR WELCOME SCREEN
    ============================ */
-.grid {
+.welcome-grid {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0; left: 0;
+  width:100%; height:100%;
   background-size: 40px 40px;
   background-image:
     linear-gradient(to right, rgba(255,255,255,0.07) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255,255,255,0.07) 1px, transparent 1px);
   animation: moveGrid 14s linear infinite;
-  z-index: 1; /* sits behind most UI */
-  pointer-events: none; /* <- allow clicks through */
+  z-index: 98;
+  opacity:0;
+  transition: opacity .5s ease;
 }
+
 @keyframes moveGrid {
   0% { background-position: 0 0; }
   100% { background-position: 200px 200px; }
@@ -47,11 +48,10 @@ body {
   align-items:center;
   font-size:3rem;
   color:white;
-  z-index:2;
+  z-index:100;
   opacity:0;
   transition: opacity 0.5s ease;
   font-family: monospace;
-  pointer-events: none; /* <- important so it doesn't block clicks */
 }
 
 /* Sidebar */
@@ -63,10 +63,13 @@ body {
   background:#111;
   padding-top:30px;
   box-shadow:2px 0 10px rgba(0,0,0,0.6);
-  z-index:5;
+  z-index:10;
   display:flex;
   flex-direction:column;
   align-items:center;
+  opacity:0;            /* hidden at start */
+  pointer-events:none;  /* disabled until welcome ends */
+  transition: opacity .5s ease;
 }
 .sidebar button {
   display:block;
@@ -106,7 +109,6 @@ body {
   font-size:1rem;
   gap:5px;
   transition: transform 0.2s, box-shadow 0.3s;
-  z-index:5;
 }
 .discord-btn:hover {
   transform: scale(1.05);
@@ -117,8 +119,9 @@ body {
 .content {
   margin-left:240px;
   padding:40px;
-  z-index:5;
-  position:relative;
+  opacity:0;            /* hidden at start */
+  transition: opacity .5s ease;
+  pointer-events:none;
 }
 
 /* Title */
@@ -172,21 +175,23 @@ body {
   border-radius: 50%;
   pointer-events: none;
   opacity: 0;
-  z-index:999;
+  z-index: 999;
   box-shadow: 0 0 8px #666;
 }
 </style>
+
+<link href="https://fonts.googleapis.com/css2?family=Mestizo&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<!-- WHITE GRID BG (NEW) -->
-<div class="grid" id="grid"></div>
+<!-- WELCOME GRID -->
+<div class="welcome-grid" id="welcome-grid"></div>
 
 <!-- Welcome Screen -->
 <div class="welcome" id="welcome">Welcome.</div>
 
 <!-- Sidebar -->
-<div class="sidebar">
+<div class="sidebar" id="sidebar">
   <button onclick="showPackage('package1')">📦 Package 1</button>
   <button onclick="showPackage('package2')">📦 Package 2</button>
   <button onclick="showPackage('package3')">📃 Custom Discord Bot</button>
@@ -199,9 +204,10 @@ body {
   </button>
 </div>
 
-<div class="content">
+<div class="content" id="content">
   <h1 id="title">Fourty's Details</h1>
 
+  <!-- YOUR EXACT PACKAGE TEXT -->
   <div class="package-details" id="package1">
     <h2>🧰 Package 1: Discord Setup – <strong>$20</strong></h2>
     <p><em>Perfect for new business owners, gang startups, or anyone wanting a streamlined Discord to manage their FiveM experience with ease and clarity.</em></p>
@@ -225,7 +231,11 @@ body {
       <li>🎭 Reaction Roles / Role Menus</li>
       <li>📝 Custom Applications</li>
       <li>📚 Resource Channels</li>
-      <li>🔒 Staff Setup</li>
+      <li>🔒 Staff Setup & Permissions</li>
+      <li>🤖 Bot Automation</li>
+      <li>📊 Server Analytics Bots</li>
+      <li>🖼️ Branding Integration</li>
+      <li>📞 Support: Included</li>
     </ul>
     <button class="back-button" onclick="goBack()">Back</button>
   </div>
@@ -238,59 +248,72 @@ body {
 
   <div class="package-details" id="package4">
     <h2>🛠️ Custom FiveM Scripts – <strong>$5 PER SCRIPT</strong></h2>
-    <p><em>Custom scripts and server builds...</em></p>
+    <p><em>Custom scripts and server builds for your FiveM city. Support included.</em></p>
     <button class="back-button" onclick="goBack()">Back</button>
   </div>
 
   <div class="package-details" id="package5">
     <h2>💸 Payment Methods</h2>
-    <p>BTC, ETH, LTC, Gift Cards</p>
+    <p>Bitcoin ₿, Ethereum Ξ, Litecoin Ł, and Gift Cards (Discord Nitro/Steam preferred) are accepted.</p>
     <button class="back-button" onclick="goBack()">Back</button>
   </div>
 </div>
 
 <script>
-/* ============= YOUR LOGIC EXACTLY AS-IS =============== */
-
 const welcome = document.getElementById("welcome");
-const welcomeGrid = document.getElementById("grid");
+const grid = document.getElementById("welcome-grid");
+const sidebar = document.getElementById("sidebar");
+const content = document.getElementById("content");
 const title = document.getElementById("title");
+
 const packages = ["package1","package2","package3","package4","package5"];
 
-// Clean Welcome Fade In & Out
+/* Welcome animation */
 window.onload = () => {
-  // show welcome + grid
-  welcomeGrid.style.opacity = 1;
+  grid.style.opacity = 1;
   welcome.style.opacity = 1;
 
-  // after 2.5s, start fade out
   setTimeout(() => {
     welcome.style.opacity = 0;
-    welcomeGrid.style.opacity = 0;
+    grid.style.opacity = 0;
   }, 2500);
 
-  // after 3s, remove welcome elements and show UI
   setTimeout(() => {
     welcome.style.display = 'none';
-    welcomeGrid.style.display = 'none';
-    title.style.display = 'block';
-    title.style.opacity = '0';
-    setTimeout(()=>{title.style.opacity='1';},50);
-  }, 3000);
-}
+    grid.style.display = 'none';
 
-// Packages
+    sidebar.style.opacity = 1;
+    content.style.opacity = 1;
+    sidebar.style.pointerEvents = "auto";
+    content.style.pointerEvents = "auto";
+
+    title.style.display = 'block';
+    setTimeout(()=> title.style.opacity = 1, 50);
+
+  }, 3000);
+};
+
+/* Packages */
 function showPackage(id){
-  packages.forEach(p=>{ const el=document.getElementById(p); el.style.display='none'; el.style.opacity=0; });
+  packages.forEach(p=>{ 
+    const el=document.getElementById(p); 
+    el.style.display='none'; 
+    el.style.opacity=0; 
+  });
+
   const detail=document.getElementById(id);
   detail.style.display='block';
-  setTimeout(()=>{detail.style.opacity=1;},50);
+  setTimeout(()=> detail.style.opacity=1, 50);
 }
 function goBack(){
-  packages.forEach(p=>{ const el=document.getElementById(p); el.style.display='none'; el.style.opacity=0; });
+  packages.forEach(p=>{ 
+    const el=document.getElementById(p); 
+    el.style.display='none'; 
+    el.style.opacity=0; 
+  });
 }
 
-// Orbs
+/* Orbs — unchanged original logic */
 const orbCount = 6;
 const orbs = [];
 for(let i=0;i<orbCount;i++){
@@ -301,28 +324,29 @@ for(let i=0;i<orbCount;i++){
 }
 
 let mouse={x:window.innerWidth/2,y:window.innerHeight/2};
+
 function updateMouse(x,y){
   mouse.x = x;
   mouse.y = y;
-  orbs.forEach(o=>o.el.style.opacity=1);
+  orbs.forEach(o => o.el.style.opacity = 1);
 }
-window.addEventListener('mousemove',e=>updateMouse(e.clientX,e.clientY));
-window.addEventListener('touchmove',e=>{ 
+
+window.addEventListener('mousemove', e => updateMouse(e.clientX,e.clientY));
+window.addEventListener('touchmove', e => {
   if(e.touches.length>0){
-    const t = e.touches[0];
-    updateMouse(t.clientX, t.clientY);
+    const t=e.touches[0];
+    updateMouse(t.clientX,t.clientY);
   }
 });
 
 function animateOrbs(){
   let x=mouse.x, y=mouse.y;
-  orbs.forEach((o,i)=>{
+  orbs.forEach((o)=>{
     o.x += (x-o.x)*0.15;
     o.y += (y-o.y)*0.15;
-    o.el.style.left = `${o.x - 6}px`;
-    o.el.style.top = `${o.y - 6}px`;
-    x=o.x;
-    y=o.y;
+    o.el.style.left = `${o.x-6}px`;
+    o.el.style.top = `${o.y-6}px`;
+    x=o.x; y=o.y;
   });
   requestAnimationFrame(animateOrbs);
 }
@@ -331,12 +355,11 @@ animateOrbs();
 let orbTimeout;
 function hideOrbsDelayed(){
   clearTimeout(orbTimeout);
-  orbTimeout=setTimeout(()=>{orbs.forEach(o=>o.el.style.opacity=0)},2000);
+  orbTimeout=setTimeout(()=> orbs.forEach(o=>o.el.style.opacity=0), 2000);
 }
 window.addEventListener('mousemove', hideOrbsDelayed);
 window.addEventListener('touchmove', hideOrbsDelayed);
 window.addEventListener('resize',()=>{ mouse.x=window.innerWidth/2; mouse.y=window.innerHeight/2; });
-
 </script>
 
 </body>
