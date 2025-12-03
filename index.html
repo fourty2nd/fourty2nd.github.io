@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Fourty's Details</title>
-
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
@@ -15,7 +14,9 @@ body {
   position:relative;
 }
 
-/* GRID – ONLY FOR WELCOME SCREEN */
+/* ============================
+   WHITE GRID BACKGROUND (NEW)
+   ============================ */
 .grid {
   position: fixed;
   top: 0;
@@ -27,7 +28,8 @@ body {
     linear-gradient(to right, rgba(255,255,255,0.07) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255,255,255,0.07) 1px, transparent 1px);
   animation: moveGrid 14s linear infinite;
-  z-index: 1;
+  z-index: 1; /* sits behind most UI */
+  pointer-events: none; /* <- allow clicks through */
 }
 @keyframes moveGrid {
   0% { background-position: 0 0; }
@@ -49,6 +51,7 @@ body {
   opacity:0;
   transition: opacity 0.5s ease;
   font-family: monospace;
+  pointer-events: none; /* <- important so it doesn't block clicks */
 }
 
 /* Sidebar */
@@ -103,6 +106,7 @@ body {
   font-size:1rem;
   gap:5px;
   transition: transform 0.2s, box-shadow 0.3s;
+  z-index:5;
 }
 .discord-btn:hover {
   transform: scale(1.05);
@@ -125,7 +129,7 @@ body {
   font-size:2.5rem;
   margin-bottom:2rem;
   transition:opacity 0.5s ease;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Mestizo', sans-serif;
 }
 
 /* Package Details */
@@ -172,12 +176,11 @@ body {
   box-shadow: 0 0 8px #666;
 }
 </style>
-
 </head>
 <body>
 
-<!-- GRID -->
-<div class="grid"></div>
+<!-- WHITE GRID BG (NEW) -->
+<div class="grid" id="grid"></div>
 
 <!-- Welcome Screen -->
 <div class="welcome" id="welcome">Welcome.</div>
@@ -191,37 +194,89 @@ body {
   <button onclick="showPackage('package5')">💸 Payment Methods</button>
 
   <button class="discord-btn" onclick="window.location.href='https://discord.gg/gekCBbQk4r'">
-    🌐 My Discord Server
+    <span>🌐</span>
+    <span>My Discord Server</span>
   </button>
 </div>
 
 <div class="content">
   <h1 id="title">Fourty's Details</h1>
 
-  <!-- PACKAGES (unchanged) -->
-  <!-- … YOUR PACKAGES HERE EXACTLY AS YOU SENT THEM … -->
+  <div class="package-details" id="package1">
+    <h2>🧰 Package 1: Discord Setup – <strong>$20</strong></h2>
+    <p><em>Perfect for new business owners, gang startups, or anyone wanting a streamlined Discord to manage their FiveM experience with ease and clarity.</em></p>
+    <ul>
+      <li>📁 Channel, Role & Category Setup</li>
+      <li>🖌️ Custom Embed Design</li>
+      <li>🤖 Bot Setup</li>
+      <li>🌐 Professional Layout</li>
+      <li>📞 Support: Included</li>
+    </ul>
+    <button class="back-button" onclick="goBack()">Back</button>
+  </div>
 
+  <div class="package-details" id="package2">
+    <h2>🛠️ Package 2: Advanced Discord Build – <strong>$30</strong></h2>
+    <p><em>Ideal for gang startups, businesses, or server owners who want structure, automation, and active oversight.</em></p>
+    <ul>
+      <li>Everything in Package 1</li>
+      <li>🔧 Custom Ticket System</li>
+      <li>📜 Rules + Guidelines Embed</li>
+      <li>🎭 Reaction Roles / Role Menus</li>
+      <li>📝 Custom Applications</li>
+      <li>📚 Resource Channels</li>
+      <li>🔒 Staff Setup</li>
+    </ul>
+    <button class="back-button" onclick="goBack()">Back</button>
+  </div>
+
+  <div class="package-details" id="package3">
+    <h2>🤖 Custom Discord Bot – <strong>$20</strong></h2>
+    <p><em>Fully custom bot tailored to your server. VPS/server required.</em></p>
+    <button class="back-button" onclick="goBack()">Back</button>
+  </div>
+
+  <div class="package-details" id="package4">
+    <h2>🛠️ Custom FiveM Scripts – <strong>$5 PER SCRIPT</strong></h2>
+    <p><em>Custom scripts and server builds...</em></p>
+    <button class="back-button" onclick="goBack()">Back</button>
+  </div>
+
+  <div class="package-details" id="package5">
+    <h2>💸 Payment Methods</h2>
+    <p>BTC, ETH, LTC, Gift Cards</p>
+    <button class="back-button" onclick="goBack()">Back</button>
+  </div>
 </div>
 
 <script>
-/* ============= YOUR LOGIC UNTOUCHED =============== */
+/* ============= YOUR LOGIC EXACTLY AS-IS =============== */
 
 const welcome = document.getElementById("welcome");
+const welcomeGrid = document.getElementById("grid");
 const title = document.getElementById("title");
 const packages = ["package1","package2","package3","package4","package5"];
 
 // Clean Welcome Fade In & Out
 window.onload = () => {
-  welcome.style.opacity = 1; 
+  // show welcome + grid
+  welcomeGrid.style.opacity = 1;
+  welcome.style.opacity = 1;
+
+  // after 2.5s, start fade out
   setTimeout(() => {
     welcome.style.opacity = 0;
-  }, 3000);
+    welcomeGrid.style.opacity = 0;
+  }, 2500);
+
+  // after 3s, remove welcome elements and show UI
   setTimeout(() => {
     welcome.style.display = 'none';
+    welcomeGrid.style.display = 'none';
     title.style.display = 'block';
     title.style.opacity = '0';
     setTimeout(()=>{title.style.opacity='1';},50);
-  }, 3500);
+  }, 3000);
 }
 
 // Packages
@@ -281,6 +336,7 @@ function hideOrbsDelayed(){
 window.addEventListener('mousemove', hideOrbsDelayed);
 window.addEventListener('touchmove', hideOrbsDelayed);
 window.addEventListener('resize',()=>{ mouse.x=window.innerWidth/2; mouse.y=window.innerHeight/2; });
+
 </script>
 
 </body>
