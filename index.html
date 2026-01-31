@@ -16,8 +16,10 @@ body {
 }
 
 /* ============================
-   WELCOME SCREEN (REVERTED)
+   WELCOME SCREEN & GRID
    ============================ */
+
+/* The moving grid background */
 .welcome-grid {
   position: fixed;
   top: 0; left: 0;
@@ -28,8 +30,9 @@ body {
     linear-gradient(to bottom, rgba(255,255,255,0.07) 1px, transparent 1px);
   animation: moveGrid 14s linear infinite;
   z-index: 98;
-  opacity:0;
-  transition: opacity .5s ease;
+  opacity: 0; /* Controlled by JS */
+  transition: opacity 1s ease;
+  pointer-events: none;
 }
 
 @keyframes moveGrid {
@@ -37,21 +40,57 @@ body {
   100% { background-position: 200px 200px; }
 }
 
-.welcome {
-  position:fixed;
-  top:0; left:0;
-  width:100%; height:100%;
-  background:black;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-size:3rem;
-  color:white;
-  z-index:100;
-  opacity:0;
-  transition: opacity 0.5s ease;
-  font-family: monospace;
+/* Container for the welcome text messages */
+.welcome-container {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: black; /* Solid background hiding the site */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  transition: opacity 1s ease; /* Fade out the whole black screen at end */
 }
+
+/* General style for welcome messages */
+.welcome-msg {
+  position: absolute;
+  color: white;
+  text-align: center;
+  opacity: 0;
+  transform: scale(1.1); /* Start slightly zoomed in */
+  transition: opacity 1s ease, transform 1s ease;
+  padding: 0 20px;
+  width: 100%;
+  max-width: 800px;
+}
+
+/* Specific styling for the first message */
+#msg-1 {
+  font-size: 3rem;
+  font-family: monospace;
+  letter-spacing: 2px;
+}
+
+/* Specific styling for the second message */
+#msg-2 {
+  font-size: 1.5rem;
+  font-weight: 300;
+  line-height: 1.6;
+  color: #e0e0e0;
+}
+
+/* Helper class to show messages */
+.visible {
+  opacity: 1 !important;
+  transform: scale(1) !important; /* Zoom to normal */
+}
+
+
+/* ============================
+   MAIN SITE STYLES
+   ============================ */
 
 /* Sidebar */
 .sidebar {
@@ -66,11 +105,10 @@ body {
   display:flex;
   flex-direction:column;
   align-items:center;
-  opacity:0;
-  pointer-events:none;
-  transition: opacity .5s ease;
+  opacity:0;            /* hidden at start */
+  pointer-events:none;  /* disabled until welcome ends */
+  transition: opacity 1s ease;
 }
-
 .sidebar button {
   display:block;
   width:90%;
@@ -82,33 +120,49 @@ body {
   color:#ccc;
   font-size:1rem;
   cursor:pointer;
-  transition: all 0.3s ease;
+  text-align:left;
+  transition: background 0.3s, color 0.3s, transform 0.2s, box-shadow 0.3s;
 }
-
 .sidebar button:hover {
   background:#444;
   color:white;
   transform: scale(1.05);
-  box-shadow: 0 0 12px rgba(255,255,255,0.2);
+  box-shadow: 0 0 12px #fff, 0 0 18px #fff55;
 }
 
-.discord-sidebar-toggle {
-  margin-top: auto !important;
-  margin-bottom: 20px !important;
-  background: #5865F2 !important;
-  color: white !important;
-  text-align: center;
+/* Discord Button */
+.discord-btn {
+  position: absolute;
+  bottom: 20px;
+  width:160px;
+  height:50px;
+  background:#7289da;
+  border-radius:10px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  cursor:pointer;
+  border:none;
+  color:white;
+  font-size:1rem;
+  gap:5px;
+  transition: transform 0.2s, box-shadow 0.3s;
+}
+.discord-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 12px #fff, 0 0 18px #fff55;
 }
 
 /* Content */
 .content {
   margin-left:240px;
   padding:40px;
-  opacity:0;
-  transition: opacity .5s ease;
+  opacity:0;            /* hidden at start */
+  transition: opacity 1s ease;
   pointer-events:none;
 }
 
+/* Title */
 #title {
   display:none;
   text-align:center;
@@ -119,6 +173,7 @@ body {
   font-family: 'Mestizo', sans-serif;
 }
 
+/* Package Details */
 .package-details {
   display:none;
   opacity:0;
@@ -131,65 +186,35 @@ body {
   color:#ddd;
   transition:opacity 0.5s ease;
 }
-
-/* ============================
-   DISCORD TAB & CARD
-   ============================ */
-.discord-pitch {
-  text-align: center;
-  margin-bottom: 30px;
-  max-width: 650px;
-  margin-left: auto;
-  margin-right: auto;
-  font-size: 1.15rem;
-  line-height: 1.6;
-  color: #fff;
-  font-weight: 300;
-}
-
-.discord-card {
-  background: #18191c;
-  border-radius: 16px;
-  overflow: hidden;
-  max-width: 450px;
-  margin: 0 auto;
-  border: 1px solid #2f3136;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
-.card-banner { height: 60px; background: #202225; }
-.card-body { padding: 20px; position: relative; }
-.card-icon {
-  width: 80px; height: 80px;
-  background: #000;
-  border-radius: 18px;
-  margin-top: -60px;
-  border: 5px solid #18191c;
-  display: flex; align-items: center; justify-content: center;
-  overflow: hidden;
-}
-.card-icon img { width: 100%; height: 100%; object-fit: cover; }
-.card-name { font-size: 1.6rem; font-weight: 600; margin: 15px 0 5px; color: white; display: flex; align-items: center; gap: 8px; }
-.card-stats { display: flex; gap: 15px; font-size: 0.95rem; color: #b9bbbe; margin-bottom: 20px; }
-.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 4px; }
-.dot.online { background: #3ba55c; }
-.dot.total { background: #747f8d; }
-.join-btn {
-  display: block; width: 100%; padding: 15px;
-  background: #248046; color: white; text-decoration: none;
-  text-align: center; border-radius: 10px; font-weight: 600;
-  font-size: 1.1rem;
-  transition: background 0.3s, transform 0.2s;
-}
-.join-btn:hover { background: #1a6334; transform: translateY(-2px); }
-
+.package-details h2 { margin-bottom:10px; }
+.package-details ul { margin-left:20px; }
 .back-button {
-  margin-top:20px; background-color:#333; color:#ddd; border:none; padding:10px 20px; border-radius:8px; cursor:pointer; transition: 0.2s;
+  margin-top:20px;
+  background-color:#333;
+  color:#ddd;
+  border:none;
+  padding:10px 20px;
+  border-radius:8px;
+  cursor:pointer;
+  transition: transform 0.2s, box-shadow 0.3s;
 }
-.back-button:hover { background: #444; color: #fff; }
+.back-button:hover { 
+  background-color:#444; 
+  transform: scale(1.05);
+  box-shadow: 0 0 12px #fff, 0 0 18px #fff55;
+}
 
+/* Cursor Orbs */
 .orb {
-  position: fixed; width: 12px; height: 12px; background: #888; border-radius: 50%;
-  pointer-events: none; opacity: 0; z-index: 999; box-shadow: 0 0 8px #666;
+  position: fixed;
+  width: 12px;
+  height: 12px;
+  background: #888;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 999;
+  box-shadow: 0 0 8px #666;
 }
 </style>
 
@@ -198,17 +223,26 @@ body {
 <body>
 
 <div class="welcome-grid" id="welcome-grid"></div>
-<div class="welcome" id="welcome">Welcome.</div>
+
+<div class="welcome-container" id="welcome-container">
+  <div class="welcome-msg" id="msg-1">Welcome.</div>
+  
+  <div class="welcome-msg" id="msg-2">
+    Professional, tailored Discord setups and custom bots for<br>
+    FiveM communities and beyond.
+  </div>
+</div>
 
 <div class="sidebar" id="sidebar">
   <button onclick="showPackage('package1')">📦 Package 1</button>
   <button onclick="showPackage('package2')">📦 Package 2</button>
-  <button onclick="showPackage('package3')">🤖 Custom Bot</button>
-  <button onclick="showPackage('package4')">🛠️ FiveM Scripts</button>
-  <button onclick="showPackage('package5')">💸 Payment</button>
+  <button onclick="showPackage('package3')">📃 Custom Discord Bot</button>
+  <button onclick="showPackage('package4')">📃 Custom FiveM Scripts</button>
+  <button onclick="showPackage('package5')">💸 Payment Methods</button>
 
-  <button class="discord-sidebar-toggle" onclick="showPackage('package-discord')">
-    🌐 My Discord Server
+  <button class="discord-btn" onclick="window.location.href='https://discord.gg/gekCBbQk4r'">
+    <span>🌐</span>
+    <span>My Discord Server</span>
   </button>
 </div>
 
@@ -216,123 +250,185 @@ body {
   <h1 id="title">Fourty's Details</h1>
 
   <div class="package-details" id="package1">
-    <h2>🧰 Package 1: Discord Setup – $20</h2>
-    <ul><li>Channel, Role & Category Setup</li><li>Custom Embed Design</li><li>Bot Setup</li><li>Support: Included</li></ul>
+    <h2>🧰 Package 1: Discord Setup – <strong>$20</strong></h2>
+    <p><em>Perfect for new business owners, gang startups, or anyone wanting a streamlined Discord to manage their FiveM experience with ease and clarity.</em></p>
+    <ul>
+      <li>📁 Channel, Role & Category Setup</li>
+      <li>🖌️ Custom Embed Design</li>
+      <li>🤖 Bot Setup</li>
+      <li>🌐 Professional Layout</li>
+      <li>📞 Support: Included</li>
+    </ul>
     <button class="back-button" onclick="goBack()">Back</button>
   </div>
-  <div class="package-details" id="package2"><h2>🛠️ Package 2: Advanced Build – $30</h2><button class="back-button" onclick="goBack()">Back</button></div>
-  <div class="package-details" id="package3"><h2>🤖 Custom Bot – $20</h2><button class="back-button" onclick="goBack()">Back</button></div>
-  <div class="package-details" id="package4"><h2>🛠️ FiveM Scripts – $15</h2><button class="back-button" onclick="goBack()">Back</button></div>
-  <div class="package-details" id="package5"><h2>💸 Payment</h2><p>BTC, ETH, LTC, and Discord Nitro / Steam Gift Cards accepted.</p><button class="back-button" onclick="goBack()">Back</button></div>
 
-  <div class="package-details" id="package-discord">
-    <div class="discord-pitch">
-      Professional Discord setups and tailored bots for FiveM servers and other projects. 
-      Join us and begin your move toward a cleaner, more polished experience.
-    </div>
+  <div class="package-details" id="package2">
+    <h2>🛠️ Package 2: Advanced Discord Build – <strong>$30</strong></h2>
+    <p><em>Ideal for gang startups, businesses, or server owners who want structure, automation, and active oversight.</em></p>
+    <ul>
+      <li>Everything in Package 1</li>
+      <li>🔧 Custom Ticket System</li>
+      <li>📜 Rules + Guidelines Embed</li>
+      <li>🎭 Reaction Roles / Role Menus</li>
+      <li>📝 Custom Applications</li>
+      <li>📚 Resource Channels</li>
+      <li>🔒 Staff Setup & Permissions</li>
+      <li>🤖 Bot Automation</li>
+      <li>📊 Server Analytics Bots</li>
+      <li>🖼️ Branding Integration</li>
+      <li>📞 Support: Included</li>
+    </ul>
+    <button class="back-button" onclick="goBack()">Back</button>
+  </div>
 
-    <div class="discord-card">
-      <div class="card-banner"></div>
-      <div class="card-body">
-        <div class="card-icon">
-          <img src="https://i.ibb.co/3ykX3vM/logo.png" alt="Fourty's Logo">
-        </div>
-        <div class="card-name">Fourty's Details <span style="font-size:1.1rem; opacity:0.8;">🏠</span></div>
-        <div class="card-stats">
-          <span><span class="dot online"></span> <span id="online-count">5</span> Online</span>
-          <span><span class="dot total"></span> <span id="member-count">9</span> Members</span>
-        </div>
-        <p style="font-size:0.85rem; color:#888; margin-bottom:15px; letter-spacing: 0.5px;">EST. JUN 2024</p>
-        <a href="https://discord.gg/gekCBbQk4r" target="_blank" class="join-btn">Join us here!</a>
-      </div>
-    </div>
-    <button class="back-button" onclick="goBack()" style="display:block; margin: 30px auto 0;">Back to Dashboard</button>
+  <div class="package-details" id="package3">
+    <h2>🤖 Custom Discord Bot – <strong>$20</strong></h2>
+    <p><em>Fully custom bot tailored to your server. VPS/server required.</em></p>
+    <button class="back-button" onclick="goBack()">Back</button>
+  </div>
+
+  <div class="package-details" id="package4">
+    <h2>🛠️ Custom FiveM Scripts – <strong>$15 PER SCRIPT</strong></h2>
+    <p><em>Custom scripts and server builds for your FiveM city. Support included.</em></p>
+    <button class="back-button" onclick="goBack()">Back</button>
+  </div>
+
+  <div class="package-details" id="package5">
+    <h2>💸 Payment Methods</h2>
+    <p>Bitcoin ₿, Ethereum Ξ, Litecoin Ł, and Gift Cards (Discord Nitro/Steam preferred) are accepted.</p>
+    <button class="back-button" onclick="goBack()">Back</button>
   </div>
 </div>
 
 <script>
-const welcome = document.getElementById("welcome");
+/* Elements */
 const grid = document.getElementById("welcome-grid");
+const welcomeContainer = document.getElementById("welcome-container");
+const msg1 = document.getElementById("msg-1");
+const msg2 = document.getElementById("msg-2");
+
 const sidebar = document.getElementById("sidebar");
 const content = document.getElementById("content");
 const title = document.getElementById("title");
-const packages = ["package1","package2","package3","package4","package5","package-discord"];
+const packages = ["package1","package2","package3","package4","package5"];
 
-// Welcome Intro Sequence
+/* CINEMATIC INTRO SEQUENCE */
 window.onload = () => {
+  // 1. Show Grid immediately
   grid.style.opacity = 1;
-  welcome.style.opacity = 1;
 
+  // 2. T+500ms: Fade In "Welcome"
   setTimeout(() => {
-    welcome.style.opacity = 0;
-    grid.style.opacity = 0;
-  }, 2000);
+    msg1.classList.add('visible');
+  }, 500);
 
+  // 3. T+2500ms: Fade Out "Welcome"
   setTimeout(() => {
-    welcome.style.display = 'none';
+    msg1.classList.remove('visible');
+  }, 2500);
+
+  // 4. T+3500ms: Fade In "Professional..."
+  setTimeout(() => {
+    msg2.classList.add('visible');
+  }, 3500);
+
+  // 5. T+7500ms: Fade Out "Professional..."
+  setTimeout(() => {
+    msg2.classList.remove('visible');
+  }, 7500);
+
+  // 6. T+8500ms: Fade Out Background & Grid
+  setTimeout(() => {
+    welcomeContainer.style.opacity = 0; // Fades out the black cover
+    grid.style.opacity = 0;             // Fades out the moving grid
+  }, 8500);
+
+  // 7. T+9500ms: Remove Welcome from DOM & Reveal Main Content
+  setTimeout(() => {
+    welcomeContainer.style.display = 'none';
     grid.style.display = 'none';
+
+    // Show Main UI
     sidebar.style.opacity = 1;
     content.style.opacity = 1;
     sidebar.style.pointerEvents = "auto";
     content.style.pointerEvents = "auto";
+
     title.style.display = 'block';
     setTimeout(()=> title.style.opacity = 1, 50);
-  }, 2600);
+
+  }, 9500);
 };
 
-// Discord Widget Stats Fetch
-async function fetchDiscordStats() {
-  const serverID = '1256247963353452565';
-  try {
-    const res = await fetch(`https://discord.com/api/guilds/${serverID}/widget.json`);
-    const data = await res.json();
-    if(data.presence_count) document.getElementById('online-count').innerText = data.presence_count;
-  } catch (e) {
-    console.log("Widget API disabled or server unreachable.");
-  }
-}
-fetchDiscordStats();
-
+/* Packages Logic */
 function showPackage(id){
   packages.forEach(p=>{ 
-    const el = document.getElementById(p); 
-    if(el) { el.style.display='none'; el.style.opacity=0; }
+    const el=document.getElementById(p); 
+    el.style.display='none'; 
+    el.style.opacity=0; 
   });
-  const detail = document.getElementById(id);
-  if(detail) {
-    detail.style.display='block';
-    setTimeout(()=> detail.style.opacity=1, 50);
-  }
+
+  const detail=document.getElementById(id);
+  detail.style.display='block';
+  setTimeout(()=> detail.style.opacity=1, 50);
 }
 
 function goBack(){
   packages.forEach(p=>{ 
-    const el = document.getElementById(p); 
-    if(el) { el.style.display='none'; el.style.opacity=0; }
+    const el=document.getElementById(p); 
+    el.style.display='none'; 
+    el.style.opacity=0; 
   });
 }
 
-// Interactive Cursor Orbs
-const orbCount = 6; const orbs = [];
+/* Orbs Logic */
+const orbCount = 6;
+const orbs = [];
 for(let i=0;i<orbCount;i++){
-  const orb = document.createElement('div'); orb.className='orb';
-  document.body.appendChild(orb); orbs.push({el: orb, x:0, y:0});
+  const orb=document.createElement('div');
+  orb.className='orb';
+  document.body.appendChild(orb);
+  orbs.push({el: orb, x:0, y:0});
 }
+
 let mouse={x:window.innerWidth/2,y:window.innerHeight/2};
-window.addEventListener('mousemove', e => {
-  mouse.x = e.clientX; mouse.y = e.clientY;
+
+function updateMouse(x,y){
+  mouse.x = x;
+  mouse.y = y;
   orbs.forEach(o => o.el.style.opacity = 1);
+}
+
+window.addEventListener('mousemove', e => updateMouse(e.clientX,e.clientY));
+window.addEventListener('touchmove', e => {
+  if(e.touches.length>0){
+    const t=e.touches[0];
+    updateMouse(t.clientX,t.clientY);
+  }
 });
+
 function animateOrbs(){
   let x=mouse.x, y=mouse.y;
-  orbs.forEach((o)=>{ 
-    o.x += (x-o.x)*0.15; o.y += (y-o.y)*0.15;
-    o.el.style.left = `${o.x-6}px`; o.el.style.top = `${o.y-6}px`; 
+  orbs.forEach((o)=>{
+    o.x += (x-o.x)*0.15;
+    o.y += (y-o.y)*0.15;
+    o.el.style.left = `${o.x-6}px`;
+    o.el.style.top = `${o.y-6}px`;
     x=o.x; y=o.y;
   });
   requestAnimationFrame(animateOrbs);
 }
 animateOrbs();
+
+let orbTimeout;
+function hideOrbsDelayed(){
+  clearTimeout(orbTimeout);
+  orbTimeout=setTimeout(()=> orbs.forEach(o=>o.el.style.opacity=0), 2000);
+}
+window.addEventListener('mousemove', hideOrbsDelayed);
+window.addEventListener('touchmove', hideOrbsDelayed);
+window.addEventListener('resize',()=>{ mouse.x=window.innerWidth/2; mouse.y=window.innerHeight/2; });
 </script>
+
 </body>
 </html>
