@@ -16,8 +16,10 @@ body {
 }
 
 /* ============================
-   WHITE GRID FOR WELCOME SCREEN
+   WELCOME SCREEN & GRID
    ============================ */
+
+/* The moving grid background */
 .welcome-grid {
   position: fixed;
   top: 0; left: 0;
@@ -28,8 +30,9 @@ body {
     linear-gradient(to bottom, rgba(255,255,255,0.07) 1px, transparent 1px);
   animation: moveGrid 14s linear infinite;
   z-index: 98;
-  opacity:0;
-  transition: opacity .5s ease;
+  opacity: 0; /* Controlled by JS */
+  transition: opacity 1s ease;
+  pointer-events: none;
 }
 
 @keyframes moveGrid {
@@ -37,22 +40,57 @@ body {
   100% { background-position: 200px 200px; }
 }
 
-/* Welcome screen */
-.welcome {
-  position:fixed;
-  top:0; left:0;
-  width:100%; height:100%;
-  background:black;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-size:3rem;
-  color:white;
-  z-index:100;
-  opacity:0;
-  transition: opacity 0.5s ease;
-  font-family: monospace;
+/* Container for the welcome text messages */
+.welcome-container {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: black; /* Solid background hiding the site */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  transition: opacity 1s ease; /* Fade out the whole black screen at end */
 }
+
+/* General style for welcome messages */
+.welcome-msg {
+  position: absolute;
+  color: white;
+  text-align: center;
+  opacity: 0;
+  transform: scale(1.1); /* Start slightly zoomed in */
+  transition: opacity 1s ease, transform 1s ease;
+  padding: 0 20px;
+  width: 100%;
+  max-width: 800px;
+}
+
+/* Specific styling for the first message */
+#msg-1 {
+  font-size: 3rem;
+  font-family: monospace;
+  letter-spacing: 2px;
+}
+
+/* Specific styling for the second message */
+#msg-2 {
+  font-size: 1.5rem;
+  font-weight: 300;
+  line-height: 1.6;
+  color: #e0e0e0;
+}
+
+/* Helper class to show messages */
+.visible {
+  opacity: 1 !important;
+  transform: scale(1) !important; /* Zoom to normal */
+}
+
+
+/* ============================
+   MAIN SITE STYLES
+   ============================ */
 
 /* Sidebar */
 .sidebar {
@@ -69,7 +107,7 @@ body {
   align-items:center;
   opacity:0;            /* hidden at start */
   pointer-events:none;  /* disabled until welcome ends */
-  transition: opacity .5s ease;
+  transition: opacity 1s ease;
 }
 .sidebar button {
   display:block;
@@ -120,7 +158,7 @@ body {
   margin-left:240px;
   padding:40px;
   opacity:0;            /* hidden at start */
-  transition: opacity .5s ease;
+  transition: opacity 1s ease;
   pointer-events:none;
 }
 
@@ -184,13 +222,17 @@ body {
 </head>
 <body>
 
-<!-- WELCOME GRID -->
 <div class="welcome-grid" id="welcome-grid"></div>
 
-<!-- Welcome Screen -->
-<div class="welcome" id="welcome">Welcome.</div>
+<div class="welcome-container" id="welcome-container">
+  <div class="welcome-msg" id="msg-1">Welcome.</div>
+  
+  <div class="welcome-msg" id="msg-2">
+    Professional, tailored Discord setups and custom bots for<br>
+    FiveM communities and beyond.
+  </div>
+</div>
 
-<!-- Sidebar -->
 <div class="sidebar" id="sidebar">
   <button onclick="showPackage('package1')">📦 Package 1</button>
   <button onclick="showPackage('package2')">📦 Package 2</button>
@@ -207,7 +249,6 @@ body {
 <div class="content" id="content">
   <h1 id="title">Fourty's Details</h1>
 
-  <!-- YOUR EXACT PACKAGE TEXT -->
   <div class="package-details" id="package1">
     <h2>🧰 Package 1: Discord Setup – <strong>$20</strong></h2>
     <p><em>Perfect for new business owners, gang startups, or anyone wanting a streamlined Discord to manage their FiveM experience with ease and clarity.</em></p>
@@ -260,28 +301,54 @@ body {
 </div>
 
 <script>
-const welcome = document.getElementById("welcome");
+/* Elements */
 const grid = document.getElementById("welcome-grid");
+const welcomeContainer = document.getElementById("welcome-container");
+const msg1 = document.getElementById("msg-1");
+const msg2 = document.getElementById("msg-2");
+
 const sidebar = document.getElementById("sidebar");
 const content = document.getElementById("content");
 const title = document.getElementById("title");
-
 const packages = ["package1","package2","package3","package4","package5"];
 
-/* Welcome animation */
+/* CINEMATIC INTRO SEQUENCE */
 window.onload = () => {
+  // 1. Show Grid immediately
   grid.style.opacity = 1;
-  welcome.style.opacity = 1;
 
+  // 2. T+500ms: Fade In "Welcome"
   setTimeout(() => {
-    welcome.style.opacity = 0;
-    grid.style.opacity = 0;
+    msg1.classList.add('visible');
+  }, 500);
+
+  // 3. T+2500ms: Fade Out "Welcome"
+  setTimeout(() => {
+    msg1.classList.remove('visible');
   }, 2500);
 
+  // 4. T+3500ms: Fade In "Professional..."
   setTimeout(() => {
-    welcome.style.display = 'none';
+    msg2.classList.add('visible');
+  }, 3500);
+
+  // 5. T+7500ms: Fade Out "Professional..."
+  setTimeout(() => {
+    msg2.classList.remove('visible');
+  }, 7500);
+
+  // 6. T+8500ms: Fade Out Background & Grid
+  setTimeout(() => {
+    welcomeContainer.style.opacity = 0; // Fades out the black cover
+    grid.style.opacity = 0;             // Fades out the moving grid
+  }, 8500);
+
+  // 7. T+9500ms: Remove Welcome from DOM & Reveal Main Content
+  setTimeout(() => {
+    welcomeContainer.style.display = 'none';
     grid.style.display = 'none';
 
+    // Show Main UI
     sidebar.style.opacity = 1;
     content.style.opacity = 1;
     sidebar.style.pointerEvents = "auto";
@@ -290,10 +357,10 @@ window.onload = () => {
     title.style.display = 'block';
     setTimeout(()=> title.style.opacity = 1, 50);
 
-  }, 3000);
+  }, 9500);
 };
 
-/* Packages */
+/* Packages Logic */
 function showPackage(id){
   packages.forEach(p=>{ 
     const el=document.getElementById(p); 
@@ -305,6 +372,7 @@ function showPackage(id){
   detail.style.display='block';
   setTimeout(()=> detail.style.opacity=1, 50);
 }
+
 function goBack(){
   packages.forEach(p=>{ 
     const el=document.getElementById(p); 
@@ -313,7 +381,7 @@ function goBack(){
   });
 }
 
-/* Orbs — unchanged original logic */
+/* Orbs Logic */
 const orbCount = 6;
 const orbs = [];
 for(let i=0;i<orbCount;i++){
