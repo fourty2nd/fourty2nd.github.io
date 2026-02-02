@@ -18,203 +18,151 @@ body {
 /* ============================
    WELCOME SCREEN & GRID
    ============================ */
-
-/* The moving grid background */
 .welcome-grid {
-  position: fixed;
-  top: 0; left: 0;
-  width:100%; height:100%;
+  position: fixed; top: 0; left: 0; width:100%; height:100%;
   background-size: 40px 40px;
   background-image:
     linear-gradient(to right, rgba(255,255,255,0.07) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255,255,255,0.07) 1px, transparent 1px);
   animation: moveGrid 14s linear infinite;
-  z-index: 98;
-  opacity: 0; /* Controlled by JS */
-  transition: opacity 1s ease;
-  pointer-events: none;
+  z-index: 98; opacity: 0; transition: opacity 1s ease; pointer-events: none;
 }
-
 @keyframes moveGrid {
   0% { background-position: 0 0; }
   100% { background-position: 200px 200px; }
 }
-
-/* Container for the welcome text messages */
 .welcome-container {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: black; /* Solid background hiding the site */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 100;
-  transition: opacity 1s ease; /* Fade out the whole black screen at end */
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: black; display: flex; justify-content: center; align-items: center;
+  z-index: 100; transition: opacity 1s ease;
 }
-
-/* General style for welcome messages */
 .welcome-msg {
-  position: absolute;
-  color: white;
-  text-align: center;
-  opacity: 0;
-  transform: scale(1.1); /* Start slightly zoomed in */
-  transition: opacity 1s ease, transform 1s ease;
-  padding: 0 20px;
-  width: 100%;
-  max-width: 800px;
+  position: absolute; color: white; text-align: center; opacity: 0;
+  transform: scale(1.1); transition: opacity 1s ease, transform 1s ease;
+  padding: 0 20px; width: 100%; max-width: 800px;
 }
-
-/* Specific styling for the first message */
-#msg-1 {
-  font-size: 3rem;
-  font-family: monospace;
-  letter-spacing: 2px;
-}
-
-/* Specific styling for the second message */
-#msg-2 {
-  font-size: 1.5rem;
-  font-weight: 300;
-  line-height: 1.6;
-  color: #e0e0e0;
-}
-
-/* Helper class to show messages */
-.visible {
-  opacity: 1 !important;
-  transform: scale(1) !important; /* Zoom to normal */
-}
-
+#msg-1 { font-size: 3rem; font-family: monospace; letter-spacing: 2px; }
+#msg-2 { font-size: 1.5rem; font-weight: 300; line-height: 1.6; color: #e0e0e0; }
+.visible { opacity: 1 !important; transform: scale(1) !important; }
 
 /* ============================
    MAIN SITE STYLES
    ============================ */
-
-/* Sidebar */
 .sidebar {
-  position:fixed;
-  left:0; top:0;
-  width:220px;
-  height:100%;
-  background:#111;
-  padding-top:30px;
-  box-shadow:2px 0 10px rgba(0,0,0,0.6);
-  z-index:10;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  opacity:0;            /* hidden at start */
-  pointer-events:none;  /* disabled until welcome ends */
-  transition: opacity 1s ease;
+  position:fixed; left:0; top:0; width:220px; height:100%;
+  background:#111; padding-top:30px; box-shadow:2px 0 10px rgba(0,0,0,0.6);
+  z-index:10; display:flex; flex-direction:column; align-items:center;
+  opacity:0; pointer-events:none; transition: opacity 1s ease;
 }
 .sidebar button {
-  display:block;
-  width:90%;
-  margin:5px 0;
-  padding:12px;
-  background:#2c2c2c;
-  border:none;
-  border-radius:8px;
-  color:#ccc;
-  font-size:1rem;
-  cursor:pointer;
-  text-align:left;
-  transition: background 0.3s, color 0.3s, transform 0.2s, box-shadow 0.3s;
+  display:block; width:90%; margin:5px 0; padding:12px;
+  background:#2c2c2c; border:none; border-radius:8px; color:#ccc;
+  font-size:1rem; cursor:pointer; text-align:left;
+  transition: all 0.3s;
 }
 .sidebar button:hover {
-  background:#444;
-  color:white;
-  transform: scale(1.05);
+  background:#444; color:white; transform: scale(1.05);
   box-shadow: 0 0 12px #fff, 0 0 18px #fff55;
 }
 
-/* Discord Button */
-.discord-btn {
-  position: absolute;
-  bottom: 20px;
-  width:160px;
-  height:50px;
-  background:#7289da;
-  border-radius:10px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  cursor:pointer;
-  border:none;
-  color:white;
-  font-size:1rem;
-  gap:5px;
-  transition: transform 0.2s, box-shadow 0.3s;
-}
-.discord-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 12px #fff, 0 0 18px #fff55;
+/* Specific styling for the Discord Toggle Button in Sidebar */
+.discord-sidebar-btn {
+  margin-top: auto !important; /* Pushes it to the bottom */
+  margin-bottom: 20px !important;
+  background: #5865F2 !important; /* Discord Blurple */
+  color: white !important;
+  text-align: center !important;
+  justify-content: center;
+  display: flex; gap: 8px;
 }
 
-/* Content */
 .content {
-  margin-left:240px;
-  padding:40px;
-  opacity:0;            /* hidden at start */
-  transition: opacity 1s ease;
-  pointer-events:none;
+  margin-left:240px; padding:40px; opacity:0;
+  transition: opacity 1s ease; pointer-events:none;
 }
-
-/* Title */
 #title {
-  display:none;
-  text-align:center;
-  color:#aaa;
-  font-size:2.5rem;
-  margin-bottom:2rem;
-  transition:opacity 0.5s ease;
+  display:none; text-align:center; color:#aaa; font-size:2.5rem;
+  margin-bottom:2rem; transition:opacity 0.5s ease;
   font-family: 'Mestizo', sans-serif;
 }
 
 /* Package Details */
 .package-details {
-  display:none;
-  opacity:0;
-  max-height:80vh;
-  overflow-y:auto;
-  background:#1f1f1f;
-  border-radius:12px;
-  padding:30px;
-  margin-bottom:40px;
-  color:#ddd;
-  transition:opacity 0.5s ease;
+  display:none; opacity:0; max-height:80vh; overflow-y:auto;
+  background:#1f1f1f; border-radius:12px; padding:30px; margin-bottom:40px;
+  color:#ddd; transition:opacity 0.5s ease;
 }
-.package-details h2 { margin-bottom:10px; }
-.package-details ul { margin-left:20px; }
 .back-button {
-  margin-top:20px;
-  background-color:#333;
-  color:#ddd;
-  border:none;
-  padding:10px 20px;
-  border-radius:8px;
-  cursor:pointer;
+  margin-top:20px; background-color:#333; color:#ddd; border:none;
+  padding:10px 20px; border-radius:8px; cursor:pointer;
   transition: transform 0.2s, box-shadow 0.3s;
 }
-.back-button:hover { 
-  background-color:#444; 
-  transform: scale(1.05);
-  box-shadow: 0 0 12px #fff, 0 0 18px #fff55;
+.back-button:hover { background-color:#444; transform: scale(1.05); }
+
+/* ============================
+   NEW DISCORD CARD STYLES
+   ============================ */
+.discord-pitch-text {
+  text-align: center; margin-bottom: 25px; font-size: 1.1rem; color: #ccc;
 }
 
-/* Cursor Orbs */
+.discord-embed-card {
+  background-color: #0f1012; /* Darker discord background */
+  border-radius: 12px;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.embed-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.embed-logo {
+  width: 64px; height: 64px;
+  border-radius: 18px; /* Squircle shape like Discord */
+  overflow: hidden;
+  background: #202225;
+}
+.embed-logo img { width: 100%; height: 100%; object-fit: cover; }
+
+.embed-info h3 {
+  color: white; font-size: 1.2rem; font-weight: 700; display: flex; align-items: center; gap: 5px;
+}
+.verified-badge { width: 16px; height: 16px; display: inline-block; fill: #fff; }
+
+.embed-stats {
+  font-size: 0.85rem; color: #b9bbbe; display: flex; gap: 10px; margin-top: 4px;
+}
+.stat-dot {
+  display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px;
+}
+.online-dot { background-color: #3ba55c; }
+.member-dot { background-color: #747f8d; }
+
+.join-us-btn {
+  background-color: #248046; /* The specific Discord Green */
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  text-align: center;
+  padding: 12px;
+  border-radius: 5px;
+  transition: background-color 0.2s;
+  display: block;
+}
+.join-us-btn:hover { background-color: #1a6334; }
+
+/* Orbs */
 .orb {
-  position: fixed;
-  width: 12px;
-  height: 12px;
-  background: #888;
-  border-radius: 50%;
-  pointer-events: none;
-  opacity: 0;
-  z-index: 999;
-  box-shadow: 0 0 8px #666;
+  position: fixed; width: 12px; height: 12px; background: #888; border-radius: 50%;
+  pointer-events: none; opacity: 0; z-index: 999; box-shadow: 0 0 8px #666;
 }
 </style>
 
@@ -226,7 +174,6 @@ body {
 
 <div class="welcome-container" id="welcome-container">
   <div class="welcome-msg" id="msg-1">Welcome.</div>
-  
   <div class="welcome-msg" id="msg-2">
     Professional, tailored Discord setups and custom bots for<br>
     FiveM communities and beyond.
@@ -240,9 +187,8 @@ body {
   <button onclick="showPackage('package4')">📃 Custom FiveM Scripts</button>
   <button onclick="showPackage('package5')">💸 Payment Methods</button>
 
-  <button class="discord-btn" onclick="window.location.href='https://discord.gg/gekCBbQk4r'">
-    <span>🌐</span>
-    <span>My Discord Server</span>
+  <button class="discord-sidebar-btn" onclick="showPackage('package-discord')">
+    🌐 My Discord Server
   </button>
 </div>
 
@@ -252,32 +198,14 @@ body {
   <div class="package-details" id="package1">
     <h2>🧰 Package 1: Discord Setup – <strong>$20</strong></h2>
     <p><em>Perfect for new business owners, gang startups, or anyone wanting a streamlined Discord to manage their FiveM experience with ease and clarity.</em></p>
-    <ul>
-      <li>📁 Channel, Role & Category Setup</li>
-      <li>🖌️ Custom Embed Design</li>
-      <li>🤖 Bot Setup</li>
-      <li>🌐 Professional Layout</li>
-      <li>📞 Support: Included</li>
-    </ul>
+    <ul><li>📁 Channel, Role & Category Setup</li><li>🖌️ Custom Embed Design</li><li>🤖 Bot Setup</li><li>🌐 Professional Layout</li><li>📞 Support: Included</li></ul>
     <button class="back-button" onclick="goBack()">Back</button>
   </div>
 
   <div class="package-details" id="package2">
     <h2>🛠️ Package 2: Advanced Discord Build – <strong>$30</strong></h2>
     <p><em>Ideal for gang startups, businesses, or server owners who want structure, automation, and active oversight.</em></p>
-    <ul>
-      <li>Everything in Package 1</li>
-      <li>🔧 Custom Ticket System</li>
-      <li>📜 Rules + Guidelines Embed</li>
-      <li>🎭 Reaction Roles / Role Menus</li>
-      <li>📝 Custom Applications</li>
-      <li>📚 Resource Channels</li>
-      <li>🔒 Staff Setup & Permissions</li>
-      <li>🤖 Bot Automation</li>
-      <li>📊 Server Analytics Bots</li>
-      <li>🖼️ Branding Integration</li>
-      <li>📞 Support: Included</li>
-    </ul>
+    <ul><li>Everything in Package 1</li><li>🔧 Custom Ticket System</li><li>📜 Rules + Guidelines Embed</li><li>🎭 Reaction Roles / Role Menus</li><li>📝 Custom Applications</li><li>📚 Resource Channels</li><li>🔒 Staff Setup & Permissions</li><li>🤖 Bot Automation</li><li>📊 Server Analytics Bots</li><li>🖼️ Branding Integration</li><li>📞 Support: Included</li></ul>
     <button class="back-button" onclick="goBack()">Back</button>
   </div>
 
@@ -298,6 +226,36 @@ body {
     <p>Bitcoin ₿, Ethereum Ξ, Litecoin Ł, and Gift Cards (Discord Nitro/Steam preferred) are accepted.</p>
     <button class="back-button" onclick="goBack()">Back</button>
   </div>
+
+  <div class="package-details" id="package-discord">
+    <div class="discord-pitch-text">
+        Professional Discord setups and tailored bots for FiveM servers and other projects.<br>
+        Join us and begin your move toward a cleaner, more polished experience.
+    </div>
+
+    <div class="discord-embed-card">
+        <div class="embed-header">
+            <div class="embed-logo">
+                <img src="https://i.ibb.co/3ykX3vM/logo.png" alt="Fourty's Logo">
+            </div>
+            <div class="embed-info">
+                <h3>Fourty's Details 
+                    <svg class="verified-badge" viewBox="0 0 512 512"><path d="M512 256c0-141.4-114.6-256-256-256S0 114.6 0 256s114.6 256 256 256 256-114.6 256-256z" fill="#fff"/><path d="m226.3 358.5-86.6-88.8 33.6-33.1 53.6 55 120-125.8 34.3 32.5z" fill="#5865F2"/></svg>
+                </h3>
+                <div class="embed-stats">
+                    <span><span class="stat-dot online-dot"></span><span id="live-online">Loading...</span> Online</span>
+                    <span><span class="stat-dot member-dot"></span><span id="live-members">9</span> Members</span>
+                </div>
+            </div>
+        </div>
+        <div style="font-size: 0.8rem; color: #72767d; margin-top: -10px;">Est. Jun 2024</div>
+        
+        <a href="https://discord.gg/gekCBbQk4r" target="_blank" class="join-us-btn">Join us here!</a>
+    </div>
+
+    <button class="back-button" onclick="goBack()" style="display:block; margin: 20px auto 0;">Back to Dashboard</button>
+  </div>
+
 </div>
 
 <script>
@@ -310,53 +268,26 @@ const msg2 = document.getElementById("msg-2");
 const sidebar = document.getElementById("sidebar");
 const content = document.getElementById("content");
 const title = document.getElementById("title");
-const packages = ["package1","package2","package3","package4","package5"];
+const packages = ["package1","package2","package3","package4","package5","package-discord"];
 
 /* CINEMATIC INTRO SEQUENCE */
 window.onload = () => {
-  // 1. Show Grid immediately
   grid.style.opacity = 1;
-
-  // 2. T+500ms: Fade In "Welcome"
+  setTimeout(() => msg1.classList.add('visible'), 500);
+  setTimeout(() => msg1.classList.remove('visible'), 2500);
+  setTimeout(() => msg2.classList.add('visible'), 3500);
+  setTimeout(() => msg2.classList.remove('visible'), 7500);
   setTimeout(() => {
-    msg1.classList.add('visible');
-  }, 500);
-
-  // 3. T+2500ms: Fade Out "Welcome"
-  setTimeout(() => {
-    msg1.classList.remove('visible');
-  }, 2500);
-
-  // 4. T+3500ms: Fade In "Professional..."
-  setTimeout(() => {
-    msg2.classList.add('visible');
-  }, 3500);
-
-  // 5. T+7500ms: Fade Out "Professional..."
-  setTimeout(() => {
-    msg2.classList.remove('visible');
-  }, 7500);
-
-  // 6. T+8500ms: Fade Out Background & Grid
-  setTimeout(() => {
-    welcomeContainer.style.opacity = 0; // Fades out the black cover
-    grid.style.opacity = 0;             // Fades out the moving grid
+    welcomeContainer.style.opacity = 0;
+    grid.style.opacity = 0;
   }, 8500);
-
-  // 7. T+9500ms: Remove Welcome from DOM & Reveal Main Content
   setTimeout(() => {
     welcomeContainer.style.display = 'none';
     grid.style.display = 'none';
-
-    // Show Main UI
-    sidebar.style.opacity = 1;
-    content.style.opacity = 1;
-    sidebar.style.pointerEvents = "auto";
-    content.style.pointerEvents = "auto";
-
+    sidebar.style.opacity = 1; content.style.opacity = 1;
+    sidebar.style.pointerEvents = "auto"; content.style.pointerEvents = "auto";
     title.style.display = 'block';
     setTimeout(()=> title.style.opacity = 1, 50);
-
   }, 9500);
 };
 
@@ -364,71 +295,64 @@ window.onload = () => {
 function showPackage(id){
   packages.forEach(p=>{ 
     const el=document.getElementById(p); 
-    el.style.display='none'; 
-    el.style.opacity=0; 
+    if(el) { el.style.display='none'; el.style.opacity=0; }
   });
-
   const detail=document.getElementById(id);
-  detail.style.display='block';
-  setTimeout(()=> detail.style.opacity=1, 50);
+  if(detail) {
+    detail.style.display='block';
+    setTimeout(()=> detail.style.opacity=1, 50);
+  }
 }
 
 function goBack(){
   packages.forEach(p=>{ 
     const el=document.getElementById(p); 
-    el.style.display='none'; 
-    el.style.opacity=0; 
+    if(el) { el.style.display='none'; el.style.opacity=0; }
   });
 }
 
+/* LIVE DISCORD COUNTER */
+async function fetchDiscordStats() {
+    // This is your Server ID extracted from your previous inputs
+    const serverID = '1256247963353452565'; 
+    try {
+        const response = await fetch(`https://discord.com/api/guilds/${serverID}/widget.json`);
+        const data = await response.json();
+        
+        // Update Online Count
+        if (data.presence_count) {
+            document.getElementById('live-online').innerText = data.presence_count;
+        } else {
+             document.getElementById('live-online').innerText = "5"; // Fallback
+        }
+    } catch (error) {
+        console.error("Could not fetch Discord stats", error);
+        document.getElementById('live-online').innerText = "5"; // Fallback on error
+    }
+}
+// Run fetch immediately
+fetchDiscordStats();
+// Update every 60 seconds
+setInterval(fetchDiscordStats, 60000);
+
 /* Orbs Logic */
-const orbCount = 6;
-const orbs = [];
+const orbCount = 6; const orbs = [];
 for(let i=0;i<orbCount;i++){
-  const orb=document.createElement('div');
-  orb.className='orb';
-  document.body.appendChild(orb);
-  orbs.push({el: orb, x:0, y:0});
+  const orb=document.createElement('div'); orb.className='orb';
+  document.body.appendChild(orb); orbs.push({el: orb, x:0, y:0});
 }
-
 let mouse={x:window.innerWidth/2,y:window.innerHeight/2};
-
-function updateMouse(x,y){
-  mouse.x = x;
-  mouse.y = y;
-  orbs.forEach(o => o.el.style.opacity = 1);
-}
-
+function updateMouse(x,y){ mouse.x = x; mouse.y = y; orbs.forEach(o => o.el.style.opacity = 1); }
 window.addEventListener('mousemove', e => updateMouse(e.clientX,e.clientY));
-window.addEventListener('touchmove', e => {
-  if(e.touches.length>0){
-    const t=e.touches[0];
-    updateMouse(t.clientX,t.clientY);
-  }
-});
-
 function animateOrbs(){
   let x=mouse.x, y=mouse.y;
   orbs.forEach((o)=>{
-    o.x += (x-o.x)*0.15;
-    o.y += (y-o.y)*0.15;
-    o.el.style.left = `${o.x-6}px`;
-    o.el.style.top = `${o.y-6}px`;
-    x=o.x; y=o.y;
+    o.x += (x-o.x)*0.15; o.y += (y-o.y)*0.15;
+    o.el.style.left = `${o.x-6}px`; o.el.style.top = `${o.y-6}px`; x=o.x; y=o.y;
   });
   requestAnimationFrame(animateOrbs);
 }
 animateOrbs();
-
-let orbTimeout;
-function hideOrbsDelayed(){
-  clearTimeout(orbTimeout);
-  orbTimeout=setTimeout(()=> orbs.forEach(o=>o.el.style.opacity=0), 2000);
-}
-window.addEventListener('mousemove', hideOrbsDelayed);
-window.addEventListener('touchmove', hideOrbsDelayed);
-window.addEventListener('resize',()=>{ mouse.x=window.innerWidth/2; mouse.y=window.innerHeight/2; });
 </script>
-
 </body>
 </html>
