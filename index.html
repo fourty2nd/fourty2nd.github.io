@@ -39,10 +39,10 @@ body {
 .welcome-msg {
   position: absolute; color: white; text-align: center; opacity: 0;
   transform: scale(1.1); transition: opacity 1s ease, transform 1s ease;
-  padding: 0 20px; width: 100%; max-width: 800px;
+  padding: 0 30px; width: 100%; max-width: 900px;
 }
 #msg-1 { font-size: 3rem; font-family: monospace; letter-spacing: 2px; }
-#msg-2 { font-size: 1.5rem; font-weight: 300; line-height: 1.6; color: #e0e0e0; }
+#msg-2 { font-size: 1.4rem; font-weight: 300; line-height: 1.8; color: #e0e0e0; }
 .visible { opacity: 1 !important; transform: scale(1) !important; }
 
 /* ============================
@@ -57,112 +57,68 @@ body {
 .sidebar button {
   display:block; width:90%; margin:5px 0; padding:12px;
   background:#2c2c2c; border:none; border-radius:8px; color:#ccc;
-  font-size:1rem; cursor:pointer; text-align:left;
-  transition: all 0.3s;
+  font-size:1rem; cursor:pointer; text-align:left; transition: all 0.3s ease;
 }
 .sidebar button:hover {
   background:#444; color:white; transform: scale(1.05);
-  box-shadow: 0 0 12px #fff, 0 0 18px #fff55;
+  box-shadow: 0 0 12px rgba(255,255,255,0.1);
 }
 
-/* Sidebar Divider */
-.sidebar-divider {
-  width: 85%;
-  height: 1px;
-  background: #444;
-  margin: 15px 0;
-}
+.sidebar-divider { width: 85%; height: 1px; background: #333; margin: 15px 0; }
 
-/* Specific Button Styles */
-.discord-sidebar-btn {
+.discord-sidebar-toggle {
   margin-bottom: 20px !important;
   background: #5865F2 !important;
   color: white !important;
   text-align: center !important;
-  justify-content: center; display: flex; gap: 8px;
 }
-.reviews-btn {
-  margin-top: auto !important;
-  background: #202225 !important;
-  border: 1px solid #444 !important;
-}
-/* License button specific style (optional) */
-.license-btn {
-  border: 1px solid #333;
-}
+.reviews-btn { margin-top: auto !important; background: #202225 !important; border: 1px solid #333 !important; text-align: center !important;}
 
-.content {
-  margin-left:240px; padding:40px; opacity:0;
-  transition: opacity 1s ease; pointer-events:none;
-}
-#title {
-  display:none; text-align:center; color:#aaa; font-size:2.5rem;
-  margin-bottom:2rem; transition:opacity 0.5s ease;
-  font-family: 'Mestizo', sans-serif;
-}
+.content { margin-left:240px; padding:40px; opacity:0; transition: opacity 1s ease; pointer-events:none; }
+#title { display:none; text-align:center; color:#aaa; font-size:2.5rem; margin-bottom:2rem; font-family: 'Mestizo', sans-serif; }
 
-/* Package Details */
 .package-details {
   display:none; opacity:0; max-height:80vh; overflow-y:auto;
   background:#1f1f1f; border-radius:12px; padding:30px; margin-bottom:40px;
   color:#ddd; transition:opacity 0.5s ease;
 }
-.back-button {
-  margin-top:20px; background-color:#333; color:#ddd; border:none;
-  padding:10px 20px; border-radius:8px; cursor:pointer;
-  transition: transform 0.2s, box-shadow 0.3s;
-}
-.back-button:hover { background-color:#444; transform: scale(1.05); }
+.package-details h2 { margin-bottom: 15px; }
+.package-details ul { margin-left: 20px; margin-bottom: 15px; }
+.package-details li { margin-bottom: 5px; }
 
-/* License Text Styles */
-.license-text p { margin-bottom: 15px; line-height: 1.6; }
-.license-text strong { color: #fff; }
-.license-list { margin-left: 20px; margin-bottom: 15px; }
-.license-list li { margin-bottom: 5px; }
-.friendly-note {
-    background: #252525; border-left: 4px solid #fff; padding: 15px; margin-top: 20px; font-style: italic; color: #bbb;
+/* DISCORD CARD STYLING */
+.discord-card {
+  background: #18191c; border-radius: 16px; padding: 0; overflow: hidden;
+  max-width: 450px; margin: 0 auto; border: 1px solid #2f3136;
+}
+.card-banner { height: 60px; background: #202225; }
+.card-body { padding: 20px; position: relative; }
+.card-icon {
+  width: 70px; height: 70px; background: #000; border-radius: 15px;
+  margin-top: -55px; border: 5px solid #18191c; overflow: hidden;
+}
+.card-icon img { width: 100%; height: 100%; }
+.card-name { font-size: 1.5rem; font-weight: 600; margin: 15px 0 5px; color: white; display: flex; align-items: center; gap: 8px; }
+.join-btn {
+  display: block; width: 100%; padding: 14px; background: #248046;
+  color: white; text-decoration: none; text-align: center; border-radius: 8px; font-weight: 600;
 }
 
-/* ============================
-   DISCORD & REVIEW STYLES
-   ============================ */
-.discord-pitch-text { text-align: center; margin-bottom: 25px; font-size: 1.1rem; color: #ccc; }
-.discord-embed-card {
-  background-color: #0f1012; border-radius: 12px; max-width: 400px;
-  margin: 0 auto; padding: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-  display: flex; flex-direction: column; gap: 15px;
-}
-.embed-header { display: flex; align-items: center; gap: 15px; }
-.embed-logo { width: 64px; height: 64px; border-radius: 18px; overflow: hidden; background: #202225; }
-.embed-logo img { width: 100%; height: 100%; object-fit: cover; }
-.embed-info h3 { color: white; font-size: 1.2rem; font-weight: 700; display: flex; align-items: center; gap: 5px; }
-.verified-badge { width: 16px; height: 16px; display: inline-block; fill: #fff; }
-.join-us-btn {
-  background-color: #248046; color: white; text-decoration: none; font-weight: 600; text-align: center; padding: 12px; border-radius: 5px; transition: background-color 0.2s; display: block;
-}
-.join-us-btn:hover { background-color: #1a6334; }
-
-.review-header-title { font-size: 1.8rem; color: #fff; margin-bottom: 5px; font-weight: 500; }
+/* REVIEWS & LICENSE */
+.review-header-title { font-size: 1.8rem; color: #fff; margin-bottom: 5px; }
 .review-subtext { font-size: 0.9rem; color: #888; margin-bottom: 30px; font-style: italic; }
-.review-card {
-    background: #2f3136; border-radius: 8px; padding: 16px; border-left: 4px solid #faa61a;
-    margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-}
+.review-card { background: #2f3136; border-radius: 8px; padding: 16px; border-left: 4px solid #faa61a; margin-bottom: 20px; }
 .review-user { display: flex; align-items: center; margin-bottom: 12px; }
-.review-avatar {
-    width: 40px; height: 40px; border-radius: 50%; 
-    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); margin-right: 12px;
-}
-.review-username { color: #fff; font-weight: 600; font-size: 1rem; display: flex; align-items: center; gap: 6px; }
-.review-role-badge { background: #5865F2; color: white; font-size: 0.65rem; padding: 1px 4px; border-radius: 4px; text-transform: uppercase; }
+.review-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); margin-right: 12px; }
+.review-username { color: #fff; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+.review-role-badge { background: #5865F2; color: white; font-size: 0.65rem; padding: 1px 4px; border-radius: 4px; }
 .review-content { color: #dcddde; font-size: 0.95rem; line-height: 1.5; }
-.review-xo { color: #ffb6c1; font-weight: bold; letter-spacing: 1px; }
+.license-text p { margin-bottom: 15px; line-height: 1.6; }
+.license-list { margin-left: 20px; margin-bottom: 15px; }
+.friendly-note { background: #252525; border-left: 4px solid #fff; padding: 15px; margin-top: 20px; font-style: italic; }
 
-/* Orbs */
-.orb {
-  position: fixed; width: 12px; height: 12px; background: #888; border-radius: 50%;
-  pointer-events: none; opacity: 0; z-index: 999; box-shadow: 0 0 8px #666;
-}
+.back-button { margin-top:20px; background-color:#333; color:#ddd; border:none; padding:10px 20px; border-radius:8px; cursor:pointer; }
+.orb { position: fixed; width: 12px; height: 12px; background: #888; border-radius: 50%; pointer-events: none; opacity: 0; z-index: 999; }
 </style>
 
 <link href="https://fonts.googleapis.com/css2?family=Mestizo&display=swap" rel="stylesheet">
@@ -174,84 +130,81 @@ body {
 <div class="welcome-container" id="welcome-container">
   <div class="welcome-msg" id="msg-1">Welcome.</div>
   <div class="welcome-msg" id="msg-2">
-    Professional, tailored Discord setups and custom bots for<br>
-    FiveM communities and beyond.
+    Professional Discord setups and tailored bots for FiveM servers and other projects.<br>
+    Join us and begin your move toward a cleaner, more polished experience.
   </div>
 </div>
 
 <div class="sidebar" id="sidebar">
-  <button class="license-btn" onclick="showPackage('package-license')">📜 Digital License</button>
-  
+  <button onclick="showPackage('package-license')">📜 Digital License</button>
   <div class="sidebar-divider"></div>
-
   <button onclick="showPackage('package1')">📦 Package 1</button>
   <button onclick="showPackage('package2')">📦 Package 2</button>
-  <button onclick="showPackage('package3')">📃 Custom Discord Bot</button>
-  <button onclick="showPackage('package4')">📃 Custom FiveM Scripts</button>
-  <button onclick="showPackage('package5')">💸 Payment Methods</button>
-  
+  <button onclick="showPackage('package3')">🤖 Custom Bot</button>
+  <button onclick="showPackage('package4')">🛠️ FiveM Scripts</button>
+  <button onclick="showPackage('package5')">💸 Payment</button>
   <button class="reviews-btn" onclick="showPackage('package-reviews')">⭐ Reviews</button>
-
-  <button class="discord-sidebar-btn" onclick="showPackage('package-discord')">
-    🌐 My Discord Server
-  </button>
+  <button class="discord-sidebar-toggle" onclick="showPackage('package-discord')">🌐 My Discord Server</button>
 </div>
 
 <div class="content" id="content">
   <h1 id="title">Fourty's Details</h1>
 
   <div class="package-details" id="package-license">
-    <h2 style="margin-bottom:20px; border-bottom:1px solid #444; padding-bottom:10px;">Fourty's Details - Digital License Agreement</h2>
-    
+    <h2>Fourty's Details - Digital License Agreement</h2>
     <div class="license-text">
         <p>Effective Date: <strong>As of Sunday, August 24th, 2025</strong><br>
         Creator: <strong>fourty2</strong></p>
-        
         <p>By using Fourty's Details, you agree to the following terms:</p>
-
-        <p><strong>1. License Grant</strong><br>
-        I grant you permission to use Fourty's Details for your personal digital purposes only. This license is limited, non-transferable, and does not give you ownership of the product.</p>
-
-        <p><strong>2. What You Cannot Do</strong><br>
-        You may not:</p>
+        <p><strong>1. License Grant</strong><br>I grant you permission to use Fourty's Details for your personal digital purposes only. This license is limited, non-transferable, and does not give you ownership of the product.</p>
+        <p><strong>2. What You Cannot Do</strong><br>You may not:</p>
         <ul class="license-list">
             <li>Copy, duplicate, or replicate any part of Fourty's Details</li>
             <li>Share, sell, or give it to anyone else</li>
             <li>Claim it as your own work</li>
             <li>Use it for commercial purposes or profit without my permission</li>
         </ul>
-
-        <p><strong>3. Intellectual Property</strong><br>
-        All rights, including copyrights and ownership, remain with me. You are only allowed to use the product as described in this license.</p>
-
-        <p><strong>4. Responsibility</strong><br>
-        This product is provided as-is. I am not responsible for any issues that arise from misuse or unauthorized sharing.</p>
-
-        <p><strong>5. Respect and Integrity</strong><br>
-        By using this product, you agree to respect the work and effort I put into it. Please do not distribute it or present it as your own.</p>
-
-        <p><strong>6. Updates</strong><br>
-        I may update these terms at any time. Continued use of the product means you accept any changes.</p>
-
+        <p><strong>3. Intellectual Property</strong><br>All rights, including copyrights and ownership, remain with me.</p>
+        <p><strong>4. Responsibility</strong><br>This product is provided as-is. I am not responsible for any issues that arise from misuse.</p>
+        <p><strong>5. Respect and Integrity</strong><br>Please do not distribute it or present it as your own.</p>
+        <p><strong>6. Updates</strong><br>I may update these terms at any time.</p>
         <div class="friendly-note">
-            <strong>Friendly Note:</strong><br>
-            I made Fourty's Details for you to enjoy and learn from, but please keep it personal. Sharing or copying it takes away from the work I put into it.<br>
-            Respect the product, and everyone benefits.
+            <strong>Friendly Note:</strong> Sharing or copying it takes away from the work I put into it. Respect the product, and everyone benefits.
         </div>
     </div>
-    
     <button class="back-button" onclick="goBack()">Back</button>
   </div>
 
   <div class="package-details" id="package1">
-    <h2>🧰 Package 1: Discord Setup – <strong>$20</strong></h2>
-    <ul><li>📁 Channel, Role & Category Setup</li><li>🖌️ Custom Embed Design</li><li>🤖 Bot Setup</li><li>🌐 Professional Layout</li><li>📞 Support: Included</li></ul>
+    <h2>🧰 Package 1: Discord Setup – $20</h2>
+    <ul>
+        <li>Channel, Role & Category Setup</li>
+        <li>Custom Embed Design</li>
+        <li>Bot Setup</li>
+        <li>Professional Layout</li>
+        <li>Support: Included</li>
+    </ul>
     <button class="back-button" onclick="goBack()">Back</button>
   </div>
-  <div class="package-details" id="package2"><h2>🛠️ Package 2: Advanced Build – <strong>$30</strong></h2><ul><li>Everything in Package 1</li><li>🔧 Custom Ticket System</li><li>📜 Rules + Guidelines Embed</li><li>🎭 Reaction Roles</li><li>🔒 Staff Permissions</li></ul><button class="back-button" onclick="goBack()">Back</button></div>
-  <div class="package-details" id="package3"><h2>🤖 Custom Discord Bot – <strong>$20</strong></h2><p>Fully custom bot tailored to your server.</p><button class="back-button" onclick="goBack()">Back</button></div>
-  <div class="package-details" id="package4"><h2>🛠️ Custom FiveM Scripts – <strong>$15/Script</strong></h2><p>Custom scripts and server builds.</p><button class="back-button" onclick="goBack()">Back</button></div>
-  <div class="package-details" id="package5"><h2>💸 Payment Methods</h2><p>Bitcoin ₿, Ethereum Ξ, Litecoin Ł, and Gift Cards.</p><button class="back-button" onclick="goBack()">Back</button></div>
+
+  <div class="package-details" id="package2">
+    <h2>🛠️ Package 2: Advanced Build – $30</h2>
+    <p>Ideal for gang startups, businesses, or server owners who want structure, automation, and active oversight.</p>
+    <ul>
+        <li>Everything in Package 1</li>
+        <li>🔧 Custom Ticket System</li>
+        <li>📜 Rules + Guidelines Embed</li>
+        <li>🎭 Reaction Roles / Role Menus</li>
+        <li>📝 Custom Applications</li>
+        <li>📚 Resource Channels</li>
+        <li>🔒 Staff Setup & Permissions</li>
+    </ul>
+    <button class="back-button" onclick="goBack()">Back</button>
+  </div>
+
+  <div class="package-details" id="package3"><h2>🤖 Custom Bot – $20</h2><p>Fully custom bot tailored to your server. VPS/server required.</p><button class="back-button" onclick="goBack()">Back</button></div>
+  <div class="package-details" id="package4"><h2>🛠️ FiveM Scripts – $15</h2><p>Custom scripts and server builds for your FiveM city. Support included.</p><button class="back-button" onclick="goBack()">Back</button></div>
+  <div class="package-details" id="package5"><h2>💸 Payment</h2><p>Bitcoin ₿, Ethereum Ξ, Litecoin Ł, and Gift Cards (Discord Nitro/Steam preferred) are accepted.</p><button class="back-button" onclick="goBack()">Back</button></div>
 
   <div class="package-details" id="package-reviews">
     <h2 class="review-header-title">Reviews ♡</h2>
@@ -266,56 +219,48 @@ body {
         <div class="review-content">
             Dylan is my go to and ONLY person I go to regarding discord services. He never lets me down and is professional, I've worked with him for over a year and he has overseen over 10 discords I run.<br><br>
             I run discords for my business, my gaming, my friends and all of them are well over hundreds of people so having an appealing discord is crucial.<br><br>
-            Dylan knows everything there is to know regarding discord and I will forever only go to him and TRUST him. My discord Plug FR <span class="review-xo">XO XO 💕</span>
+            Dylan knows everything there is to know regarding discord and I will forever only go to him and TRUST him. My discord Plug FR <span style="color:#ffb6c1; font-weight:bold;">XO XO 💕</span>
         </div>
     </div>
     <button class="back-button" onclick="goBack()">Back</button>
   </div>
 
   <div class="package-details" id="package-discord">
-    <div class="discord-pitch-text">
-        Professional Discord setups and tailored bots for FiveM servers and other projects.<br>
-        Join us and begin your move toward a cleaner, more polished experience.
-    </div>
-    <div class="discord-embed-card">
-        <div class="embed-header">
-            <div class="embed-logo"><img src="https://i.ibb.co/3ykX3vM/logo.png" alt="Fourty's Logo"></div>
-            <div class="embed-info">
-                <h3>Fourty's Details <svg class="verified-badge" viewBox="0 0 512 512"><path d="M512 256c0-141.4-114.6-256-256-256S0 114.6 0 256s114.6 256 256 256 256-114.6 256-256z" fill="#fff"/><path d="m226.3 358.5-86.6-88.8 33.6-33.1 53.6 55 120-125.8 34.3 32.5z" fill="#5865F2"/></svg></h3>
-                <div style="font-size: 0.85rem; color: #b9bbbe; margin-top: 4px;">Est. Jun 2024</div>
-            </div>
+    <div class="discord-card">
+      <div class="card-banner"></div>
+      <div class="card-body">
+        <div class="card-icon">
+          <img src="https://cdn.discordapp.com/icons/1256247963353452565/370908740c0079a40344d27196556e80.png" alt="Logo">
         </div>
-        <a href="https://discord.gg/gekCBbQk4r" target="_blank" class="join-us-btn">Join us here!</a>
+        <div class="card-name">Fourty's Details <span style="font-size:1rem;">🏠</span></div>
+        <p style="font-size:0.8rem; color:#888; margin-bottom:15px;">Est. Jun 2024</p>
+        <a href="https://discord.gg/gekCBbQk4r" target="_blank" class="join-btn">Join us here!</a>
+      </div>
     </div>
-    <button class="back-button" onclick="goBack()" style="display:block; margin: 20px auto 0;">Back to Dashboard</button>
+    <button class="back-button" onclick="goBack()" style="display:block; margin: 20px auto 0;">Back</button>
   </div>
-
 </div>
 
 <script>
-/* Elements */
 const grid = document.getElementById("welcome-grid");
 const welcomeContainer = document.getElementById("welcome-container");
 const msg1 = document.getElementById("msg-1");
 const msg2 = document.getElementById("msg-2");
-
 const sidebar = document.getElementById("sidebar");
 const content = document.getElementById("content");
 const title = document.getElementById("title");
-// UPDATED PACKAGE LIST TO INCLUDE LICENSE
 const packages = ["package1","package2","package3","package4","package5","package-discord","package-reviews","package-license"];
 
-/* CINEMATIC INTRO SEQUENCE */
 window.onload = () => {
   grid.style.opacity = 1;
   setTimeout(() => msg1.classList.add('visible'), 500);
-  setTimeout(() => msg1.classList.remove('visible'), 2500);
-  setTimeout(() => msg2.classList.add('visible'), 3500);
-  setTimeout(() => msg2.classList.remove('visible'), 7500);
+  setTimeout(() => msg1.classList.remove('visible'), 3000);
+  setTimeout(() => msg2.classList.add('visible'), 4000);
+  setTimeout(() => msg2.classList.remove('visible'), 9000);
   setTimeout(() => {
     welcomeContainer.style.opacity = 0;
     grid.style.opacity = 0;
-  }, 8500);
+  }, 10000);
   setTimeout(() => {
     welcomeContainer.style.display = 'none';
     grid.style.display = 'none';
@@ -323,10 +268,9 @@ window.onload = () => {
     sidebar.style.pointerEvents = "auto"; content.style.pointerEvents = "auto";
     title.style.display = 'block';
     setTimeout(()=> title.style.opacity = 1, 50);
-  }, 9500);
+  }, 11000);
 };
 
-/* Packages Logic */
 function showPackage(id){
   packages.forEach(p=>{ 
     const el=document.getElementById(p); 
@@ -346,7 +290,6 @@ function goBack(){
   });
 }
 
-/* Orbs Logic */
 const orbCount = 6; const orbs = [];
 for(let i=0;i<orbCount;i++){
   const orb=document.createElement('div'); orb.className='orb';
@@ -357,10 +300,7 @@ function updateMouse(x,y){ mouse.x = x; mouse.y = y; orbs.forEach(o => o.el.styl
 window.addEventListener('mousemove', e => updateMouse(e.clientX,e.clientY));
 function animateOrbs(){
   let x=mouse.x, y=mouse.y;
-  orbs.forEach((o)=>{
-    o.x += (x-o.x)*0.15; o.y += (y-o.y)*0.15;
-    o.el.style.left = `${o.x-6}px`; o.el.style.top = `${o.y-6}px`; x=o.x; y=o.y;
-  });
+  orbs.forEach((o)=>{ o.x += (x-o.x)*0.15; o.y += (y-o.y)*0.15; o.el.style.left = `${o.x-6}px`; o.el.style.top = `${o.y-6}px`; x=o.x; y=o.y; });
   requestAnimationFrame(animateOrbs);
 }
 animateOrbs();
